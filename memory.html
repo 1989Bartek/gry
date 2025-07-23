@@ -2,8 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Memory – Szkło Must Go On</title>
+  <title>Świąteczne Memory</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
     * {
@@ -14,8 +13,8 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(ellipse at center, #0f1f17 0%, #0a1813 100%);
-      color: #e2e2e2;
+      background: radial-gradient(ellipse at center, #b60000 0%, #750000 100%);
+      color: #ffffff;
       padding: 20px;
       min-height: 100vh;
     }
@@ -30,42 +29,23 @@
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    #instruction-mobile {
-      display: none;
-      font-size: 18px;
-      line-height: 1.6;
-      text-align: center;
-      margin: 0 auto 20px;
-      max-width: 400px;
-      width: 80%;
-    }
-
     #game-container {
       display: flex;
-      flex-direction: row;
       justify-content: center;
-      align-items: flex-start;
-      gap: 40px;
-      max-width: 1200px;
-      margin: auto;
-      flex-wrap: wrap;
-    }
-
-    #left-panel {
-      display: flex;
+      align-items: center;
       flex-direction: column;
     }
 
     #grid-container {
       display: grid;
-      grid-template-columns: repeat(4, 120px);
-      grid-template-rows: repeat(4, 120px);
-      gap: 15px;
+      grid-template-columns: repeat(7, 100px);
+      grid-template-rows: repeat(6, 100px);
+      gap: 12px;
     }
 
     .card {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       position: relative;
       cursor: pointer;
       border-radius: 12px;
@@ -106,31 +86,12 @@
       visibility: visible;
     }
 
-    #right-panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    #instruction {
-      font-size: 24px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
     #buttons {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-top: 20px;
-      margin-bottom: 10px;
+      margin: 30px 0;
     }
 
     #buttons button {
-      width: 80%;
-      max-width: 400px;
+      width: 300px;
       padding: 15px 20px;
       font-size: 20px;
       font-weight: bold;
@@ -140,28 +101,6 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    #timer {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    #logo-section {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    #logo {
-      max-width: 400px;
-      width: 80%;
-      height: auto;
-    }
-
-    #website {
-      margin-top: 8px;
-      font-weight: bold;
     }
 
     #end-screen {
@@ -187,8 +126,7 @@
     }
 
     #end-screen button {
-      width: 80%;
-      max-width: 400px;
+      width: 300px;
       padding: 15px 20px;
       font-size: 20px;
       font-weight: bold;
@@ -200,120 +138,20 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    #end-logo-section {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    #end-logo-section img {
-      max-width: 400px;
-      width: 80%;
-      height: auto;
-    }
-
-    #end-logo-section p {
-      margin-top: 8px;
-      font-weight: bold;
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
-
-    @media (max-width: 1024px) {
-      #game-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      #left-panel,
-      #right-panel {
-        width: 100%;
-      }
-
-      #left-panel {
-        align-items: center;
-      }
-
-      #instruction {
-        display: none;
-      }
-
-      #instruction-mobile {
-        display: block;
-      }
-
-      #grid-container {
-        grid-template-columns: repeat(4, 60px);
-        grid-template-rows: repeat(4, 60px);
-        gap: 8px;
-        margin-bottom: 20px;
-      }
-
-      .card {
-        width: 60px;
-        height: 60px;
-      }
-
-      #buttons {
-        margin-bottom: 10px;
-      }
-
-      #buttons button {
-        width: 80%;
-      }
-
-      #timer {
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      #logo-section {
-        order: 5;
-      }
-
-      #logo {
-        width: 80%;
-      }
-
-      #website {
-        font-size: 14px;
-      }
-
-      #end-logo-section p {
-        font-size: 14px;
-      }
-    }
   </style>
 </head>
 <body>
-  <h1 id="game-title">MEMORY</h1>
-
-  <p id="instruction-mobile">
-    Jeśli chcesz dowiedzieć się jakie odpady trafiają do zielonego pojemnika, postaraj się odnaleźć wszystkie 8 par obrazków w jak najkrótszym czasie.
-  </p>
+  <h1 id="game-title">Świąteczne Memory</h1>
 
   <div id="game-container">
-    <div id="left-panel">
-      <div id="grid-container"></div>
-    </div>
+    <div id="grid-container"></div>
 
-    <div id="right-panel">
-      <p id="instruction">
-        Jeśli chcesz dowiedzieć się jakie odpady trafiają do zielonego pojemnika, postaraj się odnaleźć wszystkie 8 par obrazków w jak najkrótszym czasie.
-      </p>
-
-      <div id="buttons" class="controls">
-        <button id="startBtn">Start</button>
-      </div>
-
-      <div id="timer">Czas: 0 s</div>
-
-      <div id="logo-section">
-        <img src="img/Logo.png" alt="Logo gry" id="logo" />
-        <p id="website">WWW.SZKLOMUSTGOON.PL</p>
-      </div>
+    <div id="buttons" class="controls">
+      <button id="startBtn">Start</button>
     </div>
   </div>
 
@@ -322,17 +160,11 @@
     <p>Udało Ci się znaleźć wszystkie pary!</p>
     <p id="final-time">Twój czas: ...</p>
     <button onclick="restartAndStart()">Zagraj ponownie</button>
-
-    <div id="end-logo-section">
-      <img src="img/Logo.png" alt="Logo gry" />
-      <p>WWW.SZKLOMUSTGOON.PL</p>
-    </div>
   </div>
 
   <script>
     const gridContainer = document.getElementById("grid-container");
     const startBtn = document.getElementById("startBtn");
-    const timerDisplay = document.getElementById("timer");
     const endScreen = document.getElementById("end-screen");
     const finalTime = document.getElementById("final-time");
 
@@ -345,11 +177,12 @@
     let started = false;
 
     const createCardArray = () => {
-      const pairs = [];
-      for (let i = 1; i <= 8; i++) {
-        pairs.push(i, i);
+      const totalPairs = 21;
+      const all = [];
+      for (let i = 1; i <= totalPairs; i++) {
+        all.push(i, i);
       }
-      return pairs.sort(() => 0.5 - Math.random());
+      return all.sort(() => 0.5 - Math.random());
     };
 
     const createBoard = (colorCovers = false) => {
@@ -361,11 +194,11 @@
         card.classList.add("card");
 
         const frontImg = document.createElement("img");
-        frontImg.src = `img/${value}.png`;
+        frontImg.src = `img/memory/${value}.png`;
         frontImg.classList.add("front");
 
         const backImg = document.createElement("img");
-        backImg.src = "img/9.png";
+        backImg.src = "img/memory/0.png";
         backImg.classList.add("cover");
         if (colorCovers) backImg.classList.add("kolorowa");
 
@@ -391,9 +224,7 @@
         if (firstCard.value === secondCard.value) {
           matchedPairs++;
           resetTurn();
-          if (matchedPairs === 8) {
-            endGame();
-          }
+          if (matchedPairs === 21) endGame();
         } else {
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
@@ -412,21 +243,16 @@
 
     const startTimer = () => {
       seconds = 0;
-      timerDisplay.textContent = "Czas: 0 s";
       timer = setInterval(() => {
         seconds++;
-        timerDisplay.textContent = `Czas: ${seconds} s`;
       }, 1000);
     };
 
-    const stopTimer = () => {
-      clearInterval(timer);
-    };
+    const stopTimer = () => clearInterval(timer);
 
     const restartAndStart = () => {
       stopTimer();
       seconds = 0;
-      timerDisplay.textContent = "Czas: 0 s";
       matchedPairs = 0;
       firstCard = null;
       secondCard = null;
@@ -479,18 +305,12 @@
       }, 600);
 
       endScreen.classList.remove("visible");
-      document.getElementById("game-container").style.display = "flex";
-      document.getElementById("instruction").style.display = "";
-      document.getElementById("instruction-mobile").style.display = "";
     };
 
     const endGame = () => {
       stopTimer();
       finalTime.textContent = `Twój czas: ${seconds} s`;
-
       document.getElementById("game-container").style.display = "none";
-      document.getElementById("instruction").style.display = "none";
-      document.getElementById("instruction-mobile").style.display = "none";
       endScreen.classList.add("visible");
 
       confetti({
@@ -518,5 +338,3 @@
   </script>
 </body>
 </html>
-
-
