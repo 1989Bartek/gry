@@ -22,7 +22,6 @@
     #game-title {
       text-align: center;
       font-size: 64px;
-      color: white;
       margin-bottom: 30px;
       font-weight: bold;
       letter-spacing: 4px;
@@ -33,43 +32,83 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      flex-wrap: wrap;
       gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .scoreboard {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .scoreboard div {
+      margin: 8px 0;
+    }
+
+    #grid-wrapper {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    #column-labels {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+    }
+
+    #row-labels {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      text-align: center;
     }
 
     #grid-container {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 1vw;
-      width: 70vw;
-      max-width: 700px;
+      grid-template-rows: repeat(6, 1fr);
+      gap: 1.5vw;
+      width: min(90vw, 700px);
+      aspect-ratio: calc(7 / 6);
     }
 
     .card {
       width: 100%;
-      aspect-ratio: 1;
+      aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
       border-radius: 12px;
       overflow: hidden;
     }
 
-    .card .front,
-    .card .cover {
-      position: absolute;
+    .card .front {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 12px;
-      top: 0;
-      left: 0;
+      visibility: hidden;
     }
 
-    .cover {
-      z-index: 2;
-      filter: grayscale(100%) brightness(80%);
+    .card .cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
       transition: filter 0.3s ease;
+      z-index: 2;
       visibility: visible;
+      filter: grayscale(100%) brightness(80%);
     }
 
     .cover.kolorowa {
@@ -84,25 +123,16 @@
       visibility: visible;
     }
 
-    .matched .front {
+    .card.matched .front {
       filter: grayscale(100%) brightness(70%);
+      transition: filter 0.5s ease;
     }
 
-    #side-panel {
+    #buttons {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
-    }
-
-    #scoreboard {
-      text-align: center;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    #scoreboard div {
-      margin: 5px 0;
+      margin-top: 10px;
     }
 
     #buttons button {
@@ -111,7 +141,7 @@
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #007BFF;
+      background-color: #2b8cff;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -146,31 +176,16 @@
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #007BFF;
+      background-color: #2b8cff;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
-    }
-
-    @media (max-width: 768px) {
-      #game-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      #grid-container {
-        width: 90vw;
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      #side-panel {
-        width: 100%;
-      }
     }
   </style>
 </head>
@@ -178,14 +193,23 @@
   <h1 id="game-title">Świąteczne Memory</h1>
 
   <div id="game-container">
-    <div id="grid-container"></div>
-
-    <div id="side-panel">
-      <div id="scoreboard">
-        <div>Drużyna 1: <span id="team1-points">0</span></div>
-        <div>Drużyna 2: <span id="team2-points">0</span></div>
+    <div id="grid-wrapper">
+      <div></div>
+      <div id="column-labels">
+        <div>A</div><div>B</div><div>C</div><div>D</div><div>E</div><div>F</div><div>G</div>
       </div>
-      <div id="buttons">
+      <div id="row-labels">
+        <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
+      </div>
+      <div id="grid-container"></div>
+    </div>
+
+    <div>
+      <div class="scoreboard">
+        <div><strong>Drużyna 1:</strong> <span id="score1">0</span></div>
+        <div><strong>Drużyna 2:</strong> <span id="score2">0</span></div>
+      </div>
+      <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
       </div>
     </div>
@@ -203,8 +227,8 @@
     const startBtn = document.getElementById("startBtn");
     const endScreen = document.getElementById("end-screen");
     const finalTime = document.getElementById("final-time");
-    const team1Points = document.getElementById("team1-points");
-    const team2Points = document.getElementById("team2-points");
+    const score1 = document.getElementById("score1");
+    const score2 = document.getElementById("score2");
 
     let firstCard = null;
     let secondCard = null;
@@ -213,8 +237,8 @@
     let timer;
     let seconds = 0;
     let started = false;
-    let team1 = 0;
-    let team2 = 0;
+    let points1 = 0;
+    let points2 = 0;
     let currentTeam = 1;
 
     const createCardArray = () => {
@@ -252,7 +276,7 @@
     };
 
     const handleCardClick = (card, value) => {
-      if (lockBoard || card.classList.contains("flipped")) return;
+      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched")) return;
 
       card.classList.add("flipped");
 
@@ -263,18 +287,28 @@
         lockBoard = true;
 
         if (firstCard.value === secondCard.value) {
-          matchedPairs++;
-          firstCard.card.classList.add("matched");
-          secondCard.card.classList.add("matched");
-          updateScore();
-          resetTurn();
-          if (matchedPairs === 21) endGame();
+          setTimeout(() => {
+            firstCard.card.classList.add("matched");
+            secondCard.card.classList.add("matched");
+            matchedPairs++;
+
+            if (currentTeam === 1) {
+              points1++;
+              score1.textContent = points1;
+            } else {
+              points2++;
+              score2.textContent = points2;
+            }
+
+            resetTurn();
+            if (matchedPairs === 21) endGame();
+          }, 1000);
         } else {
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
             resetTurn();
-            switchTeam();
+            currentTeam = currentTeam === 1 ? 2 : 1;
           }, 1000);
         }
       }
@@ -284,20 +318,6 @@
       firstCard = null;
       secondCard = null;
       lockBoard = false;
-    };
-
-    const switchTeam = () => {
-      currentTeam = currentTeam === 1 ? 2 : 1;
-    };
-
-    const updateScore = () => {
-      if (currentTeam === 1) {
-        team1++;
-        team1Points.textContent = team1;
-      } else {
-        team2++;
-        team2Points.textContent = team2;
-      }
     };
 
     const startTimer = () => {
@@ -316,19 +336,63 @@
       firstCard = null;
       secondCard = null;
       lockBoard = true;
-      started = true;
-      team1 = 0;
-      team2 = 0;
+      points1 = 0;
+      points2 = 0;
       currentTeam = 1;
-      team1Points.textContent = "0";
-      team2Points.textContent = "0";
+      score1.textContent = 0;
+      score2.textContent = 0;
 
-      createBoard(true);
-      lockBoard = false;
-      startTimer();
+      document.querySelectorAll(".card").forEach(card => {
+        card.classList.remove("matched");
+      });
+
+      const oldCards = Array.from(document.querySelectorAll(".card"));
+      const gridRect = gridContainer.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+      const centerY = gridRect.top + gridRect.height / 2;
+
+      oldCards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const offsetX = centerX - (rect.left + rect.width / 2);
+        const offsetY = centerY - (rect.top + rect.height / 2);
+        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+
+      setTimeout(() => {
+        createBoard(true);
+        lockBoard = false;
+        startTimer();
+
+        const newCards = Array.from(document.querySelectorAll(".card"));
+        const newGridRect = gridContainer.getBoundingClientRect();
+        const centerX = newGridRect.left + newGridRect.width / 2;
+        const centerY = newGridRect.top + newGridRect.height / 2;
+
+        newCards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const offsetX = centerX - (rect.left + rect.width / 2);
+          const offsetY = centerY - (rect.top + rect.height / 2);
+          card.style.transition = "none";
+          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        });
+
+        setTimeout(() => {
+          newCards.forEach(card => {
+            card.style.transition = "transform 0.6s ease-in-out";
+            card.style.transform = "translate(0, 0)";
+          });
+
+          setTimeout(() => {
+            newCards.forEach(card => {
+              card.style.transition = "";
+              card.style.transform = "";
+            });
+          }, 700);
+        }, 30);
+      }, 600);
 
       endScreen.classList.remove("visible");
-      document.getElementById("game-container").style.display = "flex";
     };
 
     const endGame = () => {
