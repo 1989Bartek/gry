@@ -38,21 +38,19 @@
 
     .scoreboard {
       text-align: center;
-      font-size: 20px;
+      font-size: 24px;
       margin-bottom: 20px;
     }
 
     .scoreboard div {
-      margin: 8px 0;
+      margin: 12px 0;
     }
 
     #full-grid {
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(7, 1fr);
-      width: min(90vw, 700px);
-      aspect-ratio: calc(8 / 7);
-      gap: 1.5vw;
+      grid-template-columns: repeat(8, auto);
+      grid-template-rows: repeat(7, auto);
+      gap: 0.5vw;
     }
 
     .grid-cell {
@@ -60,13 +58,19 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 18px;
+      font-size: clamp(14px, 1.8vw, 20px);
       color: white;
+      transition: opacity 0.3s ease;
+    }
+
+    .ukryj-oznakowanie {
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .card {
-      width: 100%;
-      height: 100%;
+      width: clamp(60px, 10vw, 100px);
+      aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
       border-radius: 12px;
@@ -120,7 +124,7 @@
     }
 
     #buttons button {
-      width: 200px;
+      width: 240px;
       padding: 15px 20px;
       font-size: 20px;
       font-weight: bold;
@@ -130,6 +134,13 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    #buttons img {
+      width: 200px;
+      height: auto;
+      display: block;
     }
 
     #end-screen {
@@ -186,6 +197,7 @@
       </div>
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
+        <img src="memory/logo.png" alt="Logo" />
       </div>
     </div>
   </div>
@@ -231,15 +243,15 @@
       const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
       const rows = ["", "1", "2", "3", "4", "5", "6"];
 
-      for (let i = 0; i < 7; i++) { // wiersze
-        for (let j = 0; j < 8; j++) { // kolumny
+      for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 8; j++) {
           const cell = document.createElement("div");
 
           if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell");
+            cell.classList.add("grid-cell", "label-cell");
             cell.textContent = letters[j];
           } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell");
+            cell.classList.add("grid-cell", "label-cell");
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
@@ -279,19 +291,19 @@
         lockBoard = true;
 
         if (firstCard.value === secondCard.value) {
+          firstCard.card.classList.add("matched");
+          secondCard.card.classList.add("matched");
+
+          matchedPairs++;
+          if (currentTeam === 1) {
+            points1++;
+            score1.textContent = points1;
+          } else {
+            points2++;
+            score2.textContent = points2;
+          }
+
           setTimeout(() => {
-            firstCard.card.classList.add("matched");
-            secondCard.card.classList.add("matched");
-
-            matchedPairs++;
-            if (currentTeam === 1) {
-              points1++;
-              score1.textContent = points1;
-            } else {
-              points2++;
-              score2.textContent = points2;
-            }
-
             resetTurn();
             if (matchedPairs === 21) endGame();
           }, 1000);
@@ -334,12 +346,17 @@
       score1.textContent = 0;
       score2.textContent = 0;
 
+      document.querySelectorAll(".card").forEach(card => {
+        card.classList.remove("matched");
+      });
+
+      document.querySelectorAll(".label-cell").forEach(el => el.classList.add("ukryj-oznakowanie"));
+
       const gridRect = fullGrid.getBoundingClientRect();
       const centerX = gridRect.left + gridRect.width / 2;
       const centerY = gridRect.top + gridRect.height / 2;
 
       document.querySelectorAll(".card").forEach(card => {
-        card.classList.remove("matched");
         const rect = card.getBoundingClientRect();
         const offsetX = centerX - (rect.left + rect.width / 2);
         const offsetY = centerY - (rect.top + rect.height / 2);
@@ -376,6 +393,9 @@
               card.style.transition = "";
               card.style.transform = "";
             });
+
+            document.querySelectorAll(".label-cell").forEach(el => el.classList.remove("ukryj-oznakowanie"));
+
           }, 700);
         }, 30);
       }, 600);
