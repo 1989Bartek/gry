@@ -38,12 +38,12 @@
 
     .scoreboard {
       text-align: center;
-      font-size: 20px;
+      font-size: 24px;
       margin-bottom: 20px;
     }
 
     .scoreboard div {
-      margin: 8px 0;
+      margin: 12px 0;
     }
 
     #full-grid {
@@ -60,10 +60,11 @@
       font-weight: bold;
       font-size: clamp(14px, 1.8vw, 20px);
       color: white;
+      opacity: 1;
       transition: opacity 0.3s ease;
     }
 
-    .ukryj-oznakowanie {
+    .grid-cell.ukryj-oznakowanie {
       opacity: 0;
     }
 
@@ -123,7 +124,7 @@
     }
 
     #buttons button {
-      width: 200px;
+      width: 240px;
       padding: 15px 20px;
       font-size: 20px;
       font-weight: bold;
@@ -133,6 +134,13 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    #buttons img {
+      width: 200px;
+      height: auto;
+      display: block;
     }
 
     #end-screen {
@@ -189,6 +197,7 @@
       </div>
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
+        <img src="memory/logo.png" alt="Logo" />
       </div>
     </div>
   </div>
@@ -341,7 +350,6 @@
         card.classList.remove("matched");
       });
 
-      // Ukryj oznaczenia (litery i cyfry)
       document.querySelectorAll(".label-cell").forEach(el => el.classList.add("ukryj-oznakowanie"));
 
       const gridRect = fullGrid.getBoundingClientRect();
@@ -386,8 +394,9 @@
               card.style.transform = "";
             });
 
-            // Przywróć oznaczenia
-            document.querySelectorAll(".label-cell").forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            document.querySelectorAll(".label-cell").forEach(el => {
+              el.classList.remove("ukryj-oznakowanie");
+            });
 
           }, 700);
         }, 30);
