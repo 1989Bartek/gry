@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Świąteczne Memory</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -60,15 +59,12 @@
       font-weight: bold;
       font-size: clamp(14px, 1.8vw, 20px);
       color: white;
-    }
-
-    .label-cell {
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .label-cell:not(.ukryj-oznakowanie) {
       opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .grid-cell.ukryj-oznakowanie {
+      opacity: 0;
     }
 
     .card {
@@ -145,46 +141,6 @@
       height: auto;
       display: block;
     }
-
-    #end-screen {
-      display: none;
-      text-align: center;
-      margin-top: 40px;
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    #end-screen.visible {
-      display: block;
-    }
-
-    #end-screen h2 {
-      font-size: 32px;
-      color: #c0ff6a;
-      margin-bottom: 16px;
-    }
-
-    #end-screen p {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    #end-screen button {
-      width: 300px;
-      padding: 15px 20px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      background-color: #2b8cff;
-      color: white;
-      border: 4px solid white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
   </style>
 </head>
 <body>
@@ -205,18 +161,9 @@
     </div>
   </div>
 
-  <div id="end-screen" class="hidden">
-    <h2>GRATULACJE!</h2>
-    <p>Udało Ci się znaleźć wszystkie pary!</p>
-    <p id="final-time">Twój czas: ...</p>
-    <button onclick="restartAndStart()">Zagraj ponownie</button>
-  </div>
-
   <script>
     const fullGrid = document.getElementById("full-grid");
     const startBtn = document.getElementById("startBtn");
-    const endScreen = document.getElementById("end-screen");
-    const finalTime = document.getElementById("final-time");
     const score1 = document.getElementById("score1");
     const score2 = document.getElementById("score2");
 
@@ -251,10 +198,10 @@
           const cell = document.createElement("div");
 
           if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.classList.add("grid-cell", "label-cell");
             cell.textContent = letters[j];
           } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.classList.add("grid-cell", "label-cell");
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
@@ -308,7 +255,6 @@
 
           setTimeout(() => {
             resetTurn();
-            if (matchedPairs === 21) endGame();
           }, 1000);
         } else {
           setTimeout(() => {
@@ -397,28 +343,10 @@
               card.style.transform = "";
             });
 
-            document.querySelectorAll(".label-cell").forEach(el => {
-              el.classList.remove("ukryj-oznakowanie");
-            });
-
+            document.querySelectorAll(".label-cell").forEach(el => el.classList.remove("ukryj-oznakowanie"));
           }, 700);
         }, 30);
       }, 600);
-
-      endScreen.classList.remove("visible");
-    };
-
-    const endGame = () => {
-      stopTimer();
-      finalTime.textContent = `Twój czas: ${seconds} s`;
-      document.getElementById("game-container").style.display = "none";
-      endScreen.classList.add("visible");
-
-      confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
     };
 
     startBtn.addEventListener("click", () => {
