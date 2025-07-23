@@ -60,12 +60,15 @@
       font-weight: bold;
       font-size: clamp(14px, 1.8vw, 20px);
       color: white;
-      opacity: 1;
-      transition: opacity 0.3s ease;
     }
 
-    .grid-cell.ukryj-oznakowanie {
+    .label-cell {
       opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .label-cell:not(.ukryj-oznakowanie) {
+      opacity: 1;
     }
 
     .card {
@@ -248,10 +251,10 @@
           const cell = document.createElement("div");
 
           if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell");
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = letters[j];
           } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell");
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
