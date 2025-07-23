@@ -198,10 +198,10 @@
           const cell = document.createElement("div");
 
           if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell");
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = letters[j];
           } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell");
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
@@ -299,7 +299,8 @@
         card.classList.remove("matched");
       });
 
-      document.querySelectorAll(".label-cell").forEach(el => el.classList.add("ukryj-oznakowanie"));
+      const labelCells = document.querySelectorAll(".label-cell");
+      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
 
       const gridRect = fullGrid.getBoundingClientRect();
       const centerX = gridRect.left + gridRect.width / 2;
@@ -343,7 +344,11 @@
               card.style.transform = "";
             });
 
-            document.querySelectorAll(".label-cell").forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            const labelCells = document.querySelectorAll(".label-cell");
+            requestAnimationFrame(() => {
+              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            });
+
           }, 700);
         }, 30);
       }, 600);
@@ -363,6 +368,10 @@
 
     window.onload = () => {
       createBoard(false);
+      const labelCells = document.querySelectorAll(".label-cell");
+      requestAnimationFrame(() => {
+        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+      });
     };
   </script>
 </body>
