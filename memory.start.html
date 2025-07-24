@@ -39,7 +39,7 @@
     }
 
     .team-input label {
-      font-size: 48px;
+      font-size: 24px;
       display: block;
       margin-bottom: 10px;
     }
@@ -117,8 +117,9 @@
         font-size: 42px;
       }
 
-      .team-input label {
-        font-size: 32px;
+      .team-input label,
+      .section-title {
+        font-size: 20px;
       }
 
       .team-input input {
@@ -142,12 +143,12 @@
 
   <div class="team-input">
     <label for="team1">Nazwa drużyny nr 1</label>
-    <input type="text" id="team1" maxlength="15" placeholder="Wpisz nazwę" />
+    <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
   </div>
 
   <div class="team-input">
     <label for="team2">Nazwa drużyny nr 2</label>
-    <input type="text" id="team2" maxlength="15" placeholder="Wpisz nazwę" />
+    <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
   </div>
 
   <div class="section-title">Która drużyna ma rozpocząć grę?</div>
@@ -166,7 +167,7 @@
     const team2Input = document.getElementById("team2");
     const btnTeam1 = document.getElementById("btnTeam1");
     const btnTeam2 = document.getElementById("btnTeam2");
-    let startingTeam = 1;
+    let startingTeam = null;
 
     const updateButtonLabels = () => {
       btnTeam1.textContent = team1Input.value.trim() || "Drużyna 1";
@@ -190,12 +191,11 @@
       const team2 = team2Input.value.trim() || "Drużyna 2";
       localStorage.setItem("team1", team1);
       localStorage.setItem("team2", team2);
-      localStorage.setItem("startingTeam", startingTeam);
+      localStorage.setItem("startingTeam", startingTeam !== null ? startingTeam : 1); 
       window.location.href = "memory.html";
     });
 
-    updateButtonLabels();
-    activateButton(1);
+    updateButtonLabels(); 
   </script>
 </body>
 </html>
