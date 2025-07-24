@@ -31,23 +31,36 @@
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    .team-input {
+    .config-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
       margin-bottom: 30px;
-      width: 100%;
-      max-width: 400px;
+    }
+
+    .left-block, .right-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .team-input {
+      width: 280px;
       text-align: center;
     }
 
     .team-input label {
       font-size: 24px;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .team-input input {
       width: 100%;
-      padding: 12px;
-      font-size: 20px;
+      padding: 10px;
+      font-size: 18px;
       border-radius: 10px;
       border: none;
       outline: none;
@@ -55,22 +68,21 @@
 
     .section-title {
       font-size: 24px;
-      margin: 20px 0 10px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
-    .team-select {
+    .button-group {
       display: flex;
-      gap: 20px;
-      justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 30px;
+      justify-content: center;
+      gap: 15px;
     }
 
-    .team-select button {
-      width: 180px;
-      padding: 15px 20px;
-      font-size: 20px;
+    .button-group button {
+      width: auto;
+      padding: 12px 20px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       background-color: #104f9c;
@@ -78,10 +90,11 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
       transition: background-color 0.3s ease;
     }
 
-    .team-select button.active {
+    .button-group button.active {
       background-color: #2e7d32 !important;
     }
 
@@ -98,6 +111,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-top: 20px;
       margin-bottom: 30px;
+      text-transform: uppercase;
     }
 
     #logo {
@@ -112,28 +126,10 @@
       text-align: center;
     }
 
-    @media (max-width: 480px) {
-      #game-title {
-        font-size: 42px;
-      }
-
-      .team-input label,
-      .section-title {
-        font-size: 20px;
-      }
-
-      .team-input input {
-        font-size: 18px;
-      }
-
-      .team-select button {
-        width: 150px;
-        font-size: 18px;
-      }
-
-      #nextBtn {
-        width: 200px;
-        font-size: 18px;
+    @media (max-width: 768px) {
+      .config-container {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
@@ -141,20 +137,42 @@
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
 
-  <div class="team-input">
-    <label for="team1">Nazwa drużyny nr 1</label>
-    <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
+  <div class="config-container">
+    <div class="left-block">
+      <div class="team-input">
+        <label for="team1">Nazwa drużyny nr 1</label>
+        <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
+      </div>
+
+      <div class="team-input">
+        <label for="team2">Nazwa drużyny nr 2</label>
+        <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
+      </div>
+    </div>
+
+    <div class="right-block">
+      <div class="section-title">Która drużyna ma rozpocząć grę?</div>
+      <div class="button-group" id="starterGroup">
+        <button id="btnTeam1">DRUŻYNA 1</button>
+        <button id="btnTeam2">DRUŻYNA 2</button>
+      </div>
+    </div>
   </div>
 
-  <div class="team-input">
-    <label for="team2">Nazwa drużyny nr 2</label>
-    <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
+  <div class="section-title">Czas na wykonanie ruchu drużyny:</div>
+  <div class="button-group" id="moveTimeGroup">
+    <button data-time="15">15 SEKUND</button>
+    <button data-time="30">30 SEKUND</button>
+    <button data-time="60">60 SEKUND</button>
+    <button data-time="0">BEZ CZASU</button>
   </div>
 
-  <div class="section-title">Która drużyna ma rozpocząć grę?</div>
-  <div class="team-select">
-    <button id="btnTeam1">Drużyna 1</button>
-    <button id="btnTeam2">Drużyna 2</button>
+  <div class="section-title">Czas na całą rozgrywkę:</div>
+  <div class="button-group" id="gameTimeGroup">
+    <button data-time="10">10 MINUT</button>
+    <button data-time="15">15 MINUT</button>
+    <button data-time="25">25 MINUT</button>
+    <button data-time="0">BEZ CZASU</button>
   </div>
 
   <button id="nextBtn">Dalej</button>
@@ -167,35 +185,65 @@
     const team2Input = document.getElementById("team2");
     const btnTeam1 = document.getElementById("btnTeam1");
     const btnTeam2 = document.getElementById("btnTeam2");
+
+    const moveTimeGroup = document.getElementById("moveTimeGroup");
+    const gameTimeGroup = document.getElementById("gameTimeGroup");
+
     let startingTeam = null;
+    let moveTime = null;
+    let gameTime = null;
 
     const updateButtonLabels = () => {
-      btnTeam1.textContent = team1Input.value.trim() || "Drużyna 1";
-      btnTeam2.textContent = team2Input.value.trim() || "Drużyna 2";
+      btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1").toUpperCase();
+      btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2").toUpperCase();
     };
 
-    const activateButton = (team) => {
-      startingTeam = team;
-      btnTeam1.classList.toggle("active", team === 1);
-      btnTeam2.classList.toggle("active", team === 2);
+    const activateSingleButton = (group, value, setCallback) => {
+      [...group.querySelectorAll("button")].forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.time == value);
+      });
+      setCallback(value);
     };
 
     team1Input.addEventListener("input", updateButtonLabels);
     team2Input.addEventListener("input", updateButtonLabels);
 
-    btnTeam1.addEventListener("click", () => activateButton(1));
-    btnTeam2.addEventListener("click", () => activateButton(2));
+    btnTeam1.addEventListener("click", () => {
+      startingTeam = 1;
+      btnTeam1.classList.add("active");
+      btnTeam2.classList.remove("active");
+    });
+
+    btnTeam2.addEventListener("click", () => {
+      startingTeam = 2;
+      btnTeam2.classList.add("active");
+      btnTeam1.classList.remove("active");
+    });
+
+    moveTimeGroup.addEventListener("click", e => {
+      if (e.target.tagName === "BUTTON") {
+        activateSingleButton(moveTimeGroup, e.target.dataset.time, val => moveTime = val);
+      }
+    });
+
+    gameTimeGroup.addEventListener("click", e => {
+      if (e.target.tagName === "BUTTON") {
+        activateSingleButton(gameTimeGroup, e.target.dataset.time, val => gameTime = val);
+      }
+    });
 
     document.getElementById("nextBtn").addEventListener("click", () => {
       const team1 = team1Input.value.trim() || "Drużyna 1";
       const team2 = team2Input.value.trim() || "Drużyna 2";
       localStorage.setItem("team1", team1);
       localStorage.setItem("team2", team2);
-      localStorage.setItem("startingTeam", startingTeam !== null ? startingTeam : 1); 
+      localStorage.setItem("startingTeam", startingTeam || 1); // domyślnie drużyna 1
+      localStorage.setItem("moveTime", moveTime || "0");       // domyślnie bez czasu
+      localStorage.setItem("gameTime", gameTime || "0");       // domyślnie bez czasu
       window.location.href = "memory.html";
     });
 
-    updateButtonLabels(); 
+    updateButtonLabels();
   </script>
 </body>
 </html>
