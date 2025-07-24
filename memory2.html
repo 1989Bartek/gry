@@ -1,1 +1,423 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Świąteczne Memory</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(ellipse at center, #b60000 0%, #750000 100%);
+      color: #ffffff;
+      padding: 20px;
+      min-height: 100vh;
+      transition: padding-top 0.3s ease;
+    }
+
+    body.fullscreen-active {
+      padding-top: 120px;
+    }
+
+    #game-title {
+      text-align: center;
+      font-size: 64px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    #game-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .scoreboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 34px;
+      font-weight: bold;
+      margin-top: 30px;  
+      margin-bottom: 10px;
+      width: 240px;
+    }
+
+    .scoreboard div {
+      margin: 10px 0;
+    }
+
+    #full-grid {
+      display: grid;
+      grid-template-columns: repeat(8, auto);
+      grid-template-rows: repeat(7, auto);
+      gap: 0.5vw;
+    }
+
+    .grid-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: clamp(14px, 1.8vw, 20px);
+      color: white;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .grid-cell.ukryj-oznakowanie {
+      opacity: 0;
+    }
+
+    .card {
+      width: clamp(60px, 10vw, 100px);
+      aspect-ratio: 1 / 1;
+      position: relative;
+      cursor: pointer;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card .front {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      visibility: hidden;
+      transition: filter 1s ease;
+    }
+
+    .card .cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: filter 0.3s ease;
+      z-index: 2;
+      visibility: visible;
+      filter: grayscale(100%) brightness(80%);
+    }
+
+    .cover.kolorowa {
+      filter: none;
+    }
+
+    .card.flipped .cover {
+      visibility: hidden;
+    }
+
+    .card.flipped .front {
+      visibility: visible;
+    }
+
+    .card.matched .front {
+      filter: grayscale(100%) brightness(60%);
+    }
+
+    #buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    #buttons button {
+      width: 240px;
+      padding: 15px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    #startBtn {
+      background-color: #2e7d32 !important;
+    }
+
+    #buttons img {
+      width: 200px;
+      height: auto;
+      display: block;
+      margin-top: 10px;
+    }
+
+    #website-link {
+      color: white;
+      font-size: 16px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="game-title">Świąteczne Memory</h1>
+
+  <div id="game-container">
+    <div id="full-grid"></div>
+
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div class="scoreboard">
+        <div>Drużyna 1: <span id="score1">0</span></div>
+        <div>Drużyna 2: <span id="score2">0</span></div>
+      </div>
+      <div id="buttons" class="controls">
+        <button id="startBtn">Start</button>
+        <button id="fullscreenBtn">Pełny ekran</button>
+        <button id="returnBtn">Powrót</button>
+        <img src="memory/logo.png" alt="Logo" />
+        <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fullGrid = document.getElementById("full-grid");
+    const startBtn = document.getElementById("startBtn");
+    const score1 = document.getElementById("score1");
+    const score2 = document.getElementById("score2");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = true;
+    let matchedPairs = 0;
+    let timer;
+    let seconds = 0;
+    let started = false;
+    let points1 = 0;
+    let points2 = 0;
+    let currentTeam = 1;
+    let cards = [];
+
+    const createBoard = (colorCovers = false) => {
+      fullGrid.innerHTML = "";
+      cards = [];
+
+      const totalPairs = 21;
+      const all = [];
+      for (let i = 1; i <= totalPairs; i++) {
+        all.push(i, i);
+      }
+      const shuffled = all.sort(() => 0.5 - Math.random());
+
+      const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
+      const rows = ["", "1", "2", "3", "4", "5", "6"];
+
+      for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 8; j++) {
+          const cell = document.createElement("div");
+
+          if (i === 0 && j > 0) {
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.textContent = letters[j];
+          } else if (j === 0 && i > 0) {
+            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.textContent = rows[i];
+          } else if (i > 0 && j > 0) {
+            const value = shuffled.pop();
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            const frontImg = document.createElement("img");
+            frontImg.src = `memory/${value}.png`;
+            frontImg.classList.add("front");
+
+            const backImg = document.createElement("img");
+            backImg.src = "memory/0.png";
+            backImg.classList.add("cover");
+            if (colorCovers) backImg.classList.add("kolorowa");
+
+            card.appendChild(frontImg);
+            card.appendChild(backImg);
+            card.addEventListener("click", () => handleCardClick(card, value));
+            cell.appendChild(card);
+            cards.push(card);
+          }
+
+          fullGrid.appendChild(cell);
+        }
+      }
+    };
+
+    const handleCardClick = (card, value) => {
+      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+
+      card.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = { card, value };
+      } else {
+        secondCard = { card, value };
+        lockBoard = true;
+
+        if (firstCard.value === secondCard.value) {
+          firstCard.card.classList.add("matched");
+          secondCard.card.classList.add("matched");
+
+          matchedPairs++;
+          if (currentTeam === 1) {
+            points1++;
+            score1.textContent = points1;
+          } else {
+            points2++;
+            score2.textContent = points2;
+          }
+
+          setTimeout(() => {
+            resetTurn();
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            firstCard.card.classList.remove("flipped");
+            secondCard.card.classList.remove("flipped");
+            resetTurn();
+            currentTeam = currentTeam === 1 ? 2 : 1;
+          }, 1000);
+        }
+      }
+    };
+
+    const resetTurn = () => {
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+    };
+
+    const startTimer = () => {
+      seconds = 0;
+      timer = setInterval(() => {
+        seconds++;
+      }, 1000);
+    };
+
+    const stopTimer = () => clearInterval(timer);
+
+    const restartAndStart = () => {
+      stopTimer();
+      seconds = 0;
+      matchedPairs = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = true;
+      points1 = 0;
+      points2 = 0;
+      currentTeam = 1;
+      score1.textContent = 0;
+      score2.textContent = 0;
+
+      document.querySelectorAll(".card").forEach(card => {
+        card.classList.remove("matched");
+      });
+
+      const labelCells = document.querySelectorAll(".label-cell");
+      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const gridRect = fullGrid.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+      const centerY = gridRect.top + gridRect.height / 2;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const offsetX = centerX - (rect.left + rect.width / 2);
+        const offsetY = centerY - (rect.top + rect.height / 2);
+        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+
+      setTimeout(() => {
+        createBoard(true);
+        lockBoard = false;
+        startTimer();
+
+        const newCards = Array.from(document.querySelectorAll(".card"));
+        const newGridRect = fullGrid.getBoundingClientRect();
+        const centerX = newGridRect.left + newGridRect.width / 2;
+        const centerY = newGridRect.top + newGridRect.height / 2;
+
+        newCards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const offsetX = centerX - (rect.left + rect.width / 2);
+          const offsetY = centerY - (rect.top + rect.height / 2);
+          card.style.transition = "none";
+          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        });
+
+        setTimeout(() => {
+          newCards.forEach(card => {
+            card.style.transition = "transform 0.6s ease-in-out";
+            card.style.transform = "translate(0, 0)";
+          });
+
+          setTimeout(() => {
+            newCards.forEach(card => {
+              card.style.transition = "";
+              card.style.transform = "";
+            });
+
+            const labelCells = document.querySelectorAll(".label-cell");
+            requestAnimationFrame(() => {
+              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            });
+
+          }, 600);
+        }, 30);
+      }, 600);
+    };
+
+    startBtn.addEventListener("click", () => {
+      if (!started) {
+        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
+        lockBoard = false;
+        startTimer();
+        startBtn.textContent = "Restart";
+        started = true;
+      } else {
+        restartAndStart();
+      }
+    });
+
+    fullscreenBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.textContent = "Podstawowy ekran";
+        document.body.classList.add("fullscreen-active");
+      } else {
+        fullscreenBtn.textContent = "Pełny ekran";
+        document.body.classList.remove("fullscreen-active");
+      }
+    });
+
+    window.onload = () => {
+      createBoard(false);
+      const labelCells = document.querySelectorAll(".label-cell");
+      requestAnimationFrame(() => {
+        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+      });
+    };
+  </script>
+</body>
+</html>
 
