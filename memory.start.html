@@ -39,7 +39,7 @@
     }
 
     .team-input label {
-      font-size: 24px;
+      font-size: 48px;
       display: block;
       margin-bottom: 10px;
     }
@@ -51,7 +51,38 @@
       border-radius: 10px;
       border: none;
       outline: none;
-      max-length: 15;
+    }
+
+    .section-title {
+      font-size: 24px;
+      margin: 20px 0 10px;
+      text-align: center;
+    }
+
+    .team-select {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .team-select button {
+      width: 180px;
+      padding: 15px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .team-select button.active {
+      background-color: #2e7d32 !important;
     }
 
     #nextBtn {
@@ -87,10 +118,15 @@
       }
 
       .team-input label {
-        font-size: 20px;
+        font-size: 32px;
       }
 
       .team-input input {
+        font-size: 18px;
+      }
+
+      .team-select button {
+        width: 150px;
         font-size: 18px;
       }
 
@@ -106,12 +142,18 @@
 
   <div class="team-input">
     <label for="team1">Nazwa drużyny nr 1</label>
-    <input type="text" id="team1" maxlength="15" placeholder="Wpisz nazwę drużyny 1" />
+    <input type="text" id="team1" maxlength="15" placeholder="Wpisz nazwę" />
   </div>
 
   <div class="team-input">
     <label for="team2">Nazwa drużyny nr 2</label>
-    <input type="text" id="team2" maxlength="15" placeholder="Wpisz nazwę drużyny 2" />
+    <input type="text" id="team2" maxlength="15" placeholder="Wpisz nazwę" />
+  </div>
+
+  <div class="section-title">Która drużyna ma rozpocząć grę?</div>
+  <div class="team-select">
+    <button id="btnTeam1">Drużyna 1</button>
+    <button id="btnTeam2">Drużyna 2</button>
   </div>
 
   <button id="nextBtn">Dalej</button>
@@ -120,14 +162,40 @@
   <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
 
   <script>
+    const team1Input = document.getElementById("team1");
+    const team2Input = document.getElementById("team2");
+    const btnTeam1 = document.getElementById("btnTeam1");
+    const btnTeam2 = document.getElementById("btnTeam2");
+    let startingTeam = 1;
+
+    const updateButtonLabels = () => {
+      btnTeam1.textContent = team1Input.value.trim() || "Drużyna 1";
+      btnTeam2.textContent = team2Input.value.trim() || "Drużyna 2";
+    };
+
+    const activateButton = (team) => {
+      startingTeam = team;
+      btnTeam1.classList.toggle("active", team === 1);
+      btnTeam2.classList.toggle("active", team === 2);
+    };
+
+    team1Input.addEventListener("input", updateButtonLabels);
+    team2Input.addEventListener("input", updateButtonLabels);
+
+    btnTeam1.addEventListener("click", () => activateButton(1));
+    btnTeam2.addEventListener("click", () => activateButton(2));
+
     document.getElementById("nextBtn").addEventListener("click", () => {
-      const team1 = document.getElementById("team1").value.trim();
-      const team2 = document.getElementById("team2").value.trim();
-      localStorage.setItem("team1", team1 || "Drużyna 1");
-      localStorage.setItem("team2", team2 || "Drużyna 2");
+      const team1 = team1Input.value.trim() || "Drużyna 1";
+      const team2 = team2Input.value.trim() || "Drużyna 2";
+      localStorage.setItem("team1", team1);
+      localStorage.setItem("team2", team2);
+      localStorage.setItem("startingTeam", startingTeam);
       window.location.href = "memory.html";
     });
+
+    updateButtonLabels();
+    activateButton(1);
   </script>
 </body>
 </html>
-
