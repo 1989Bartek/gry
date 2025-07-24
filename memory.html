@@ -350,6 +350,76 @@
 
     const stopTimer = () => clearInterval(timer);
 
+    const restartAndStart = () => {
+      stopTimer();
+      seconds = 0;
+      matchedPairs = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = true;
+      points1 = 0;
+      points2 = 0;
+      currentTeam = 1;
+      score1.textContent = 0;
+      score2.textContent = 0;
+      highlightActiveTeam();
+
+      document.querySelectorAll(".card").forEach(card => card.classList.remove("matched"));
+
+      const labelCells = document.querySelectorAll(".label-cell");
+      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const gridRect = fullGrid.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+      const centerY = gridRect.top + gridRect.height / 2;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const offsetX = centerX - (rect.left + rect.width / 2);
+        const offsetY = centerY - (rect.top + rect.height / 2);
+        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+
+      setTimeout(() => {
+        createBoard(true);
+        lockBoard = false;
+        startTimer();
+
+        const newCards = Array.from(document.querySelectorAll(".card"));
+        const newGridRect = fullGrid.getBoundingClientRect();
+        const centerX = newGridRect.left + newGridRect.width / 2;
+        const centerY = newGridRect.top + newGridRect.height / 2;
+
+        newCards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const offsetX = centerX - (rect.left + rect.width / 2);
+          const offsetY = centerY - (rect.top + rect.height / 2);
+          card.style.transition = "none";
+          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        });
+
+        setTimeout(() => {
+          newCards.forEach(card => {
+            card.style.transition = "transform 0.6s ease-in-out";
+            card.style.transform = "translate(0, 0)";
+          });
+
+          setTimeout(() => {
+            newCards.forEach(card => {
+              card.style.transition = "";
+              card.style.transform = "";
+            });
+
+            const labelCells = document.querySelectorAll(".label-cell");
+            requestAnimationFrame(() => {
+              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            });
+          }, 600);
+        }, 30);
+      }, 600);
+    };
+
     startBtn.addEventListener("click", () => {
       if (!started) {
         document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
@@ -359,7 +429,7 @@
         started = true;
         highlightActiveTeam();
       } else {
-        location.reload();
+        restartAndStart();
       }
     });
 
