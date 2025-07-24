@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Świąteczne Memory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(ellipse at center, #b60000 0%, #750000 100%);
+      color: #ffffff;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #game-title {
+      text-align: center;
+      font-size: 64px;
+      margin-bottom: 40px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .team-input {
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .team-input label {
+      font-size: 24px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .team-input input {
+      width: 100%;
+      padding: 12px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      max-length: 15;
+    }
+
+    #nextBtn {
+      width: 240px;
+      padding: 15px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+      margin-bottom: 30px;
+    }
+
+    #logo {
+      width: 200px;
+      height: auto;
+    }
+
+    #website-link {
+      color: white;
+      font-size: 16px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      #game-title {
+        font-size: 42px;
+      }
+
+      .team-input label {
+        font-size: 20px;
+      }
+
+      .team-input input {
+        font-size: 18px;
+      }
+
+      #nextBtn {
+        width: 200px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="game-title">Świąteczne Memory</h1>
+
+  <div class="team-input">
+    <label for="team1">Nazwa drużyny nr 1</label>
+    <input type="text" id="team1" maxlength="15" placeholder="Wpisz nazwę drużyny 1" />
+  </div>
+
+  <div class="team-input">
+    <label for="team2">Nazwa drużyny nr 2</label>
+    <input type="text" id="team2" maxlength="15" placeholder="Wpisz nazwę drużyny 2" />
+  </div>
+
+  <button id="nextBtn">Dalej</button>
+
+  <img id="logo" src="memory/logo.png" alt="Logo" />
+  <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+
+  <script>
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      const team1 = document.getElementById("team1").value.trim();
+      const team2 = document.getElementById("team2").value.trim();
+      localStorage.setItem("team1", team1 || "Drużyna 1");
+      localStorage.setItem("team2", team2 || "Drużyna 2");
+      window.location.href = "memory.html";
+    });
+  </script>
+</body>
+</html>
 
