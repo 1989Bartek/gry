@@ -235,7 +235,7 @@
             card.classList.add("card");
 
             const frontImg = document.createElement("img");
-            frontImg.src = memory/${value}.png;
+            frontImg.src = `memory/${value}.png`;
             frontImg.classList.add("front");
 
             const backImg = document.createElement("img");
@@ -337,7 +337,7 @@
         const offsetX = centerX - (rect.left + rect.width / 2);
         const offsetY = centerY - (rect.top + rect.height / 2);
         card.style.transition = "transform 0.5s ease-in-out";
-        card.style.transform = translate(${offsetX}px, ${offsetY}px);
+        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       });
 
       setTimeout(() => {
@@ -355,7 +355,7 @@
           const offsetX = centerX - (rect.left + rect.width / 2);
           const offsetY = centerY - (rect.top + rect.height / 2);
           card.style.transition = "none";
-          card.style.transform = translate(${offsetX}px, ${offsetY}px);
+          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         });
 
         setTimeout(() => {
@@ -420,3 +420,4 @@
   </script>
 </body>
 </html>
+
