@@ -43,7 +43,7 @@
     .scoreboard {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       font-size: 34px;
       font-weight: bold;
       margin-top: 30px;  
@@ -53,6 +53,18 @@
 
     .scoreboard div {
       margin: 10px 0;
+    }
+
+    .label {
+      font-size: 16px;
+      font-weight: normal;
+      margin-top: 5px;
+    }
+
+    .active-team {
+      background-color: #104f9c;
+      padding: 4px 8px;
+      border-radius: 8px;
     }
 
     #full-grid {
@@ -173,8 +185,10 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div>Drużyna 1: <span id="score1">0</span></div>
-        <div>Drużyna 2: <span id="score2">0</span></div>
+        <div><span id="team1Name">Drużyna 1</span>: <span id="score1">0</span></div>
+        <div><span id="team2Name">Drużyna 2</span>: <span id="score2">0</span></div>
+        <div class="label">Czas wykonania ruchu: <span id="moveTimerLabel">—</span></div>
+        <div class="label">Czas rozgrywki: <span id="gameTimerLabel">—</span></div>
       </div>
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
@@ -187,47 +201,102 @@
   </div>
 
   <script>
-    const fullGrid = document.getElementById("full-grid");
-    const startBtn = document.getElementById("startBtn");
+    const team1Name = document.getElementById("team1Name");
+    const team2Name = document.getElementById("team2Name");
     const score1 = document.getElementById("score1");
     const score2 = document.getElementById("score2");
+    const moveLabel = document.getElementById("moveTimerLabel");
+    const gameLabel = document.getElementById("gameTimerLabel");
+
+    const startBtn = document.getElementById("startBtn");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = true;
-    let matchedPairs = 0;
-    let timer;
-    let seconds = 0;
+    let moveInterval;
+    let gameInterval;
+    let moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
+    let gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+    let currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
+    let moveRemaining = moveTime;
+    let gameRemaining = gameTime * 60;
     let started = false;
     let points1 = 0;
     let points2 = 0;
-    let currentTeam = 1;
+    let lockBoard = true;
+    let firstCard = null;
+    let secondCard = null;
+    let matchedPairs = 0;
     let cards = [];
 
-    const createBoard = (colorCovers = false) => {
-      fullGrid.innerHTML = "";
-      cards = [];
+    const updateTimersDisplay = () => {
+      moveLabel.textContent = moveTime > 0 ? `${moveRemaining} sekund` : "Bez czasu";
+      gameLabel.textContent = gameTime > 0 ? formatTime(gameRemaining) : "Bez czasu";
+    };
 
-      const totalPairs = 21;
-      const all = [];
-      for (let i = 1; i <= totalPairs; i++) {
-        all.push(i, i);
+    const formatTime = (s) => {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m}:${sec < 10 ? "0" : ""}${sec}`;
+    };
+
+    const switchTeam = () => {
+      currentTeam = currentTeam === 1 ? 2 : 1;
+      highlightTeam();
+    };
+
+    const highlightTeam = () => {
+      team1Name.classList.toggle("active-team", currentTeam === 1);
+      team2Name.classList.toggle("active-team", currentTeam === 2);
+    };
+
+    const startMoveTimer = () => {
+      if (moveTime > 0) {
+        moveRemaining = moveTime;
+        moveInterval = setInterval(() => {
+          moveRemaining--;
+          updateTimersDisplay();
+          if (moveRemaining <= 0) {
+            switchTeam();
+            moveRemaining = moveTime;
+          }
+        }, 1000);
       }
-      const shuffled = all.sort(() => 0.5 - Math.random());
+    };
 
+    const startGameTimer = () => {
+      if (gameTime > 0) {
+        gameInterval = setInterval(() => {
+          gameRemaining--;
+          updateTimersDisplay();
+          if (gameRemaining <= 0) {
+            clearInterval(gameInterval);
+            clearInterval(moveInterval);
+            lockBoard = true;
+            alert("Koniec czasu rozgrywki!");
+          }
+        }, 1000);
+      }
+    };
+
+    const createBoard = () => {
+      const grid = document.getElementById("full-grid");
       const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
       const rows = ["", "1", "2", "3", "4", "5", "6"];
+      const totalPairs = 21;
+      const all = [];
+      for (let i = 1; i <= totalPairs; i++) all.push(i, i);
+      const shuffled = all.sort(() => 0.5 - Math.random());
+
+      grid.innerHTML = "";
+      cards = [];
 
       for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 8; j++) {
           const cell = document.createElement("div");
-
           if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.classList.add("grid-cell");
             cell.textContent = letters[j];
           } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+            cell.classList.add("grid-cell");
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
@@ -241,7 +310,6 @@
             const backImg = document.createElement("img");
             backImg.src = "memory/0.png";
             backImg.classList.add("cover");
-            if (colorCovers) backImg.classList.add("kolorowa");
 
             card.appendChild(frontImg);
             card.appendChild(backImg);
@@ -249,8 +317,7 @@
             cell.appendChild(card);
             cards.push(card);
           }
-
-          fullGrid.appendChild(cell);
+          grid.appendChild(cell);
         }
       }
     };
@@ -279,15 +346,13 @@
             score2.textContent = points2;
           }
 
-          setTimeout(() => {
-            resetTurn();
-          }, 1000);
+          setTimeout(resetTurn, 1000);
         } else {
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
+            switchTeam();
             resetTurn();
-            currentTeam = currentTeam === 1 ? 2 : 1;
           }, 1000);
         }
       }
@@ -299,96 +364,16 @@
       lockBoard = false;
     };
 
-    const startTimer = () => {
-      seconds = 0;
-      timer = setInterval(() => {
-        seconds++;
-      }, 1000);
-    };
-
-    const stopTimer = () => clearInterval(timer);
-
-    const restartAndStart = () => {
-      stopTimer();
-      seconds = 0;
-      matchedPairs = 0;
-      firstCard = null;
-      secondCard = null;
-      lockBoard = true;
-      points1 = 0;
-      points2 = 0;
-      currentTeam = 1;
-      score1.textContent = 0;
-      score2.textContent = 0;
-
-      document.querySelectorAll(".card").forEach(card => {
-        card.classList.remove("matched");
-      });
-
-      const labelCells = document.querySelectorAll(".label-cell");
-      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
-
-      const gridRect = fullGrid.getBoundingClientRect();
-      const centerX = gridRect.left + gridRect.width / 2;
-      const centerY = gridRect.top + gridRect.height / 2;
-
-      document.querySelectorAll(".card").forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const offsetX = centerX - (rect.left + rect.width / 2);
-        const offsetY = centerY - (rect.top + rect.height / 2);
-        card.style.transition = "transform 0.5s ease-in-out";
-        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      });
-
-      setTimeout(() => {
-        createBoard(true);
-        lockBoard = false;
-        startTimer();
-
-        const newCards = Array.from(document.querySelectorAll(".card"));
-        const newGridRect = fullGrid.getBoundingClientRect();
-        const centerX = newGridRect.left + newGridRect.width / 2;
-        const centerY = newGridRect.top + newGridRect.height / 2;
-
-        newCards.forEach(card => {
-          const rect = card.getBoundingClientRect();
-          const offsetX = centerX - (rect.left + rect.width / 2);
-          const offsetY = centerY - (rect.top + rect.height / 2);
-          card.style.transition = "none";
-          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        });
-
-        setTimeout(() => {
-          newCards.forEach(card => {
-            card.style.transition = "transform 0.6s ease-in-out";
-            card.style.transform = "translate(0, 0)";
-          });
-
-          setTimeout(() => {
-            newCards.forEach(card => {
-              card.style.transition = "";
-              card.style.transform = "";
-            });
-
-            const labelCells = document.querySelectorAll(".label-cell");
-            requestAnimationFrame(() => {
-              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
-            });
-
-          }, 600);
-        }, 30);
-      }, 600);
-    };
-
     startBtn.addEventListener("click", () => {
       if (!started) {
-        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
-        lockBoard = false;
-        startTimer();
-        startBtn.textContent = "Restart";
         started = true;
+        lockBoard = false;
+        startBtn.textContent = "Restart";
+        highlightTeam();
+        startMoveTimer();
+        startGameTimer();
       } else {
-        restartAndStart();
+        location.reload();
       }
     });
 
@@ -401,21 +386,15 @@
     });
 
     document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement) {
-        fullscreenBtn.textContent = "Podstawowy ekran";
-        document.body.classList.add("fullscreen-active");
-      } else {
-        fullscreenBtn.textContent = "Pełny ekran";
-        document.body.classList.remove("fullscreen-active");
-      }
+      document.body.classList.toggle("fullscreen-active", !!document.fullscreenElement);
+      fullscreenBtn.textContent = document.fullscreenElement ? "Podstawowy ekran" : "Pełny ekran";
     });
 
     window.onload = () => {
-      createBoard(false);
-      const labelCells = document.querySelectorAll(".label-cell");
-      requestAnimationFrame(() => {
-        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
-      });
+      team1Name.textContent = localStorage.getItem("team1") || "Drużyna 1";
+      team2Name.textContent = localStorage.getItem("team2") || "Drużyna 2";
+      updateTimersDisplay();
+      createBoard();
     };
   </script>
 </body>
