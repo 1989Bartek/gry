@@ -56,12 +56,9 @@
     }
 
     .scoreboard .active-team {
-      background-color: #104f9c;
-      color: white;
+      border: 3px solid #104f9c;
       border-radius: 12px;
-      padding: 10px;
-      width: 100%;
-      text-align: center;
+      padding: 4px 8px;
     }
 
     .info-text {
@@ -189,15 +186,15 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1Label"></div>
-        <div id="team2Label"></div>
+        <div id="team1Label"><span id="score1Container">Drużyna 1: <span id="score1">0</span></span></div>
+        <div id="team2Label"><span id="score2Container">Drużyna 2: <span id="score2">0</span></span></div>
         <div class="info-text">Czas wykonania ruchu: <span id="moveTimeLabel"></span></div>
         <div class="info-text">Czas rozgrywki: <span id="gameTimeLabel"></span></div>
       </div>
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
-        <button id="returnBtn" onclick="location.href='memory.start.html'">Powrót</button>
+        <button id="returnBtn">Powrót</button>
         <img src="memory/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
@@ -232,10 +229,10 @@
     const moveTime = parseInt(localStorage.getItem("moveTime") || "0");
     const gameTime = parseInt(localStorage.getItem("gameTime") || "0");
 
-    team1Label.innerHTML = `<div id="score1Container">${team1}: <span id="score1">0</span></div>`;
-    team2Label.innerHTML = `<div id="score2Container">${team2}: <span id="score2">0</span></div>`;
-    moveTimeLabel.textContent = moveTime > 0 ? `${moveTime}` : "Bez czasu";
-    gameTimeLabel.textContent = gameTime > 0 ? `${gameTime} minut` : "Bez czasu";
+    team1Label.innerHTML = <span id="score1Container">${team1}: <span id="score1">0</span></span>;
+    team2Label.innerHTML = <span id="score2Container">${team2}: <span id="score2">0</span></span>;
+    moveTimeLabel.textContent = moveTime > 0 ? ${moveTime} sekund : "Bez czasu";
+    gameTimeLabel.textContent = gameTime > 0 ? ${gameTime} minut : "Bez czasu";
 
     const highlightActiveTeam = () => {
       document.getElementById("score1Container").classList.toggle("active-team", currentTeam === 1);
@@ -270,7 +267,7 @@
             card.classList.add("card");
 
             const frontImg = document.createElement("img");
-            frontImg.src = `memory/${value}.png`;
+            frontImg.src = memory/${value}.png;
             frontImg.classList.add("front");
 
             const backImg = document.createElement("img");
@@ -340,6 +337,76 @@
 
     const stopTimer = () => clearInterval(timer);
 
+    const restartAndStart = () => {
+      stopTimer();
+      seconds = 0;
+      matchedPairs = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = true;
+      points1 = 0;
+      points2 = 0;
+      currentTeam = 1;
+      score1.textContent = 0;
+      score2.textContent = 0;
+      highlightActiveTeam();
+
+      document.querySelectorAll(".card").forEach(card => card.classList.remove("matched"));
+
+      const labelCells = document.querySelectorAll(".label-cell");
+      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const gridRect = fullGrid.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+      const centerY = gridRect.top + gridRect.height / 2;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const offsetX = centerX - (rect.left + rect.width / 2);
+        const offsetY = centerY - (rect.top + rect.height / 2);
+        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transform = translate(${offsetX}px, ${offsetY}px);
+      });
+
+      setTimeout(() => {
+        createBoard(true);
+        lockBoard = false;
+        startTimer();
+
+        const newCards = Array.from(document.querySelectorAll(".card"));
+        const newGridRect = fullGrid.getBoundingClientRect();
+        const centerX = newGridRect.left + newGridRect.width / 2;
+        const centerY = newGridRect.top + newGridRect.height / 2;
+
+        newCards.forEach(card => {
+          const rect = card.getBoundingClientRect();
+          const offsetX = centerX - (rect.left + rect.width / 2);
+          const offsetY = centerY - (rect.top + rect.height / 2);
+          card.style.transition = "none";
+          card.style.transform = translate(${offsetX}px, ${offsetY}px);
+        });
+
+        setTimeout(() => {
+          newCards.forEach(card => {
+            card.style.transition = "transform 0.6s ease-in-out";
+            card.style.transform = "translate(0, 0)";
+          });
+
+          setTimeout(() => {
+            newCards.forEach(card => {
+              card.style.transition = "";
+              card.style.transform = "";
+            });
+
+            const labelCells = document.querySelectorAll(".label-cell");
+            requestAnimationFrame(() => {
+              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+            });
+          }, 600);
+        }, 30);
+      }, 600);
+    };
+
     startBtn.addEventListener("click", () => {
       if (!started) {
         document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
@@ -349,7 +416,7 @@
         started = true;
         highlightActiveTeam();
       } else {
-        location.reload();
+        restartAndStart();
       }
     });
 
@@ -377,7 +444,6 @@
       requestAnimationFrame(() => {
         labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
       });
-      highlightActiveTeam();
     };
   </script>
 </body>
