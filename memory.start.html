@@ -25,7 +25,7 @@
     #game-title {
       text-align: center;
       font-size: 64px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       font-weight: bold;
       letter-spacing: 4px;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
@@ -36,7 +36,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 40px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: 0.9rem;
       transform: scale(0.94);
     }
@@ -45,7 +45,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .team-input {
@@ -56,7 +56,7 @@
     .team-input label {
       font-size: 20px;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .team-input input {
@@ -70,7 +70,7 @@
 
     .section-title {
       font-size: 20px;
-      margin: 30px 0 10px;
+      margin: 24px 0 10px;
       text-align: center;
     }
 
@@ -92,7 +92,7 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      text-transform: uppercase;
+      text-transform: capitalize;
       transition: background-color 0.3s ease;
       white-space: nowrap;
       overflow: hidden;
@@ -116,7 +116,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-top: 30px;
       margin-bottom: 30px;
-      text-transform: uppercase;
+      text-transform: capitalize;
     }
 
     #logo {
@@ -138,8 +138,15 @@
         transform: scale(1);
       }
 
+      .button-group {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
       .button-group button {
-        width: 140px;
+        width: 45%;
+        min-width: 130px;
+        max-width: 160px;
       }
     }
   </style>
@@ -163,26 +170,26 @@
     <div class="right-block">
       <div class="section-title">Która drużyna ma rozpocząć grę?</div>
       <div class="button-group" id="starterGroup">
-        <button id="btnTeam1">DRUŻYNA 1</button>
-        <button id="btnTeam2">DRUŻYNA 2</button>
+        <button id="btnTeam1">Drużyna 1</button>
+        <button id="btnTeam2">Drużyna 2</button>
       </div>
     </div>
   </div>
 
   <div class="section-title">Czas na wykonanie ruchu drużyny:</div>
   <div class="button-group" id="moveTimeGroup">
-    <button data-time="15">15 SEK.</button>
-    <button data-time="30">30 SEK.</button>
-    <button data-time="60">60 SEK.</button>
-    <button data-time="0">BEZ CZASU</button>
+    <button data-time="15">15 sek.</button>
+    <button data-time="30">30 sek.</button>
+    <button data-time="60">60 sek.</button>
+    <button data-time="0">Bez czasu</button>
   </div>
 
-  <div class="section-title" style="margin-top: 50px;">Czas na całą rozgrywkę:</div>
+  <div class="section-title" style="margin-top: 40px;">Czas na całą rozgrywkę:</div>
   <div class="button-group" id="gameTimeGroup">
-    <button data-time="10">10 MIN.</button>
-    <button data-time="15">15 MIN.</button>
-    <button data-time="25">25 MIN.</button>
-    <button data-time="0">BEZ CZASU</button>
+    <button data-time="10">10 min.</button>
+    <button data-time="15">15 min.</button>
+    <button data-time="25">25 min.</button>
+    <button data-time="0">Bez czasu</button>
   </div>
 
   <button id="nextBtn">Dalej</button>
@@ -204,8 +211,8 @@
     let gameTime = null;
 
     const updateButtonLabels = () => {
-      btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1").toUpperCase();
-      btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2").toUpperCase();
+      btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1");
+      btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2");
     };
 
     const activateSingleButton = (group, value, setCallback) => {
