@@ -139,14 +139,17 @@
       }
 
       .button-group {
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
+        max-width: 340px;
+        justify-items: center;
       }
 
       .button-group button {
-        width: 45%;
-        min-width: 130px;
-        max-width: 160px;
+        width: 100%;
+        max-width: 140px;
       }
     }
   </style>
