@@ -16,6 +16,25 @@
       color: #ffffff;
       padding: 20px;
       min-height: 100vh;
+      transition: padding-top 0.3s ease;
+    }
+
+    body.fullscreen-active {
+      padding-top: 120px;
+    }
+
+    body.fullscreen-active #game-title {
+      font-size: 80px;
+    }
+
+    body.fullscreen-active .scoreboard {
+      font-size: 42px;
+    }
+
+    body.fullscreen-active #buttons button {
+      font-size: 24px;
+      padding: 20px 24px;
+      width: 280px;
     }
 
     #game-title {
@@ -25,6 +44,7 @@
       font-weight: bold;
       letter-spacing: 4px;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+      transition: font-size 0.3s ease;
     }
 
     #game-container {
@@ -41,9 +61,10 @@
       align-items: center;
       font-size: 34px;
       font-weight: bold;
-      margin-top: 30px;  
+      margin-top: 30px;
       margin-bottom: 10px;
       width: 240px;
+      transition: font-size 0.3s ease;
     }
 
     .scoreboard div {
@@ -139,6 +160,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-bottom: 20px;
+      transition: all 0.3s ease;
     }
 
     #buttons img {
@@ -169,6 +191,7 @@
       </div>
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
+        <button id="fullscreenBtn">Pełny ekran</button>
         <button id="returnBtn">Powrót</button>
         <img src="memory/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
@@ -181,6 +204,7 @@
     const startBtn = document.getElementById("startBtn");
     const score1 = document.getElementById("score1");
     const score2 = document.getElementById("score2");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
 
     let firstCard = null;
     let secondCard = null;
@@ -378,6 +402,24 @@
         started = true;
       } else {
         restartAndStart();
+      }
+    });
+
+    fullscreenBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.textContent = "Podstawowy ekran";
+        document.body.classList.add("fullscreen-active");
+      } else {
+        fullscreenBtn.textContent = "Pełny ekran";
+        document.body.classList.remove("fullscreen-active");
       }
     });
 
