@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Świąteczne Memory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
@@ -16,6 +17,9 @@
       color: #ffffff;
       padding: 20px;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       transition: padding-top 0.3s ease;
     }
 
@@ -26,14 +30,102 @@
     #game-title {
       text-align: center;
       font-size: 64px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-weight: bold;
       letter-spacing: 4px;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    #game-container {
+    .config-container {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      transform: scale(0.94);
+    }
+
+    .left-block, .right-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .team-input {
+      width: 240px;
+      text-align: center;
+    }
+
+    .team-input label {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .team-input input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 24px 0 10px;
+      text-align: center;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .button-group button {
+      width: 150px;
+      height: 44px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-transform: none;
+      transition: background-color 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .button-group button.active {
+      background-color: #2e7d32 !important;
+    }
+
+    #nextBtn {
+      width: 240px;
+      height: 52px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-top: 30px;
+      margin-bottom: 30px;
+      text-transform: capitalize;
+    }
+
+    #game-container {
+      display: none;
       justify-content: center;
       align-items: flex-start;
       gap: 40px;
@@ -157,6 +249,11 @@
       margin-top: 10px;
     }
 
+    #logo {
+      width: 200px;
+      height: auto;
+    }
+
     #website-link {
       color: white;
       font-size: 16px;
@@ -221,10 +318,77 @@
     .current-team-display {
       display: none;
     }
+
+    @media (max-width: 768px) {
+      .config-container {
+        flex-direction: column;
+        align-items: center;
+        transform: scale(1);
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
+        max-width: 340px;
+        justify-items: center;
+      }
+
+      .button-group button {
+        width: 100%;
+        max-width: 140px;
+      }
+    }
   </style>
 </head>
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
+
+  <div id="config-screen">
+    <div class="config-container">
+      <div class="left-block">
+        <div class="team-input">
+          <label for="team1">Nazwa drużyny nr 1</label>
+          <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
+        </div>
+
+        <div class="team-input">
+          <label for="team2">Nazwa drużyny nr 2</label>
+          <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
+        </div>
+      </div>
+
+      <div class="right-block">
+        <div class="section-title">Która drużyna ma rozpocząć grę?</div>
+        <div class="button-group" id="starterGroup">
+          <button id="btnTeam1">Drużyna 1</button>
+          <button id="btnTeam2">Drużyna 2</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Czas na wykonanie ruchu drużyny:</div>
+    <div class="button-group" id="moveTimeGroup">
+      <button data-time="15">15 sek.</button>
+      <button data-time="30">30 sek.</button>
+      <button data-time="60">60 sek.</button>
+      <button data-time="0">Bez czasu</button>
+    </div>
+
+    <div class="section-title" style="margin-top: 40px;">Czas na całą rozgrywkę:</div>
+    <div class="button-group" id="gameTimeGroup">
+      <button data-time="10">10 min.</button>
+      <button data-time="15">15 min.</button>
+      <button data-time="25">25 min.</button>
+      <button data-time="0">Bez czasu</button>
+    </div>
+
+    <button id="nextBtn">Dalej</button>
+
+    <img id="logo" src="memory/logo.png" alt="Logo" />
+    <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+  </div>
 
   <div id="game-container">
     <div id="full-grid"></div>
@@ -247,7 +411,7 @@
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
-        <button id="returnBtn" onclick="window.location.href='memory.start.html'">Powrót</button>
+        <button id="returnBtn">Powrót</button>
         <img src="memory/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
@@ -255,6 +419,18 @@
   </div>
 
   <script>
+    // Elementy ekranu konfiguracyjnego
+    const configScreen = document.getElementById("config-screen");
+    const team1Input = document.getElementById("team1");
+    const team2Input = document.getElementById("team2");
+    const btnTeam1 = document.getElementById("btnTeam1");
+    const btnTeam2 = document.getElementById("btnTeam2");
+    const moveTimeGroup = document.getElementById("moveTimeGroup");
+    const gameTimeGroup = document.getElementById("gameTimeGroup");
+    const nextBtn = document.getElementById("nextBtn");
+
+    // Elementy ekranu gry
+    const gameContainer = document.getElementById("game-container");
     const fullGrid = document.getElementById("full-grid");
     const startBtn = document.getElementById("startBtn");
     const score1 = document.getElementById("score1");
@@ -267,32 +443,76 @@
     const team2Label = document.getElementById("team2-label");
     const team1NameSpan = document.getElementById("team1-name");
     const team2NameSpan = document.getElementById("team2-name");
+    const returnBtn = document.getElementById("returnBtn");
 
-    const team1Name = localStorage.getItem("team1") || "Drużyna 1";
-    const team2Name = localStorage.getItem("team2") || "Drużyna 2";
-    const moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
-    const gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+    // Zmienne konfiguracyjne
+    let team1Name = "Drużyna 1";
+    let team2Name = "Drużyna 2";
+    let startingTeam = null;
+    let moveTime = null;
+    let gameTime = null;
 
-    team1NameSpan.textContent = team1Name;
-    team2NameSpan.textContent = team2Name;
-    moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
-    gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameTime * 60);
-
+    // Zmienne gry
     let firstCard = null;
     let secondCard = null;
     let lockBoard = true;
     let matchedPairs = 0;
     let moveTimer;
     let gameTimer;
-    let moveSeconds = moveTime;
-    let gameSeconds = gameTime * 60;
+    let moveSeconds = 0;
+    let gameSeconds = 0;
     let started = false;
     let points1 = 0;
     let points2 = 0;
-    let currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
+    let currentTeam = 1;
     let cards = [];
 
+    // Funkcje konfiguracyjne
+    const updateButtonLabels = () => {
+      btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1");
+      btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2");
+    };
+
+    const activateSingleButton = (group, value, setCallback) => {
+      [...group.querySelectorAll("button")].forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.time == value);
+      });
+      setCallback(value);
+    };
+
+    team1Input.addEventListener("input", updateButtonLabels);
+    team2Input.addEventListener("input", updateButtonLabels);
+
+    btnTeam1.addEventListener("click", () => {
+      startingTeam = 1;
+      btnTeam1.classList.add("active");
+      btnTeam2.classList.remove("active");
+    });
+
+    btnTeam2.addEventListener("click", () => {
+      startingTeam = 2;
+      btnTeam2.classList.add("active");
+      btnTeam1.classList.remove("active");
+    });
+
+    moveTimeGroup.addEventListener("click", e => {
+      if (e.target.tagName === "BUTTON") {
+        activateSingleButton(moveTimeGroup, e.target.dataset.time, val => moveTime = parseInt(val));
+      }
+    });
+
+    gameTimeGroup.addEventListener("click", e => {
+      if (e.target.tagName === "BUTTON") {
+        activateSingleButton(gameTimeGroup, e.target.dataset.time, val => gameTime = parseInt(val));
+      }
+    });
+
+    // Funkcje gry
     const formatTime = (seconds) => {
+      if (isNaN(seconds) || seconds < 0) {
+        console.error("Invalid seconds value in formatTime:", seconds);
+        return "00:00";
+      }
       const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
       const secs = (seconds % 60).toString().padStart(2, "0");
       return `${mins}:${secs}`;
@@ -314,56 +534,61 @@
       currentTeamDisplay.textContent = `${teamName}: ${points}`;
     };
 
-    updateTeamHighlight();
-    updateCurrentTeamDisplay();
-
     const createBoard = (colorCovers = false) => {
-      fullGrid.innerHTML = "";
-      cards = [];
+      try {
+        fullGrid.innerHTML = "";
+        cards = [];
 
-      const totalPairs = 21;
-      const all = [];
-      for (let i = 1; i <= totalPairs; i++) {
-        all.push(i, i);
-      }
-      const shuffled = all.sort(() => 0.5 - Math.random());
-
-      const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
-      const rows = ["", "1", "2", "3", "4", "5", "6"];
-
-      for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < 8; j++) {
-          const cell = document.createElement("div");
-
-          if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-            cell.textContent = letters[j];
-          } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-            cell.textContent = rows[i];
-          } else if (i > 0 && j > 0) {
-            const value = shuffled.pop();
-            const card = document.createElement("div");
-            card.classList.add("card");
-
-            const frontImg = document.createElement("img");
-            frontImg.src = `memory/${value}.png`;
-            frontImg.classList.add("front");
-
-            const backImg = document.createElement("img");
-            backImg.src = "memory/0.png";
-            backImg.classList.add("cover");
-            if (colorCovers) backImg.classList.add("kolorowa");
-
-            card.appendChild(frontImg);
-            card.appendChild(backImg);
-            card.addEventListener("click", () => handleCardClick(card, value));
-            cell.appendChild(card);
-            cards.push(card);
-          }
-
-          fullGrid.appendChild(cell);
+        const totalPairs = 21;
+        const all = [];
+        for (let i = 1; i <= totalPairs; i++) {
+          all.push(i, i);
         }
+        const shuffled = all.sort(() => 0.5 - Math.random());
+
+        const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
+        const rows = ["", "1", "2", "3", "4", "5", "6"];
+
+        for (let i = 0; i < 7; i++) {
+          for (let j = 0; j < 8; j++) {
+            const cell = document.createElement("div");
+
+            if (i === 0 && j > 0) {
+              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+              cell.textContent = letters[j];
+            } else if (j === 0 && i > 0) {
+              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+              cell.textContent = rows[i];
+            } else if (i > 0 && j > 0) {
+              if (!shuffled.length) {
+                console.error("Not enough values in shuffled array");
+                return;
+              }
+              const value = shuffled.pop();
+              const card = document.createElement("div");
+              card.classList.add("card");
+
+              const frontImg = document.createElement("img");
+              frontImg.src = `memory/${value}.png`;
+              frontImg.classList.add("front");
+
+              const backImg = document.createElement("img");
+              backImg.src = "memory/0.png";
+              backImg.classList.add("cover");
+              if (colorCovers) backImg.classList.add("kolorowa");
+
+              card.appendChild(frontImg);
+              card.appendChild(backImg);
+              card.addEventListener("click", () => handleCardClick(card, value));
+              cell.appendChild(card);
+              cards.push(card);
+            }
+
+            fullGrid.appendChild(cell);
+          }
+        }
+      } catch (error) {
+        console.error("Error in createBoard:", error);
       }
     };
 
@@ -472,24 +697,30 @@
       lockBoard = true;
       points1 = 0;
       points2 = 0;
-      currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
+      currentTeam = startingTeam || 1;
       score1.textContent = 0;
       score2.textContent = 0;
       updateTeamHighlight();
       updateCurrentTeamDisplay();
 
-      document.querySelectorAll(".card").forEach(card => {
-        card.classList.remove("matched");
-      });
-
       const labelCells = document.querySelectorAll(".label-cell");
       labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const cards = document.querySelectorAll(".card");
+      if (cards.length === 0) {
+        console.warn("No cards found for animation");
+        createBoard(true);
+        lockBoard = false;
+        startMoveTimer();
+        startGameTimer();
+        return;
+      }
 
       const gridRect = fullGrid.getBoundingClientRect();
       const centerX = gridRect.left + gridRect.width / 2;
       const centerY = gridRect.top + gridRect.height / 2;
 
-      document.querySelectorAll(".card").forEach(card => {
+      cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const offsetX = centerX - (rect.left + rect.width / 2);
         const offsetY = centerY - (rect.top + rect.height / 2);
@@ -532,11 +763,69 @@
             requestAnimationFrame(() => {
               labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
             });
-
           }, 600);
         }, 30);
       }, 600);
     };
+
+    // Przełączanie ekranów
+    const showConfigScreen = () => {
+      configScreen.style.display = "block";
+      gameContainer.style.display = "none";
+      // Resetowanie wartości konfiguracyjnych
+      team1Input.value = "";
+      team2Input.value = "";
+      btnTeam1.classList.remove("active");
+      btnTeam2.classList.remove("active");
+      moveTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+      gameTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+      startingTeam = null;
+      moveTime = null;
+      gameTime = null;
+      updateButtonLabels();
+    };
+
+    const showGameScreen = () => {
+      configScreen.style.display = "none";
+      gameContainer.style.display = "flex";
+
+      // Inicjalizacja wartości gry
+      team1Name = team1Input.value.trim() || "Drużyna 1";
+      team2Name = team2Input.value.trim() || "Drużyna 2";
+      moveTime = moveTime || 0;
+      gameTime = gameTime || 0;
+
+      // Walidacja
+      if (isNaN(moveTime) || moveTime < 0) {
+        console.error("Invalid moveTime value:", moveTime);
+        moveTime = 0;
+      }
+      if (isNaN(gameTime) || gameTime < 0) {
+        console.error("Invalid gameTime value:", gameTime);
+        gameTime = 0;
+      }
+
+      team1NameSpan.textContent = team1Name;
+      team2NameSpan.textContent = team2Name;
+      moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
+      gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameTime * 60);
+      moveSeconds = moveTime;
+      gameSeconds = gameTime * 60;
+      currentTeam = startingTeam || 1;
+
+      createBoard(false);
+      updateTeamHighlight();
+      updateCurrentTeamDisplay();
+      const labelCells = document.querySelectorAll(".label-cell");
+      requestAnimationFrame(() => {
+        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+      });
+    };
+
+    // Obsługa przycisków
+    nextBtn.addEventListener("click", () => {
+      showGameScreen();
+    });
 
     startBtn.addEventListener("click", () => {
       if (!started) {
@@ -569,13 +858,18 @@
       }
     });
 
-    window.onload = () => {
-      createBoard(false);
-      const labelCells = document.querySelectorAll(".label-cell");
-      requestAnimationFrame(() => {
-        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
-      });
-    };
+    returnBtn.addEventListener("click", () => {
+      clearInterval(moveTimer);
+      clearInterval(gameTimer);
+      started = false;
+      startBtn.textContent = "Start";
+      showConfigScreen();
+    });
+
+    // Inicjalizacja
+    updateButtonLabels();
+    configScreen.style.display = "block";
+    gameContainer.style.display = "none";
   </script>
 </body>
 </html>
