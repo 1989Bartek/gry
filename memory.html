@@ -25,6 +25,15 @@
 
     body.fullscreen-active {
       padding-top: 120px;
+      overflow: hidden; /* Zapobiega przewijaniu w trybie pełnego ekranu */
+    }
+
+    /* Powiększenie elementów w trybie pełnego ekranu */
+    body.fullscreen-active #config-screen,
+    body.fullscreen-active #game-container {
+      transform: scale(1.05); /* Proporcjonalne powiększenie */
+      transform-origin: top center;
+      transition: transform 0.3s ease;
     }
 
     #game-title {
@@ -450,8 +459,8 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
-        <div id="team2-label" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
+        <div id="team1-label" class="team-name"><span id="team1-name"></span>:&nbsp;&nbsp;<span id="score1">0</span></div>
+        <div id="team2-label" class="team-name"><span id="team2-name"></span>:&nbsp;&nbsp;<span id="score2">0</span></div>
         <div id="current-team" class="current-team-display"></div>
         <div class="time-label">
           Czas na ruch: 
@@ -659,11 +668,6 @@
 
       if (!firstCard) {
         firstCard = { card, value };
-        if (moveTime > 0) {
-          moveSeconds = moveTime;
-          moveTimeDisplay.textContent = formatTime(moveSeconds);
-          startMoveTimer();
-        }
       } else {
         secondCard = { card, value };
         lockBoard = true;
@@ -729,20 +733,13 @@
             if (firstCard && !secondCard) {
               firstCard.card.classList.remove("flipped");
               resetTurn();
-              currentTeam = currentTeam === 1 ? 2 : 1;
-              updateTeamHighlight();
-              updateCurrentTeamDisplay();
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
-              startMoveTimer();
-            } else if (!firstCard && !secondCard) {
-              currentTeam = currentTeam === 1 ? 2 : 1;
-              updateTeamHighlight();
-              updateCurrentTeamDisplay();
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
-              startMoveTimer();
             }
+            currentTeam = currentTeam === 1 ? 2 : 1;
+            updateTeamHighlight();
+            updateCurrentTeamDisplay();
+            moveSeconds = moveTime;
+            moveTimeDisplay.textContent = formatTime(moveSeconds);
+            startMoveTimer();
           }
         }, 1000);
       }
@@ -791,7 +788,11 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          startMoveTimer();
+          if (moveTime > 0) {
+            moveSeconds = moveTime;
+            moveTimeDisplay.textContent = formatTime(moveSeconds);
+            startMoveTimer();
+          }
           startGameTimer();
         }
         return;
@@ -813,7 +814,11 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          startMoveTimer();
+          if (moveTime > 0) {
+            moveSeconds = moveTime;
+            moveTimeDisplay.textContent = formatTime(moveSeconds);
+            startMoveTimer();
+          }
           startGameTimer();
         }
 
