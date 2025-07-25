@@ -168,9 +168,23 @@
       font-size: 34px;
       font-weight: bold;
       color: white;
+      width: 240px;
+      height: 48px;
+      line-height: 48px;
+      padding: 0 8px;
       text-align: left;
-      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .team-name.active {
+      background-color: #104f9c;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .time-label {
@@ -184,9 +198,9 @@
     }
 
     .time-display {
-      width: 80px;
-      height: 30px;
-      line-height: 30px;
+      width: 160px;
+      height: 36px;
+      line-height: 36px;
       padding: 0 8px;
       font-size: 15px;
       font-weight: bold;
@@ -199,6 +213,13 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .current-team-display {
+      display: none;
     }
   </style>
 </head>
@@ -210,15 +231,16 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name">Drużyna 1: <span id="score1">0</span></div>
-        <div id="team2-label" class="team-name">Drużyna 2: <span id="score2">0</span></div>
+        <div id="team1-label" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
+        <div id="team2-label" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
+        <div id="current-team" class="current-team-display"></div>
         <div class="time-label">
           Czas na ruch: 
-          <span id="moveTimeDisplay" class="time-display">0</span>
+          <span id="moveTimeDisplay" class="time-display">00:00</span>
         </div>
         <div class="time-label">
           Czas na rozgrywkę: 
-          <span id="gameTimeDisplay" class="time-display">0</span>
+          <span id="gameTimeDisplay" class="time-display">00:00</span>
         </div>
       </div>
 
@@ -240,19 +262,21 @@
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     const moveTimeDisplay = document.getElementById("moveTimeDisplay");
     const gameTimeDisplay = document.getElementById("gameTimeDisplay");
-
+    const currentTeamDisplay = document.getElementById("current-team");
     const team1Label = document.getElementById("team1-label");
     const team2Label = document.getElementById("team2-label");
+    const team1NameSpan = document.getElementById("team1-name");
+    const team2NameSpan = document.getElementById("team2-name");
 
     const team1Name = localStorage.getItem("team1") || "Drużyna 1";
     const team2Name = localStorage.getItem("team2") || "Drużyna 2";
     const moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
     const gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
 
-    team1Label.innerHTML = `${team1Name}: <span id="score1">0</span>`;
-    team2Label.innerHTML = `${team2Name}: <span id="score2">0</span>`;
-    moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : moveTime;
-    gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : gameTime;
+    team1NameSpan.textContent = team1Name;
+    team2NameSpan.textContent = team2Name;
+    moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
+    gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameTime * 60);
 
     let firstCard = null;
     let secondCard = null;
@@ -261,12 +285,37 @@
     let moveTimer;
     let gameTimer;
     let moveSeconds = moveTime;
-    let gameSeconds = gameTime * 60; // Convert minutes to seconds
+    let gameSeconds = gameTime * 60;
     let started = false;
     let points1 = 0;
     let points2 = 0;
     let currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
     let cards = [];
+
+    const formatTime = (seconds) => {
+      const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
+      const secs = (seconds % 60).toString().padStart(2, "0");
+      return `${mins}:${secs}`;
+    };
+
+    const updateTeamHighlight = () => {
+      team1Label.classList.remove("active");
+      team2Label.classList.remove("active");
+      if (currentTeam === 1) {
+        team1Label.classList.add("active");
+      } else {
+        team2Label.classList.add("active");
+      }
+    };
+
+    const updateCurrentTeamDisplay = () => {
+      const teamName = currentTeam === 1 ? team1Name : team2Name;
+      const points = currentTeam === 1 ? points1 : points2;
+      currentTeamDisplay.textContent = `${teamName}: ${points}`;
+    };
+
+    updateTeamHighlight();
+    updateCurrentTeamDisplay();
 
     const createBoard = (colorCovers = false) => {
       fullGrid.innerHTML = "";
@@ -327,7 +376,7 @@
         firstCard = { card, value };
         if (moveTime > 0) {
           moveSeconds = moveTime;
-          moveTimeDisplay.textContent = moveSeconds;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
           startMoveTimer();
         }
       } else {
@@ -341,25 +390,28 @@
           matchedPairs++;
           if (currentTeam === 1) {
             points1++;
-            document.getElementById("score1").textContent = points1;
+            score1.textContent = points1;
           } else {
             points2++;
-            document.getElementById("score2").textContent = points2;
+            score2.textContent = points2;
           }
+          updateCurrentTeamDisplay();
 
           clearInterval(moveTimer);
-          moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : moveTime;
+          moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
           setTimeout(() => {
             resetTurn();
           }, 1000);
         } else {
           clearInterval(moveTimer);
-          moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : moveTime;
+          moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
             resetTurn();
             currentTeam = currentTeam === 1 ? 2 : 1;
+            updateTeamHighlight();
+            updateCurrentTeamDisplay();
           }, 1000);
         }
       }
@@ -376,14 +428,16 @@
       if (moveTime > 0) {
         moveTimer = setInterval(() => {
           moveSeconds--;
-          moveTimeDisplay.textContent = moveSeconds;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
           if (moveSeconds <= 0) {
             clearInterval(moveTimer);
             if (firstCard && !secondCard) {
               firstCard.card.classList.remove("flipped");
               resetTurn();
               currentTeam = currentTeam === 1 ? 2 : 1;
-              moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : moveTime;
+              updateTeamHighlight();
+              updateCurrentTeamDisplay();
+              moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
             }
           }
         }, 1000);
@@ -395,7 +449,7 @@
       if (gameTime > 0) {
         gameTimer = setInterval(() => {
           gameSeconds--;
-          gameTimeDisplay.textContent = Math.ceil(gameSeconds / 60);
+          gameTimeDisplay.textContent = formatTime(gameSeconds);
           if (gameSeconds <= 0) {
             clearInterval(gameTimer);
             lockBoard = true;
@@ -410,8 +464,8 @@
       clearInterval(gameTimer);
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
-      moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : moveSeconds;
-      gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : Math.ceil(gameSeconds / 60);
+      moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveSeconds);
+      gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameSeconds);
       matchedPairs = 0;
       firstCard = null;
       secondCard = null;
@@ -419,8 +473,10 @@
       points1 = 0;
       points2 = 0;
       currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
-      document.getElementById("score1").textContent = 0;
-      document.getElementById("score2").textContent = 0;
+      score1.textContent = 0;
+      score2.textContent = 0;
+      updateTeamHighlight();
+      updateCurrentTeamDisplay();
 
       document.querySelectorAll(".card").forEach(card => {
         card.classList.remove("matched");
