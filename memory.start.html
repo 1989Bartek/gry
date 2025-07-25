@@ -197,7 +197,7 @@
 
   <button id="nextBtn">Dalej</button>
 
-  <img id="logo" src="memory/logo.png" alt="Logo" />
+  <img id="logo" src="img/logo.png" alt="Logo" />
   <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
 
   <script>
@@ -219,10 +219,11 @@
     };
 
     const activateSingleButton = (group, value, setCallback) => {
+      const parsedValue = parseInt(value) || 0;
       [...group.querySelectorAll("button")].forEach(btn => {
         btn.classList.toggle("active", btn.dataset.time == value);
       });
-      setCallback(value);
+      setCallback(parsedValue);
     };
 
     team1Input.addEventListener("input", updateButtonLabels);
@@ -253,11 +254,13 @@
     });
 
     document.getElementById("nextBtn").addEventListener("click", () => {
-      const team1 = team1Input.value.trim() || "Drużyna 1";
-      const team2 = team2Input.value.trim() || "Drużyna 2";
+      const team1 = team1Input.value.trim().slice(0, 13) || "Drużyna 1";
+      const team2 = team2Input.value.trim().slice(0, 13) || "Drużyna 2";
+      const selectedStartingTeam = startingTeam !== null ? startingTeam : 1;
+      console.log("Zapis danych do localStorage:", { team1, team2, selectedStartingTeam, moveTime, gameTime });
       localStorage.setItem("team1", team1);
       localStorage.setItem("team2", team2);
-      localStorage.setItem("startingTeam", startingTeam || 1);
+      localStorage.setItem("startingTeam", selectedStartingTeam);
       localStorage.setItem("moveTime", moveTime || "0");
       localStorage.setItem("gameTime", gameTime || "0");
       window.location.href = "memory.html";
