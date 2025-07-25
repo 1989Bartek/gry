@@ -164,26 +164,20 @@
       text-align: center;
     }
 
-.teams-row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
 .team-name {
   font-size: 34px;
   font-weight: bold;
   color: white;
   text-align: left;
-  width: 48%;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-.time-info {
-  margin-top: 10px;
+.time-label {
   font-size: 17px; 
   color: white;
   text-align: left;
-  width: 100%;
+  margin-bottom: 4px;
 }
 
   </style>
@@ -196,14 +190,10 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
 <div class="scoreboard">
-  <div class="teams-row">
-    <div id="team1-label" class="team-name">Drużyna 1: <span id="score1">0</span></div>
-    <div id="team2-label" class="team-name">Drużyna 2: <span id="score2">0</span></div>
-  </div>
-  <div class="time-info">
-    <div>Czas na wykonanie ruchu:</div>
-    <div>Czas na rozgrywkę:</div>
-  </div>
+  <div id="team1-label" class="team-name">Drużyna 1: <span id="score1">0</span></div>
+  <div id="team2-label" class="team-name">Drużyna 2: <span id="score2">0</span></div>
+  <div class="time-label">Czas na wykonanie ruchu:</div>
+  <div class="time-label">Czas na rozgrywkę:</div>
 </div>
 
       <div id="buttons" class="controls">
