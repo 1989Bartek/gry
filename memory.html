@@ -180,7 +180,7 @@
     }
 
     #instructions-text, #winner-text, #score-text {
-      font-size: 18px;
+      font-size: 36px;
       line-height: 1.5;
       text-align: justify;
       margin-bottom: 20px;
@@ -492,7 +492,7 @@
         </div>
       </div>
 
-      <div class="right-block">
+      <div class="right-block" style="margin-top: -24px;">
         <div class="section-title">Która drużyna ma rozpocząć grę?</div>
         <div class="button-group" id="starterGroup">
           <button id="btnTeam1">Drużyna 1</button>
@@ -1060,8 +1060,8 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
       const winnerPoints = winnerTeam === 1 ? points1 : points2;
-      const displayName = winnerName === "Drużyna 1" || winnerName === "Drużyna 2" ? `Drużyna nr ${winnerTeam}` : winnerName;
-      winnerText.textContent = `Wygrała drużyna ${displayName}`;
+      const displayName = winnerName.trim() === "" || winnerName === "Drużyna 1" || winnerName === "Drużyna 2" ? `Drużyna ${winnerTeam}` : winnerName;
+      winnerText.textContent = `Wygrała ${displayName}`;
       scoreText.textContent = `Ilość zdobytych punktów: ${winnerPoints}`;
 
       confetti({
