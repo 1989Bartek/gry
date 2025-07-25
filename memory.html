@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Świąteczne Memory</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -115,6 +116,25 @@
       background-color: #2e7d32 !important;
     }
 
+    #noTeamsBtn {
+      width: 312px;
+      height: 44px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #104f9c;
+      color: white;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-transform: none;
+      margin-top: 12px;
+    }
+
+    #noTeamsBtn.active {
+      background-color: #2e7d32 !important;
+    }
+
     #nextBtn, #configFullscreenBtn, #instructionsBtn, #instructionsReturnBtn, #congratsReturnBtn {
       width: 240px;
       height: 52px;
@@ -170,6 +190,10 @@
       font-weight: bold;
       margin-bottom: 20px;
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+      color: #104f9c;
+      border: 4px solid white;
+      border-radius: 12px;
+      padding: 10px;
     }
 
     #game-container {
@@ -338,7 +362,7 @@
     }
 
     .time-label {
-      font-size: 15px; 
+      font-size: 15px;
       color: white;
       text-align: left;
       margin-bottom: 4px;
@@ -406,6 +430,11 @@
         max-width: 140px;
       }
 
+      #noTeamsBtn {
+        width: 100%;
+        max-width: 340px;
+      }
+
       .section-title {
         width: 100%;
         max-width: 340px;
@@ -462,6 +491,7 @@
           <button id="btnTeam1">Drużyna 1</button>
           <button id="btnTeam2">Drużyna 2</button>
         </div>
+        <button id="noTeamsBtn">Gra bez podziału na drużyny</button>
       </div>
     </div>
 
@@ -496,7 +526,17 @@
 
   <div id="instructions-screen">
     <div id="instructions-text">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      Gra oparta jest na klasycznych zasadach Memory. Uczestnicy dzielą się na dwie drużyny, które na zmianę odkrywają po dwa kafelki. Jeżeli drużynie uda się odsłonić dwa takie same obrazki, to ta para zostaje odkryta na stałe, a drużyna zdobywa jeden punkt i ma prawo wykonać kolejny ruch.
+
+      W przypadku odkrycia dwóch różnych kafelków są one ponownie zakrywane, a kolejka przechodzi na drużynę przeciwną. Łącznie w grze znajdują się 42 kafelki, czyli 21 par do odnalezienia i tyle samo punktów do zdobycia.
+
+      Przed rozpoczęciem gry należy w odpowiednich polach wpisać nazwy obu drużyn oraz wybrać, która z nich jako pierwsza będzie odkrywać kafelki. W tych samych ustawieniach można również ustalić czas na całą rozgrywkę lub czas na ruch każdej z drużyn. Do wyboru jest kilka wariantów czasowych oraz opcja grania bez czasu.
+
+      Po przekroczeniu czasu na całą rozgrywkę, wygrywa drużyna, która zdobyła więcej punktów (nawet jeśli wszystkie kafelki nie zostały odkryte). W przypadku przekroczenia czasu przeznaczonego na ruch drużyny, kolejka automatycznie przechodzi na drużynę przeciwną.
+
+      Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim przypadku można grać indywidualnie lub współpracując z całą grupą, starając się wspólnie odkryć wszystkie pary, zarówno w wersji z określonym czasem jak i bez. To doskonały sposób na integrację i wspólne ćwiczenie pamięci.
+
+      Życzymy dobrej zabawy!
     </div>
     <button id="instructionsReturnBtn">Powrót</button>
     <img id="logo" src="memory/logo.png" alt="Logo" />
@@ -504,7 +544,6 @@
   </div>
 
   <div id="congratulations-screen">
-    <h1 id="game-title">Świąteczne Memory</h1>
     <h2 id="congrats-title">GRATULACJE!!!</h2>
     <div id="winner-text"></div>
     <div id="score-text"></div>
@@ -521,12 +560,12 @@
         <div id="team1-label" class="team-name"><span id="team1-name"></span>:  <span id="score1">0</span></div>
         <div id="team2-label" class="team-name"><span id="team2-name"></span>:  <span id="score2">0</span></div>
         <div id="current-team" class="current-team-display"></div>
-        <div class="time-label">
-          Czas na ruch: 
+        <div class="time-label" id="moveTimeLabel">
+          Czas na ruch:
           <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
         </div>
-        <div class="time-label">
-          Czas na rozgrywkę: 
+        <div class="time-label" id="gameTimeLabel">
+          Czas na rozgrywkę:
           <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
         </div>
       </div>
@@ -548,6 +587,7 @@
     const team2Input = document.getElementById("team2");
     const btnTeam1 = document.getElementById("btnTeam1");
     const btnTeam2 = document.getElementById("btnTeam2");
+    const noTeamsBtn = document.getElementById("noTeamsBtn");
     const moveTimeGroup = document.getElementById("moveTimeGroup");
     const gameTimeGroup = document.getElementById("gameTimeGroup");
     const nextBtn = document.getElementById("nextBtn");
@@ -573,6 +613,8 @@
     const fullscreenBtn = document.getElementById("fullscreenBtn");
     const moveTimeDisplay = document.getElementById("moveTimeDisplay");
     const gameTimeDisplay = document.getElementById("gameTimeDisplay");
+    const moveTimeLabel = document.getElementById("moveTimeLabel");
+    const gameTimeLabel = document.getElementById("gameTimeLabel");
     const currentTeamDisplay = document.getElementById("current-team");
     const team1Label = document.getElementById("team1-label");
     const team2Label = document.getElementById("team2-label");
@@ -586,6 +628,7 @@
     let startingTeam = null;
     let moveTime = null;
     let gameTime = null;
+    let noTeamsMode = false;
 
     // Zmienne gry
     let firstCard = null;
@@ -619,19 +662,45 @@
     team2Input.addEventListener("input", updateButtonLabels);
 
     btnTeam1.addEventListener("click", () => {
-      startingTeam = 1;
-      btnTeam1.classList.add("active");
-      btnTeam2.classList.remove("active");
+      if (!noTeamsMode) {
+        startingTeam = 1;
+        btnTeam1.classList.add("active");
+        btnTeam2.classList.remove("active");
+      }
     });
 
     btnTeam2.addEventListener("click", () => {
-      startingTeam = 2;
-      btnTeam2.classList.add("active");
-      btnTeam1.classList.remove("active");
+      if (!noTeamsMode) {
+        startingTeam = 2;
+        btnTeam2.classList.add("active");
+        btnTeam1.classList.remove("active");
+      }
+    });
+
+    noTeamsBtn.addEventListener("click", () => {
+      noTeamsMode = !noTeamsMode;
+      noTeamsBtn.classList.toggle("active", noTeamsMode);
+      team2Input.disabled = noTeamsMode;
+      team2Input.style.opacity = noTeamsMode ? 0.5 : 1;
+      btnTeam1.disabled = noTeamsMode;
+      btnTeam2.disabled = noTeamsMode;
+      btnTeam1.style.opacity = noTeamsMode ? 0.5 : 1;
+      btnTeam2.style.opacity = noTeamsMode ? 0.5 : 1;
+      moveTimeGroup.querySelectorAll("button").forEach(btn => {
+        btn.disabled = noTeamsMode;
+        btn.style.opacity = noTeamsMode ? 0.5 : 1;
+      });
+      if (noTeamsMode) {
+        startingTeam = null;
+        moveTime = 0;
+        btnTeam1.classList.remove("active");
+        btnTeam2.classList.remove("active");
+        moveTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+      }
     });
 
     moveTimeGroup.addEventListener("click", e => {
-      if (e.target.tagName === "BUTTON") {
+      if (e.target.tagName === "BUTTON" && !noTeamsMode) {
         activateSingleButton(moveTimeGroup, e.target.dataset.time, val => moveTime = parseInt(val));
       }
     });
@@ -656,15 +725,15 @@
     const updateTeamHighlight = () => {
       team1Label.classList.remove("active");
       team2Label.classList.remove("active");
-      if (currentTeam === 1) {
+      if (!noTeamsMode && currentTeam === 1) {
         team1Label.classList.add("active");
-      } else if (currentTeam === 2) {
+      } else if (!noTeamsMode && currentTeam === 2) {
         team2Label.classList.add("active");
       }
     };
 
     const updateCurrentTeamDisplay = () => {
-      if (!currentTeam) {
+      if (!currentTeam || noTeamsMode) {
         currentTeamDisplay.textContent = "";
         return;
       }
@@ -738,8 +807,7 @@
 
       if (!firstCard) {
         firstCard = { card, value };
-        // Start timer only if it hasn't started yet
-        if (moveTime > 0 && !moveTimer) {
+        if (!noTeamsMode && moveTime > 0 && !moveTimer) {
           moveSeconds = moveTime;
           moveTimeDisplay.textContent = formatTime(moveSeconds);
           startMoveTimer();
@@ -753,16 +821,14 @@
           secondCard.card.classList.add("matched");
 
           matchedPairs++;
-          if (currentTeam === 1) {
-            points1++;
-            score1.textContent = points1;
-          } else {
+          points1++;
+          score1.textContent = points1;
+          if (!noTeamsMode && currentTeam === 2) {
             points2++;
             score2.textContent = points2;
           }
           updateCurrentTeamDisplay();
 
-          // Sprawdzenie, czy wszystkie pary zostały dopasowane
           if (matchedPairs === 21) {
             clearInterval(moveTimer);
             clearInterval(gameTimer);
@@ -770,8 +836,7 @@
             return;
           }
 
-          // Reset move timer for the same team
-          if (moveTime > 0) {
+          if (!noTeamsMode && moveTime > 0) {
             clearInterval(moveTimer);
             moveTimer = null;
             moveSeconds = moveTime;
@@ -782,8 +847,7 @@
           }
           resetTurn();
         } else {
-          // Reset move timer and switch team
-          if (moveTime > 0) {
+          if (!noTeamsMode && moveTime > 0) {
             clearInterval(moveTimer);
             moveTimer = null;
             moveSeconds = moveTime;
@@ -795,11 +859,13 @@
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
             resetTurn();
-            currentTeam = currentTeam === 1 ? 2 : 1;
-            updateTeamHighlight();
-            updateCurrentTeamDisplay();
-            if (moveTime > 0) {
-              startMoveTimer();
+            if (!noTeamsMode) {
+              currentTeam = currentTeam === 1 ? 2 : 1;
+              updateTeamHighlight();
+              updateCurrentTeamDisplay();
+              if (moveTime > 0) {
+                startMoveTimer();
+              }
             }
           }, 1000);
         }
@@ -813,7 +879,7 @@
     };
 
     const startMoveTimer = () => {
-      if (moveTime > 0) {
+      if (!noTeamsMode && moveTime > 0) {
         moveTimer = setInterval(() => {
           moveSeconds--;
           moveTimeDisplay.textContent = formatTime(moveSeconds);
@@ -823,8 +889,6 @@
             if (firstCard && !secondCard) {
               firstCard.card.classList.remove("flipped");
               resetTurn();
-            } else if (!firstCard && !secondCard) {
-              // No cards flipped, just switch team
             }
             currentTeam = currentTeam === 1 ? 2 : 1;
             updateTeamHighlight();
@@ -845,8 +909,9 @@
           gameTimeDisplay.textContent = formatTime(gameSeconds);
           if (gameSeconds <= 0) {
             clearInterval(gameTimer);
+            clearInterval(moveTimer);
             lockBoard = true;
-            alert("Czas rozgrywki się skończył!");
+            showCongratulationsScreen();
           }
         }, 1000);
       }
@@ -866,7 +931,7 @@
       lockBoard = true;
       points1 = 0;
       points2 = 0;
-      currentTeam = startingTeam || 1;
+      currentTeam = noTeamsMode ? 1 : (startingTeam || 1);
       score1.textContent = 0;
       score2.textContent = 0;
       updateTeamHighlight();
@@ -881,7 +946,7 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          startMoveTimer();
+          if (!noTeamsMode) startMoveTimer();
           startGameTimer();
         }
         return;
@@ -903,7 +968,7 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          startMoveTimer();
+          if (!noTeamsMode) startMoveTimer();
           startGameTimer();
         }
 
@@ -950,13 +1015,25 @@
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
       team2Input.value = "";
+      team2Input.disabled = false;
+      team2Input.style.opacity = 1;
+      btnTeam1.disabled = false;
+      btnTeam2.disabled = false;
+      btnTeam1.style.opacity = 1;
+      btnTeam2.style.opacity = 1;
+      moveTimeGroup.querySelectorAll("button").forEach(btn => {
+        btn.disabled = false;
+        btn.style.opacity = 1;
+      });
       btnTeam1.classList.remove("active");
       btnTeam2.classList.remove("active");
+      noTeamsBtn.classList.remove("active");
       moveTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
       gameTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
       startingTeam = null;
       moveTime = null;
       gameTime = null;
+      noTeamsMode = false;
       updateButtonLabels();
     };
 
@@ -973,12 +1050,23 @@
       congratulationsScreen.style.display = "flex";
       gameContainer.style.display = "none";
 
-      const winnerTeam = points1 >= points2 ? 1 : 2;
+      const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
       const winnerPoints = winnerTeam === 1 ? points1 : points2;
       const displayName = winnerName === "Drużyna 1" || winnerName === "Drużyna 2" ? `Drużyna nr ${winnerTeam}` : winnerName;
       winnerText.textContent = `Wygrała drużyna ${displayName}`;
       scoreText.textContent = `Ilość zdobytych punktów: ${winnerPoints}`;
+
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 0, y: 0.6 }
+      });
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 1, y: 0.6 }
+      });
     };
 
     const showGameScreen = () => {
@@ -989,8 +1077,8 @@
 
       // Inicjalizacja wartości gry
       team1Name = team1Input.value.trim() || "Drużyna 1";
-      team2Name = team2Input.value.trim() || "Drużyna 2";
-      moveTime = moveTime || 0;
+      team2Name = noTeamsMode ? "" : (team2Input.value.trim() || "Drużyna 2");
+      moveTime = noTeamsMode ? 0 : (moveTime || 0);
       gameTime = gameTime || 0;
 
       // Walidacja
@@ -1005,11 +1093,13 @@
 
       team1NameSpan.textContent = team1Name;
       team2NameSpan.textContent = team2Name;
+      team2Label.style.display = noTeamsMode ? "none" : "flex";
+      moveTimeLabel.style.display = noTeamsMode ? "none" : "flex";
       moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveTime);
       gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameTime * 60);
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
-      currentTeam = null; // Brak aktywnej drużyny przed kliknięciem "Start"
+      currentTeam = noTeamsMode ? 1 : null;
 
       createBoard(false);
       updateTeamHighlight();
@@ -1039,10 +1129,10 @@
 
     startBtn.addEventListener("click", () => {
       if (!started) {
-        currentTeam = startingTeam || 1;
+        currentTeam = noTeamsMode ? 1 : (startingTeam || 1);
         document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
         lockBoard = false;
-        if (moveTime > 0) {
+        if (!noTeamsMode && moveTime > 0) {
           moveSeconds = moveTime;
           moveTimeDisplay.textContent = formatTime(moveSeconds);
           startMoveTimer();
@@ -1054,7 +1144,7 @@
           gameTimeDisplay.textContent = formatTime(gameSeconds);
           startGameTimer();
         } else {
-          moveTimeDisplay.textContent = "Bez czasu";
+          gameTimeDisplay.textContent = "Bez czasu";
         }
         startBtn.textContent = "Restart";
         started = true;
