@@ -84,6 +84,7 @@
       cursor: pointer;
       border-radius: 12px;
       overflow: hidden;
+      background-color: #000; /* Fallback w razie błędu ładowania obrazów */
     }
 
     .card .front {
@@ -222,6 +223,13 @@
     .current-team-display {
       display: none;
     }
+
+    .error-message {
+      color: red;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -318,9 +326,36 @@
 
     updateCurrentTeamDisplay();
 
-    const createBoard = (colorCovers = false) => {
+    const preloadImage = (src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => resolve();
+        img.onerror = () => reject(`Nie udało się załadować obrazu: ${src}`);
+      });
+    };
+
+    const createBoard = async (colorCovers = false) => {
       fullGrid.innerHTML = "";
       cards = [];
+
+      // Wstępne ładowanie obrazów
+      const imagePromises = [];
+      imagePromises.push(preloadImage("memory/0.png"));
+      for (let i = 1; i <= 21; i++) {
+        imagePromises.push(preloadImage(`memory/${i}.png`));
+      }
+
+      try {
+        await Promise.all(imagePromises);
+      } catch (error) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error-message";
+        errorDiv.textContent = "Błąd ładowania obrazów. Sprawdź, czy folder 'memory' zawiera wszystkie obrazy (0.png do 21.png).";
+        fullGrid.appendChild(errorDiv);
+        console.error(error);
+        return;
+      }
 
       const totalPairs = 21;
       const all = [];
@@ -496,43 +531,44 @@
       });
 
       setTimeout(() => {
-        createBoard(true);
-        lockBoard = false;
-        startMoveTimer();
-        startGameTimer();
+        createBoard(true).then(() => {
+          lockBoard = false;
+          startMoveTimer();
+          startGameTimer();
 
-        const newCards = Array.from(document.querySelectorAll(".card"));
-        const newGridRect = fullGrid.getBoundingClientRect();
-        const centerX = newGridRect.left + newGridRect.width / 2;
-        const centerY = newGridRect.top + newGridRect.height / 2;
+          const newCards = Array.from(document.querySelectorAll(".card"));
+          const newGridRect = fullGrid.getBoundingClientRect();
+          const centerX = newGridRect.left + newGridRect.width / 2;
+          const centerY = newGridRect.top + newGridRect.height / 2;
 
-        newCards.forEach(card => {
-          const rect = card.getBoundingClientRect();
-          const offsetX = centerX - (rect.left + rect.width / 2);
-          const offsetY = centerY - (rect.top + rect.height / 2);
-          card.style.transition = "none";
-          card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        });
-
-        setTimeout(() => {
           newCards.forEach(card => {
-            card.style.transition = "transform 0.6s ease-in-out";
-            card.style.transform = "translate(0, 0)";
+            const rect = card.getBoundingClientRect();
+            const offsetX = centerX - (rect.left + rect.width / 2);
+            const offsetY = centerY - (rect.top + rect.height / 2);
+            card.style.transition = "none";
+            card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
           });
 
           setTimeout(() => {
             newCards.forEach(card => {
-              card.style.transition = "";
-              card.style.transform = "";
+              card.style.transition = "transform 0.6s ease-in-out";
+              card.style.transform = "translate(0, 0)";
             });
 
-            const labelCells = document.querySelectorAll(".label-cell");
-            requestAnimationFrame(() => {
-              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
-            });
+            setTimeout(() => {
+              newCards.forEach(card => {
+                card.style.transition = "";
+                card.style.transform = "";
+              });
 
-          }, 600);
-        }, 30);
+              const labelCells = document.querySelectorAll(".label-cell");
+              requestAnimationFrame(() => {
+                labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+              });
+
+            }, 600);
+          }, 30);
+        });
       }, 600);
     };
 
@@ -568,10 +604,11 @@
     });
 
     window.onload = () => {
-      createBoard(false);
-      const labelCells = document.querySelectorAll(".label-cell");
-      requestAnimationFrame(() => {
-        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+      createBoard(false).then(() => {
+        const labelCells = document.querySelectorAll(".label-cell");
+        requestAnimationFrame(() => {
+          labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+        });
       });
     };
   </script>
