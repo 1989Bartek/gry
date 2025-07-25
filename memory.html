@@ -36,13 +36,6 @@
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    #config-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-
     .config-container {
       display: flex;
       flex-wrap: wrap;
@@ -51,6 +44,8 @@
       margin-bottom: 20px;
       font-size: 0.9rem;
       transform: scale(0.94);
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .left-block, .right-block {
@@ -84,6 +79,8 @@
       font-size: 20px;
       margin: 24px 0 10px;
       text-align: center;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .button-group {
@@ -91,6 +88,8 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .button-group button {
@@ -131,12 +130,11 @@
 
     #config-buttons {
       display: flex;
-      justify-content: center;
-      align-items: center;
       gap: 20px;
       margin-top: 30px;
       margin-bottom: 30px;
-      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #game-container {
@@ -153,7 +151,7 @@
       align-items: flex-start;
       font-size: 34px;
       font-weight: bold;
-      margin-top: 30px;  
+      margin-top: 0;
       margin-bottom: 10px;
       width: 240px;
     }
@@ -261,23 +259,24 @@
       width: 150px;
       height: auto;
       display: block;
-      margin-top: 5px;
+      margin-top: 10px;
     }
 
     #logo {
       width: 150px;
       height: auto;
-      display: block;
       margin-left: auto;
       margin-right: auto;
+      display: block;
     }
 
     #website-link {
       color: white;
       font-size: 14px;
-      margin-top: 5px;
+      margin-top: 10px;
       text-align: center;
-      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .team-name {
@@ -339,14 +338,9 @@
     }
 
     @media (max-width: 768px) {
-      #config-screen {
-        align-items: center;
-      }
-
       .config-container {
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         transform: scale(1);
         width: 100%;
         max-width: 340px;
@@ -377,17 +371,25 @@
         max-width: 140px;
       }
 
-      #config-buttons {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+      .section-title {
         width: 100%;
         max-width: 340px;
       }
 
-      #nextBtn, #configFullscreenBtn {
+      #config-buttons {
         width: 100%;
-        max-width: 160px;
+        max-width: 340px;
+        justify-content: center;
+      }
+
+      #logo {
+        width: 150px;
+        max-width: 340px;
+      }
+
+      #website-link {
+        width: 100%;
+        max-width: 340px;
       }
     }
   </style>
@@ -905,6 +907,34 @@
     // Obsługa przycisków
     nextBtn.addEventListener("click", () => {
       showGameScreen();
+    });
+
+    startBtn.addEventListener("click", () => {
+      if (!started) {
+        currentTeam = startingTeam || 1;
+        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
+        lockBoard = false;
+        if (moveTime > 0) {
+          moveSeconds = moveTime;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
+          startMoveTimer();
+        } else {
+          moveTimeDisplay.textContent = "Bez czasu";
+        }
+        if (gameTime > 0) {
+          gameSeconds = gameTime * 60;
+          gameTimeDisplay.textContent = formatTime(gameSeconds);
+          startGameTimer();
+        } else {
+          gameTimeDisplay.textContent = "Bez czasu";
+        }
+        startBtn.textContent = "Restart";
+        started = true;
+        updateTeamHighlight();
+        updateCurrentTeamDisplay();
+      } else {
+        restartAndStart();
+      }
     });
 
     const toggleFullscreen = () => {
