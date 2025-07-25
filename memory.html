@@ -326,6 +326,17 @@
         transform: scale(1);
       }
 
+      .left-block, .right-block {
+        width: 100%;
+        max-width: 340px;
+        align-items: center;
+      }
+
+      .team-input {
+        width: 100%;
+        max-width: 340px;
+      }
+
       .button-group {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -385,7 +396,6 @@
     </div>
 
     <button id="nextBtn">Dalej</button>
-
     <img id="logo" src="memory/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
@@ -400,11 +410,11 @@
         <div id="current-team" class="current-team-display"></div>
         <div class="time-label">
           Czas na ruch: 
-          <span id="moveTimeDisplay" class="time-display">00:00</span>
+          <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
         </div>
         <div class="time-label">
           Czas na rozgrywkę: 
-          <span id="gameTimeDisplay" class="time-display">00:00</span>
+          <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
         </div>
       </div>
 
@@ -464,7 +474,7 @@
     let started = false;
     let points1 = 0;
     let points2 = 0;
-    let currentTeam = 1;
+    let currentTeam = null;
     let cards = [];
 
     // Funkcje konfiguracyjne
@@ -523,12 +533,16 @@
       team2Label.classList.remove("active");
       if (currentTeam === 1) {
         team1Label.classList.add("active");
-      } else {
+      } else if (currentTeam === 2) {
         team2Label.classList.add("active");
       }
     };
 
     const updateCurrentTeamDisplay = () => {
+      if (!currentTeam) {
+        currentTeamDisplay.textContent = "";
+        return;
+      }
       const teamName = currentTeam === 1 ? team1Name : team2Name;
       const points = currentTeam === 1 ? points1 : points2;
       currentTeamDisplay.textContent = `${teamName}: ${points}`;
@@ -623,13 +637,16 @@
           updateCurrentTeamDisplay();
 
           clearInterval(moveTimer);
-          moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
-          setTimeout(() => {
-            resetTurn();
-          }, 1000);
+          if (moveTime > 0) {
+            moveSeconds = moveTime;
+            moveTimeDisplay.textContent = formatTime(moveSeconds);
+            startMoveTimer();
+          } else {
+            moveTimeDisplay.textContent = "Bez czasu";
+          }
+          resetTurn();
         } else {
           clearInterval(moveTimer);
-          moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
@@ -637,6 +654,13 @@
             currentTeam = currentTeam === 1 ? 2 : 1;
             updateTeamHighlight();
             updateCurrentTeamDisplay();
+            if (moveTime > 0) {
+              moveSeconds = moveTime;
+              moveTimeDisplay.textContent = formatTime(moveSeconds);
+              startMoveTimer();
+            } else {
+              moveTimeDisplay.textContent = "Bez czasu";
+            }
           }, 1000);
         }
       }
@@ -662,7 +686,16 @@
               currentTeam = currentTeam === 1 ? 2 : 1;
               updateTeamHighlight();
               updateCurrentTeamDisplay();
-              moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
+              moveSeconds = moveTime;
+              moveTimeDisplay.textContent = formatTime(moveSeconds);
+              startMoveTimer();
+            } else if (!firstCard && !secondCard) {
+              currentTeam = currentTeam === 1 ? 2 : 1;
+              updateTeamHighlight();
+              updateCurrentTeamDisplay();
+              moveSeconds = moveTime;
+              moveTimeDisplay.textContent = formatTime(moveSeconds);
+              startMoveTimer();
             }
           }
         }, 1000);
@@ -689,8 +722,8 @@
       clearInterval(gameTimer);
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
-      moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveSeconds);
-      gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameSeconds);
+      moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveSeconds);
+      gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameSeconds);
       matchedPairs = 0;
       firstCard = null;
       secondCard = null;
@@ -711,8 +744,10 @@
         console.warn("No cards found for animation");
         createBoard(true);
         lockBoard = false;
-        startMoveTimer();
-        startGameTimer();
+        if (started) {
+          startMoveTimer();
+          startGameTimer();
+        }
         return;
       }
 
@@ -731,8 +766,10 @@
       setTimeout(() => {
         createBoard(true);
         lockBoard = false;
-        startMoveTimer();
-        startGameTimer();
+        if (started) {
+          startMoveTimer();
+          startGameTimer();
+        }
 
         const newCards = Array.from(document.querySelectorAll(".card"));
         const newGridRect = fullGrid.getBoundingClientRect();
@@ -807,11 +844,11 @@
 
       team1NameSpan.textContent = team1Name;
       team2NameSpan.textContent = team2Name;
-      moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
-      gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameTime * 60);
+      moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveTime);
+      gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameTime * 60);
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
-      currentTeam = startingTeam || 1;
+      currentTeam = null; // Brak aktywnej drużyny przed kliknięciem "Start"
 
       createBoard(false);
       updateTeamHighlight();
@@ -829,12 +866,27 @@
 
     startBtn.addEventListener("click", () => {
       if (!started) {
+        currentTeam = startingTeam || 1;
         document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
         lockBoard = false;
-        startMoveTimer();
-        startGameTimer();
+        if (moveTime > 0) {
+          moveSeconds = moveTime;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
+          startMoveTimer();
+        } else {
+          moveTimeDisplay.textContent = "Bez czasu";
+        }
+        if (gameTime > 0) {
+          gameSeconds = gameTime * 60;
+          gameTimeDisplay.textContent = formatTime(gameSeconds);
+          startGameTimer();
+        } else {
+          gameTimeDisplay.textContent = "Bez czasu";
+        }
         startBtn.textContent = "Restart";
         started = true;
+        updateTeamHighlight();
+        updateCurrentTeamDisplay();
       } else {
         restartAndStart();
       }
