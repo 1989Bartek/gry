@@ -20,13 +20,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: padding-top 0.3s ease, transform 0.3s ease;
+      transition: padding-top 0.3s ease;
     }
 
     body.fullscreen-active {
       padding-top: 120px;
-      transform: scale(1.2);
-      transform-origin: top center;
       overflow: visible;
     }
 
@@ -117,7 +115,7 @@
       background-color: #2e7d32 !important;
     }
 
-    #nextBtn, #configFullscreenBtn {
+    #nextBtn, #configFullscreenBtn, #instructionsBtn, #instructionsReturnBtn {
       width: 240px;
       height: 52px;
       font-size: 18px;
@@ -131,6 +129,10 @@
       text-transform: capitalize;
     }
 
+    #nextBtn {
+      background-color: #2e7d32;
+    }
+
     #config-buttons {
       display: flex;
       gap: 20px;
@@ -139,6 +141,28 @@
       margin-left: auto;
       margin-right: auto;
       justify-content: center;
+    }
+
+    #nextBtn-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    #instructions-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #instructions-text {
+      font-size: 18px;
+      line-height: 1.5;
+      text-align: justify;
+      margin-bottom: 20px;
     }
 
     #game-container {
@@ -386,6 +410,16 @@
         justify-content: center;
       }
 
+      #nextBtn-container {
+        width: 100%;
+        max-width: 340px;
+      }
+
+      #instructions-screen {
+        width: 100%;
+        max-width: 340px;
+      }
+
       #logo {
         width: 150px;
         max-width: 340px;
@@ -442,10 +476,22 @@
 
     <div id="config-buttons">
       <button id="configFullscreenBtn">Pełny ekran</button>
+      <button id="instructionsBtn">Instrukcja</button>
+    </div>
+
+    <div id="nextBtn-container">
       <button id="nextBtn">Dalej</button>
     </div>
+
     <img id="logo" src="memory/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+  </div>
+
+  <div id="instructions-screen">
+    <div id="instructions-text">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+    <button id="instructionsReturnBtn">Powrót</button>
   </div>
 
   <div id="game-container">
@@ -487,6 +533,11 @@
     const gameTimeGroup = document.getElementById("gameTimeGroup");
     const nextBtn = document.getElementById("nextBtn");
     const configFullscreenBtn = document.getElementById("configFullscreenBtn");
+    const instructionsBtn = document.getElementById("instructionsBtn");
+
+    // Elementy ekranu instrukcji
+    const instructionsScreen = document.getElementById("instructions-screen");
+    const instructionsReturnBtn = document.getElementById("instructionsReturnBtn");
 
     // Elementy ekranu gry
     const gameContainer = document.getElementById("game-container");
@@ -860,6 +911,7 @@
     // Przełączanie ekranów
     const showConfigScreen = () => {
       configScreen.style.display = "block";
+      instructionsScreen.style.display = "none";
       gameContainer.style.display = "none";
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
@@ -874,8 +926,15 @@
       updateButtonLabels();
     };
 
+    const showInstructionsScreen = () => {
+      configScreen.style.display = "none";
+      instructionsScreen.style.display = "flex";
+      gameContainer.style.display = "none";
+    };
+
     const showGameScreen = () => {
       configScreen.style.display = "none";
+      instructionsScreen.style.display = "none";
       gameContainer.style.display = "flex";
 
       // Inicjalizacja wartości gry
@@ -914,6 +973,14 @@
     // Obsługa przycisków
     nextBtn.addEventListener("click", () => {
       showGameScreen();
+    });
+
+    instructionsBtn.addEventListener("click", () => {
+      showInstructionsScreen();
+    });
+
+    instructionsReturnBtn.addEventListener("click", () => {
+      showConfigScreen();
     });
 
     startBtn.addEventListener("click", () => {
@@ -979,6 +1046,7 @@
     // Inicjalizacja
     updateButtonLabels();
     configScreen.style.display = "block";
+    instructionsScreen.style.display = "none";
     gameContainer.style.display = "none";
   </script>
 </body>
