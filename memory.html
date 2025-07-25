@@ -20,20 +20,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: padding-top 0.3s ease;
+      transition: padding-top 0.3s ease, transform 0.3s ease;
     }
 
     body.fullscreen-active {
       padding-top: 120px;
-      overflow: hidden; /* Zapobiega przewijaniu w trybie pełnego ekranu */
-    }
-
-    /* Powiększenie elementów w trybie pełnego ekranu */
-    body.fullscreen-active #config-screen,
-    body.fullscreen-active #game-container {
-      transform: scale(1.05); /* Proporcjonalne powiększenie */
+      transform: scale(1.2);
       transform-origin: top center;
-      transition: transform 0.3s ease;
+      overflow: visible;
     }
 
     #game-title {
@@ -459,8 +453,8 @@
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name"><span id="team1-name"></span>:&nbsp;&nbsp;<span id="score1">0</span></div>
-        <div id="team2-label" class="team-name"><span id="team2-name"></span>:&nbsp;&nbsp;<span id="score2">0</span></div>
+        <div id="team1-label" class="team-name"><span id="team1-name"></span>:  <span id="score1">0</span></div>
+        <div id="team2-label" class="team-name"><span id="team2-name"></span>:  <span id="score2">0</span></div>
         <div id="current-team" class="current-team-display"></div>
         <div class="time-label">
           Czas na ruch: 
@@ -668,6 +662,12 @@
 
       if (!firstCard) {
         firstCard = { card, value };
+        // Start timer only if it hasn't started yet
+        if (moveTime > 0 && !moveTimer) {
+          moveSeconds = moveTime;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
+          startMoveTimer();
+        }
       } else {
         secondCard = { card, value };
         lockBoard = true;
@@ -686,8 +686,10 @@
           }
           updateCurrentTeamDisplay();
 
-          clearInterval(moveTimer);
+          // Reset move timer for the same team
           if (moveTime > 0) {
+            clearInterval(moveTimer);
+            moveTimer = null;
             moveSeconds = moveTime;
             moveTimeDisplay.textContent = formatTime(moveSeconds);
             startMoveTimer();
@@ -696,7 +698,15 @@
           }
           resetTurn();
         } else {
-          clearInterval(moveTimer);
+          // Reset move timer and switch team
+          if (moveTime > 0) {
+            clearInterval(moveTimer);
+            moveTimer = null;
+            moveSeconds = moveTime;
+            moveTimeDisplay.textContent = formatTime(moveSeconds);
+          } else {
+            moveTimeDisplay.textContent = "Bez czasu";
+          }
           setTimeout(() => {
             firstCard.card.classList.remove("flipped");
             secondCard.card.classList.remove("flipped");
@@ -705,11 +715,7 @@
             updateTeamHighlight();
             updateCurrentTeamDisplay();
             if (moveTime > 0) {
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
               startMoveTimer();
-            } else {
-              moveTimeDisplay.textContent = "Bez czasu";
             }
           }, 1000);
         }
@@ -723,16 +729,18 @@
     };
 
     const startMoveTimer = () => {
-      clearInterval(moveTimer);
       if (moveTime > 0) {
         moveTimer = setInterval(() => {
           moveSeconds--;
           moveTimeDisplay.textContent = formatTime(moveSeconds);
           if (moveSeconds <= 0) {
             clearInterval(moveTimer);
+            moveTimer = null;
             if (firstCard && !secondCard) {
               firstCard.card.classList.remove("flipped");
               resetTurn();
+            } else if (!firstCard && !secondCard) {
+              // No cards flipped, just switch team
             }
             currentTeam = currentTeam === 1 ? 2 : 1;
             updateTeamHighlight();
@@ -762,6 +770,7 @@
 
     const restartAndStart = () => {
       clearInterval(moveTimer);
+      moveTimer = null;
       clearInterval(gameTimer);
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
@@ -788,11 +797,7 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          if (moveTime > 0) {
-            moveSeconds = moveTime;
-            moveTimeDisplay.textContent = formatTime(moveSeconds);
-            startMoveTimer();
-          }
+          startMoveTimer();
           startGameTimer();
         }
         return;
@@ -814,11 +819,7 @@
         createBoard(true);
         lockBoard = false;
         if (started) {
-          if (moveTime > 0) {
-            moveSeconds = moveTime;
-            moveTimeDisplay.textContent = formatTime(moveSeconds);
-            startMoveTimer();
-          }
+          startMoveTimer();
           startGameTimer();
         }
 
@@ -932,7 +933,7 @@
           gameTimeDisplay.textContent = formatTime(gameSeconds);
           startGameTimer();
         } else {
-          gameTimeDisplay.textContent = "Bez czasu";
+          moveTimeDisplay.textContent = "Bez czasu";
         }
         startBtn.textContent = "Restart";
         started = true;
@@ -968,6 +969,7 @@
 
     returnBtn.addEventListener("click", () => {
       clearInterval(moveTimer);
+      moveTimer = null;
       clearInterval(gameTimer);
       started = false;
       startBtn.textContent = "Start";
