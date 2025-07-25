@@ -270,8 +270,18 @@
 
     const team1Name = localStorage.getItem("team1") || "Drużyna 1";
     const team2Name = localStorage.getItem("team2") || "Drużyna 2";
-    const moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
-    const gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+    let moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
+    let gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+
+    // Walidacja wartości z localStorage
+    if (isNaN(moveTime) || moveTime < 0) {
+      console.error("Invalid moveTime value:", moveTime);
+      moveTime = 0;
+    }
+    if (isNaN(gameTime) || gameTime < 0) {
+      console.error("Invalid gameTime value:", gameTime);
+      gameTime = 0;
+    }
 
     team1NameSpan.textContent = team1Name;
     team2NameSpan.textContent = team2Name;
@@ -293,6 +303,10 @@
     let cards = [];
 
     const formatTime = (seconds) => {
+      if (isNaN(seconds) || seconds < 0) {
+        console.error("Invalid seconds value in formatTime:", seconds);
+        return "00:00";
+      }
       const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
       const secs = (seconds % 60).toString().padStart(2, "0");
       return `${mins}:${secs}`;
@@ -318,52 +332,60 @@
     updateCurrentTeamDisplay();
 
     const createBoard = (colorCovers = false) => {
-      fullGrid.innerHTML = "";
-      cards = [];
+      try {
+        fullGrid.innerHTML = "";
+        cards = [];
 
-      const totalPairs = 21;
-      const all = [];
-      for (let i = 1; i <= totalPairs; i++) {
-        all.push(i, i);
-      }
-      const shuffled = all.sort(() => 0.5 - Math.random());
-
-      const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
-      const rows = ["", "1", "2", "3", "4", "5", "6"];
-
-      for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < 8; j++) {
-          const cell = document.createElement("div");
-
-          if (i === 0 && j > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-            cell.textContent = letters[j];
-          } else if (j === 0 && i > 0) {
-            cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-            cell.textContent = rows[i];
-          } else if (i > 0 && j > 0) {
-            const value = shuffled.pop();
-            const card = document.createElement("div");
-            card.classList.add("card");
-
-            const frontImg = document.createElement("img");
-            frontImg.src = `memory/${value}.png`;
-            frontImg.classList.add("front");
-
-            const backImg = document.createElement("img");
-            backImg.src = "memory/0.png";
-            backImg.classList.add("cover");
-            if (colorCovers) backImg.classList.add("kolorowa");
-
-            card.appendChild(frontImg);
-            card.appendChild(backImg);
-            card.addEventListener("click", () => handleCardClick(card, value));
-            cell.appendChild(card);
-            cards.push(card);
-          }
-
-          fullGrid.appendChild(cell);
+        const totalPairs = 21;
+        const all = [];
+        for (let i = 1; i <= totalPairs; i++) {
+          all.push(i, i);
         }
+        const shuffled = all.sort(() => 0.5 - Math.random());
+
+        const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
+        const rows = ["", "1", "2", "3", "4", "5", "6"];
+
+        for (let i = 0; i < 7; i++) {
+          for (let j = 0; j < 8; j++) {
+            const cell = document.createElement("div");
+
+            if (i === 0 && j > 0) {
+              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+              cell.textContent = letters[j];
+            } else if (j === 0 && i > 0) {
+              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
+              cell.textContent = rows[i];
+            } else if (i > 0 && j > 0) {
+              if (!shuffled.length) {
+                console.error("Not enough values in shuffled array");
+                return;
+              }
+              const value = shuffled.pop();
+              const card = document.createElement("div");
+              card.classList.add("card");
+
+              const frontImg = document.createElement("img");
+              frontImg.src = `memory/${value}.png`;
+              frontImg.classList.add("front");
+
+              const backImg = document.createElement("img");
+              backImg.src = "memory/0.png";
+              backImg.classList.add("cover");
+              if (colorCovers) backImg.classList.add("kolorowa");
+
+              card.appendChild(frontImg);
+              card.appendChild(backImg);
+              card.addEventListener("click", () => handleCardClick(card, value));
+              cell.appendChild(card);
+              cards.push(card);
+            }
+
+            fullGrid.appendChild(cell);
+          }
+        }
+      } catch (error) {
+        console.error("Error in createBoard:", error);
       }
     };
 
@@ -478,18 +500,24 @@
       updateTeamHighlight();
       updateCurrentTeamDisplay();
 
-      document.querySelectorAll(".card").forEach(card => {
-        card.classList.remove("matched");
-      });
-
       const labelCells = document.querySelectorAll(".label-cell");
       labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const cards = document.querySelectorAll(".card");
+      if (cards.length === 0) {
+        console.warn("No cards found for animation");
+        createBoard(true);
+        lockBoard = false;
+        startMoveTimer();
+        startGameTimer();
+        return;
+      }
 
       const gridRect = fullGrid.getBoundingClientRect();
       const centerX = gridRect.left + gridRect.width / 2;
       const centerY = gridRect.top + gridRect.height / 2;
 
-      document.querySelectorAll(".card").forEach(card => {
+      cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const offsetX = centerX - (rect.left + rect.width / 2);
         const offsetY = centerY - (rect.top + rect.height / 2);
@@ -532,7 +560,6 @@
             requestAnimationFrame(() => {
               labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
             });
-
           }, 600);
         }, 30);
       }, 600);
@@ -570,8 +597,10 @@
     });
 
     window.onload = () => {
+      console.log("Initializing board with moveTime:", moveTime, "gameTime:", gameTime);
       createBoard(false);
       const labelCells = document.querySelectorAll(".label-cell");
+      console.log("Label cells found:", labelCells.length);
       requestAnimationFrame(() => {
         labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
       });
