@@ -60,6 +60,8 @@
       grid-template-columns: repeat(8, auto);
       grid-template-rows: repeat(7, auto);
       gap: 0.5vw;
+      border: 2px solid white; /* Tymczasowo dla debugowania */
+      min-height: 400px; /* Zapewnia widoczność siatki */
     }
 
     .grid-cell {
@@ -78,12 +80,13 @@
     }
 
     .card {
-      width: clamp(60px, 10vw, 100px);
+      width: clamp(80px, 12vw, 120px); /* Zwiększono minimalny rozmiar */
       aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
       border-radius: 12px;
       overflow: hidden;
+      background-color: #ccc; /* Tymczasowo dla debugowania */
     }
 
     .card .front {
@@ -106,7 +109,7 @@
       transition: filter 0.3s ease;
       z-index: 2;
       visibility: visible;
-      filter: grayscale(100%) brightness(80%);
+      filter: none; /* Tymczasowo usunięto skalę szarości */
     }
 
     .cover.kolorowa {
@@ -221,6 +224,20 @@
     .current-team-display {
       display: none;
     }
+
+    @media (max-width: 768px) {
+      #game-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      #full-grid {
+        grid-template-columns: repeat(8, minmax(40px, 1fr));
+        gap: 4px;
+      }
+      .card {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -248,7 +265,7 @@
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
         <button id="returnBtn" onclick="window.location.href='memory.start.html'">Powrót</button>
-        <img src="memory/logo.png" alt="Logo" />
+        <img src="img/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
     </div>
@@ -270,8 +287,15 @@
 
     const team1Name = localStorage.getItem("team1") || "Drużyna 1";
     const team2Name = localStorage.getItem("team2") || "Drużyna 2";
-    const moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
-    const gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+    let moveTime = parseInt(localStorage.getItem("moveTime")) || 0;
+    let gameTime = parseInt(localStorage.getItem("gameTime")) || 0;
+    let currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
+
+    if (isNaN(moveTime)) moveTime = 0;
+    if (isNaN(gameTime)) gameTime = 0;
+    if (isNaN(currentTeam) || (currentTeam !== 1 && currentTeam !== 2)) currentTeam = 1;
+
+    console.log("Odczytane dane z localStorage:", { team1Name, team2Name, moveTime, gameTime, currentTeam });
 
     team1NameSpan.textContent = team1Name;
     team2NameSpan.textContent = team2Name;
@@ -289,7 +313,6 @@
     let started = false;
     let points1 = 0;
     let points2 = 0;
-    let currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
     let cards = [];
 
     const formatTime = (seconds) => {
@@ -314,10 +337,8 @@
       currentTeamDisplay.textContent = `${teamName}: ${points}`;
     };
 
-    updateTeamHighlight();
-    updateCurrentTeamDisplay();
-
     const createBoard = (colorCovers = false) => {
+      console.log("Tworzenie siatki...");
       fullGrid.innerHTML = "";
       cards = [];
 
@@ -327,6 +348,7 @@
         all.push(i, i);
       }
       const shuffled = all.sort(() => 0.5 - Math.random());
+      console.log("Wymieszane karty:", shuffled);
 
       const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
       const rows = ["", "1", "2", "3", "4", "5", "6"];
@@ -334,7 +356,6 @@
       for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 8; j++) {
           const cell = document.createElement("div");
-
           if (i === 0 && j > 0) {
             cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = letters[j];
@@ -343,15 +364,16 @@
             cell.textContent = rows[i];
           } else if (i > 0 && j > 0) {
             const value = shuffled.pop();
+            console.log(`Tworzenie karty z wartością ${value}`);
             const card = document.createElement("div");
             card.classList.add("card");
 
             const frontImg = document.createElement("img");
-            frontImg.src = `memory/${value}.png`;
+            frontImg.src = `img/${value}.png`;
             frontImg.classList.add("front");
 
             const backImg = document.createElement("img");
-            backImg.src = "memory/0.png";
+            backImg.src = "img/0.png";
             backImg.classList.add("cover");
             if (colorCovers) backImg.classList.add("kolorowa");
 
@@ -361,10 +383,10 @@
             cell.appendChild(card);
             cards.push(card);
           }
-
           fullGrid.appendChild(cell);
         }
       }
+      console.log("Siatka utworzona, liczba kart:", cards.length);
     };
 
     const handleCardClick = (card, value) => {
@@ -473,6 +495,7 @@
       points1 = 0;
       points2 = 0;
       currentTeam = parseInt(localStorage.getItem("startingTeam")) || 1;
+      if (isNaN(currentTeam) || (currentTeam !== 1 && currentTeam !== 2)) currentTeam = 1;
       score1.textContent = 0;
       score2.textContent = 0;
       updateTeamHighlight();
@@ -532,7 +555,6 @@
             requestAnimationFrame(() => {
               labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
             });
-
           }, 600);
         }, 30);
       }, 600);
@@ -569,13 +591,24 @@
       }
     });
 
-    window.onload = () => {
+    function initializeGame() {
+      console.log("Inicjalizacja gry...");
+      console.log("Dane z localStorage:", { team1Name, team2Name, moveTime, gameTime, currentTeam });
+      team1NameSpan.textContent = team1Name;
+      team2NameSpan.textContent = team2Name;
+      moveTimeDisplay.textContent = moveTime === 0 ? "00:00" : formatTime(moveTime);
+      gameTimeDisplay.textContent = gameTime === 0 ? "00:00" : formatTime(gameTime * 60);
+      updateTeamHighlight();
+      updateCurrentTeamDisplay();
       createBoard(false);
       const labelCells = document.querySelectorAll(".label-cell");
       requestAnimationFrame(() => {
         labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
       });
-    };
+    }
+
+    window.onload = initializeGame;
+    initializeGame();
   </script>
 </body>
 </html>
