@@ -43,7 +43,7 @@
     .scoreboard {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       font-size: 34px;
       font-weight: bold;
       margin-top: 30px;  
@@ -163,6 +163,24 @@
       margin-top: 10px;
       text-align: center;
     }
+
+.team-name {
+  font-size: 34px;
+  font-weight: bold;
+  color: white;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.time-label {
+  font-size: 15px; 
+  color: white;
+  text-align: left;
+  width: 100%;  
+  margin-bottom: 4px;
+}
+
   </style>
 </head>
 <body>
@@ -172,10 +190,13 @@
     <div id="full-grid"></div>
 
     <div style="display: flex; flex-direction: column; align-items: center;">
-      <div class="scoreboard">
-        <div id="team1-label">Drużyna 1: <span id="score1">0</span></div>
-        <div id="team2-label">Drużyna 2: <span id="score2">0</span></div>
-      </div>
+<div class="scoreboard">
+  <div id="team1-label" class="team-name">Drużyna 1: <span id="score1">0</span></div>
+  <div id="team2-label" class="team-name">Drużyna 2: <span id="score2">0</span></div>
+  <div class="time-label">Czas na ruch:</div>
+  <div class="time-label">Czas na rozgrywkę:</div>
+</div>
+
       <div id="buttons" class="controls">
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
