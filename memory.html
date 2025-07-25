@@ -876,7 +876,7 @@
       team1Name = team1Input.value.trim() || "Drużyna 1";
       team2Name = team2Input.value.trim() || "Drużyna 2";
       moveTime = moveTime || 0;
-      gameTime = moveTime || 0;
+      gameTime = gameTime || 0;
 
       // Walidacja
       if (isNaN(moveTime) || moveTime < 0) {
