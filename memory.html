@@ -46,7 +46,7 @@
       align-items: flex-start;
       font-size: 34px;
       font-weight: bold;
-      margin-top: 30px;
+      margin-top: 30px;  
       margin-bottom: 10px;
       width: 240px;
     }
@@ -174,7 +174,7 @@
     }
 
     .time-label {
-      font-size: 15px;
+      font-size: 15px; 
       color: white;
       text-align: left;
       width: 100%;
@@ -204,14 +204,8 @@
       <div class="scoreboard">
         <div id="team1-label" class="team-name">Drużyna 1: <span id="score1">0</span></div>
         <div id="team2-label" class="team-name">Drużyna 2: <span id="score2">0</span></div>
-        <div class="time-label">
-          Czas na wykonanie ruchu:
-          <span id="ruch-timer" class="timer-box"></span>
-        </div>
-        <div class="time-label">
-          Czas na rozgrywkę:
-          <span id="gra-timer" class="timer-box"></span>
-        </div>
+        <div class="time-label">Czas na wykonanie ruchu: <span id="ruch-timer" class="timer-box"></span></div>
+        <div class="time-label">Czas na rozgrywkę: <span id="gra-timer" class="timer-box"></span></div>
       </div>
 
       <div id="buttons" class="controls">
@@ -234,23 +228,23 @@
     const team1Label = document.getElementById("team1-label");
     const team2Label = document.getElementById("team2-label");
 
+    const ruchTimerEl = document.getElementById("ruch-timer");
+    const graTimerEl = document.getElementById("gra-timer");
+
     const team1Name = localStorage.getItem("team1") || "Drużyna 1";
     const team2Name = localStorage.getItem("team2") || "Drużyna 2";
 
     team1Label.innerHTML = `${team1Name}: <span id="score1">0</span>`;
     team2Label.innerHTML = `${team2Name}: <span id="score2">0</span>`;
 
-    const ruchTimerEl = document.getElementById("ruch-timer");
-    const graTimerEl = document.getElementById("gra-timer");
+    const selectedRuch = localStorage.getItem("czasRuchu") || "Bez czasu";
+    const selectedGra = localStorage.getItem("czasGry") || "Bez czasu";
 
-    const selectedRuch = localStorage.getItem("czasRuchu") || "Bez limitu";
-    const selectedGra = localStorage.getItem("czasGry") || "Bez limitu";
+    let ruchCzas = selectedRuch === "Bez czasu" ? null : parseInt(selectedRuch);
+    let graCzas = selectedGra === "Bez czasu" ? null : parseInt(selectedGra) * 60;
 
-    let ruchCzas = selectedRuch === "Bez limitu" ? null : parseInt(selectedRuch);
-    let graCzas = selectedGra === "Bez limitu" ? null : parseInt(selectedGra) * 60;
-
-    ruchTimerEl.textContent = ruchCzas !== null ? ruchCzas : "Bez limitu";
-    graTimerEl.textContent = graCzas !== null ? Math.floor(graCzas / 60) : "Bez limitu";
+    ruchTimerEl.textContent = ruchCzas !== null ? ruchCzas : "Bez czasu";
+    graTimerEl.textContent = graCzas !== null ? Math.floor(graCzas / 60) : "Bez czasu";
 
     let firstCard = null;
     let secondCard = null;
@@ -267,17 +261,21 @@
     const createBoard = (colorCovers = false) => {
       fullGrid.innerHTML = "";
       cards = [];
+
       const totalPairs = 21;
       const all = [];
       for (let i = 1; i <= totalPairs; i++) {
         all.push(i, i);
       }
       const shuffled = all.sort(() => 0.5 - Math.random());
+
       const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
       const rows = ["", "1", "2", "3", "4", "5", "6"];
+
       for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 8; j++) {
           const cell = document.createElement("div");
+
           if (i === 0 && j > 0) {
             cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
             cell.textContent = letters[j];
@@ -304,6 +302,7 @@
             cell.appendChild(card);
             cards.push(card);
           }
+
           fullGrid.appendChild(cell);
         }
       }
@@ -363,7 +362,42 @@
     const stopTimer = () => clearInterval(timer);
 
     const restartAndStart = () => {
-      // Tu ewentualnie reset liczników
+      stopTimer();
+      seconds = 0;
+      matchedPairs = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = true;
+      points1 = 0;
+      points2 = 0;
+      currentTeam = 1;
+      document.getElementById("score1").textContent = 0;
+      document.getElementById("score2").textContent = 0;
+
+      document.querySelectorAll(".card").forEach(card => {
+        card.classList.remove("matched");
+      });
+
+      const labelCells = document.querySelectorAll(".label-cell");
+      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+
+      const gridRect = fullGrid.getBoundingClientRect();
+      const centerX = gridRect.left + gridRect.width / 2;
+      const centerY = gridRect.top + gridRect.height / 2;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const offsetX = centerX - (rect.left + rect.width / 2);
+        const offsetY = centerY - (rect.top + rect.height / 2);
+        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+
+      setTimeout(() => {
+        createBoard(true);
+        lockBoard = false;
+        startTimer();
+      }, 600);
     };
 
     startBtn.addEventListener("click", () => {
@@ -389,7 +423,6 @@
             if (graCzas <= 0) clearInterval(graInterval);
           }, 1000);
         }
-
       } else {
         restartAndStart();
       }
