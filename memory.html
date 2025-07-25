@@ -485,8 +485,7 @@
           <label for="team1">Nazwa drużyny nr 1</label>
           <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
         </div>
-
-        <div class="team-input">
+        <div class="team-input" style="margin-top: 24px;">
           <label for="team2">Nazwa drużyny nr 2</label>
           <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
         </div>
@@ -808,7 +807,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const handleCardClick = (card, value) => {
-      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched") || !started) return;
 
       card.classList.add("flipped");
 
@@ -1191,6 +1190,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       clearInterval(gameTimer);
       started = false;
       startBtn.textContent = "Start";
+      document.querySelectorAll(".cover").forEach(cover => cover.classList.remove("kolorowa"));
       showConfigScreen();
     });
 
