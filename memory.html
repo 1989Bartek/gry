@@ -108,7 +108,14 @@
       background-color: #2e7d32 !important;
     }
 
-    #nextBtn {
+    #config-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    #nextBtn, #configFullscreenBtn {
       width: 240px;
       height: 52px;
       font-size: 18px;
@@ -119,8 +126,6 @@
       border: 4px solid white;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      margin-top: 30px;
-      margin-bottom: 30px;
       text-transform: capitalize;
     }
 
@@ -136,9 +141,9 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      font-size: 34px;
+      font-size: 28px;
       font-weight: bold;
-      margin-top: 30px;  
+      margin-top: 30px;
       margin-bottom: 10px;
       width: 240px;
     }
@@ -151,30 +156,15 @@
       display: grid;
       grid-template-columns: repeat(8, auto);
       grid-template-rows: repeat(7, auto);
-      gap: 0.5vw;
-    }
-
-    .grid-cell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: clamp(14px, 1.8vw, 20px);
-      color: white;
-      opacity: 1;
-      transition: opacity 0.4s ease;
-    }
-
-    .grid-cell.ukryj-oznakowanie {
-      opacity: 0;
+      gap: 20px;
     }
 
     .card {
-      width: clamp(60px, 10vw, 100px);
+      width: clamp(40px, 8vw, 80px);
       aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
-      border-radius: 12px;
+      border-radius: 5px;
       overflow: hidden;
     }
 
@@ -182,9 +172,9 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
-      visibility: hidden;
-      transition: filter 1s ease;
+      border-radius: 5px;
+      display: none;
+      transition: opacity 0.3s ease;
     }
 
     .card .cover {
@@ -194,27 +184,27 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
-      transition: filter 0.3s ease;
-      z-index: 2;
-      visibility: visible;
-      filter: grayscale(100%) brightness(80%);
+      border-radius: 5px;
+      transition: opacity 0.5s ease;
+      z-index: 1;
+      display: block;
+      filter: grayscale(100%) brightness(0.8);
     }
 
     .cover.kolorowa {
-      filter: none;
-    }
-
-    .card.flipped .cover {
-      visibility: hidden;
+      filter: none !important;
     }
 
     .card.flipped .front {
-      visibility: visible;
+      display: block !important;
+    }
+
+    .card.flipped .cover {
+      display: none !important;
     }
 
     .card.matched .front {
-      filter: grayscale(100%) brightness(60%);
+      opacity: 0.6;
     }
 
     #buttons {
@@ -225,17 +215,28 @@
     }
 
     #buttons button {
-      width: 240px;
-      padding: 15px 20px;
-      font-size: 20px;
+      width: 250px;
+      padding: 12px 20px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       background-color: #104f9c;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    #buttons button:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     #startBtn {
@@ -243,32 +244,32 @@
     }
 
     #buttons img {
-      width: 200px;
+      width: 150px;
       height: auto;
       display: block;
       margin-top: 10px;
     }
 
     #logo {
-      width: 200px;
+      width: 150px;
       height: auto;
     }
 
     #website-link {
       color: white;
-      font-size: 16px;
-      margin-top: 10px;
+      font-size: 14px;
+      margin-top: 12px;
       text-align: center;
     }
 
     .team-name {
-      font-size: 34px;
+      font-size: 28px;
       font-weight: bold;
       color: white;
       width: 240px;
-      height: 48px;
-      line-height: 48px;
-      padding: 0 8px;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 10px;
       text-align: left;
       white-space: nowrap;
       overflow: hidden;
@@ -276,37 +277,37 @@
       margin-bottom: 10px;
       display: flex;
       align-items: center;
+      border-radius: 5px;
     }
 
     .team-name.active {
       background-color: #104f9c;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .time-label {
-      font-size: 15px; 
+      font-size: 12px;
       color: white;
       text-align: left;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .time-display {
-      width: 160px;
-      height: 36px;
-      line-height: 36px;
-      padding: 0 8px;
-      font-size: 15px;
+      width: 140px;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      font-size: 14px;
       font-weight: bold;
       text-align: center;
-      background-color: #104f9c;
-      color: white;
-      border: 4px solid white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      background-color: #333;
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -317,13 +318,18 @@
 
     .current-team-display {
       display: none;
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       .config-container {
+        display: flex;
         flex-direction: column;
         align-items: center;
-        transform: scale(1);
+        transform: none;
+        width: 100%;
+        max-width: 340px;
       }
 
       .left-block, .right-block {
@@ -333,14 +339,19 @@
       }
 
       .team-input {
+        font-size: 14px;
         width: 100%;
         max-width: 340px;
+      }
+
+      .team-input input {
+        font-size: 14px;
       }
 
       .button-group {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
         width: 100%;
         max-width: 340px;
         justify-items: center;
@@ -348,410 +359,453 @@
 
       .button-group button {
         width: 100%;
-        max-width: 140px;
+        max-width: 150px;
+        font-size: 14px;
+        height: 40px;
+      }
+
+      #config-buttons {
+        width: 100%;
+        max-width: 340px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      #nextBtn, #configFullscreenBtn {
+        width: 100%;
+        max-width: 340px;
+        font-size: 16px;
+        height: 28px;
+      }
+
+      #game-title {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+
+      .scoreboard {
+        font-size: 24px;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .team-name {
+        font-size: 24px;
+        height: 36px;
+        line-height: 36px;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .time-label {
+        font-size: 11px;
+      }
+
+      .time-display {
+        width: 120px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .card {
+        width: clamp(40px, 6vw, 60px);
+      }
+      #buttons button {
+        width: 100%;
+        max-width: 320px;
+        font-size: 16px;
+        padding: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <h1 id="game-title">Świąteczne Memory</h1>
+  <h1 id="memory-title">Memory Match</h1>
 
   <div id="config-screen">
     <div class="config-container">
       <div class="left-block">
         <div class="team-input">
-          <label for="team1">Nazwa drużyny nr 1</label>
-          <input type="text" id="team1" maxlength="13" placeholder="Wpisz nazwę" />
+          <label for="team1">Team 1 Name</label>
+          <input type="text" id="team1Name" maxlength="15" placeholder="Enter team name" />
         </div>
 
         <div class="team-input">
-          <label for="team2">Nazwa drużyny nr 2</label>
-          <input type="text" id="team2" maxlength="13" placeholder="Wpisz nazwę" />
+          <label for="team2">Team 2 Name</label>
+          <input type="text" id="team2Name" maxlength="15" placeholder="Enter team name" />
         </div>
       </div>
 
       <div class="right-block">
-        <div class="section-title">Która drużyna ma rozpocząć grę?</div>
-        <div class="button-group" id="starterGroup">
-          <button id="btnTeam1">Drużyna 1</button>
-          <button id="btnTeam2">Drużyna 2</button>
+        <div class="section-title">Which team starts?</div>
+        <div class="team-buttons" id="team-buttons">
+          <button id="btnTeam1">Team 1</button>
+          <button id="btnTeam2">Team 2</button>
         </div>
       </div>
+
+<div class="section-title">Move Time Limit:</div>
+    <div class="time-buttons" id="moveTimeButtons">
+      <button data-time="15">15 min</button>
+      <button data-time="30">30 min</button>
+      <button data-time="60">60 min</button>
+      <button data-time="0">Unlimited</button>
     </div>
 
-    <div class="section-title">Czas na wykonanie ruchu drużyny:</div>
-    <div class="button-group" id="moveTimeGroup">
-      <button data-time="15">15 sek.</button>
-      <button data-time="30">30 sek.</button>
-      <button data-time="60">60 sek.</button>
-      <button data-time="0">Bez czasu</button>
+    <div class="section-title">Game Duration:</div>
+      <div class="time-buttons" id="gameTimeButtons">
+        <button data-time="10">10 Min</button>
+        <button data-time="15">15 Min</button>
+        <button data-time="30">30 Min</button>
+        <button data-time="0">Unlimited</button>
+      </div>
+
+    <div id="config-buttons">
+      <button id="configFullscreenBtn">Fullscreen</button>
+      <button id="nextBtn">Next</button>
     </div>
 
-    <div class="section-title" style="margin-top: 40px;">Czas na całą rozgrywkę:</div>
-    <div class="button-group" id="gameTimeGroup">
-      <button data-time="10">10 min.</button>
-      <button data-time="15">15 min.</button>
-      <button data-time="25">25 min.</button>
-      <button data-time="0">Bez czasu</button>
-    </div>
-
-    <button id="nextBtn">Dalej</button>
-    <img id="logo" src="memory/logo.png" alt="Logo" />
-    <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+    <img src="img/logo.png" alt="Logo" id="logoImage" />
+    <span id="website">www.example.com</span>
   </div>
 
-  <div id="game-container">
-    <div id="full-grid"></div>
+  <div id="game-screen" style="display: none;">
+    <div id="game-grid"></div>
 
-    <div style="display: flex; flex-direction: column; align-items: center;">
+    <div class="scoreboard-container">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
-        <div id="team2-label" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
-        <div id="current-team" class="current-team-display"></div>
+        <div id="team1-score" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
+        <div id="team2-score" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
+        <div id="current-team"></div>
         <div class="time-label">
-          Czas na ruch: 
-          <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
+          Move Time: <span id="moveTimeDisplay" class="time-display">Unlimited</span>
         </div>
         <div class="time-label">
-          Czas na rozgrywkę: 
-          <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
+          Game Time: <span id="gameTimeDisplay" class="time-display">Unlimited</span>
         </div>
       </div>
 
-      <div id="buttons" class="controls">
+      <div id="game-controls">
         <button id="startBtn">Start</button>
-        <button id="fullscreenBtn">Pełny ekran</button>
-        <button id="returnBtn">Powrót</button>
-        <img src="memory/logo.png" alt="Logo" />
-        <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
+        <button id="gameFullscreenBtn">Fullscreen</button>
+        <button id="returnBtn">Back</button>
+        <img src="img/logo.png" alt="Logo" />
+        <span id="website">www.example.com</span>
       </div>
     </div>
   </div>
 
   <script>
-    // Elementy ekranu konfiguracyjnego
-    const configScreen = document.getElementById("config-screen");
-    const team1Input = document.getElementById("team1");
-    const team2Input = document.getElementById("team2");
-    const btnTeam1 = document.getElementById("btnTeam1");
-    const btnTeam2 = document.getElementById("btnTeam2");
-    const moveTimeGroup = document.getElementById("moveTimeGroup");
-    const gameTimeGroup = document.getElementById("gameTimeGroup");
-    const nextBtn = document.getElementById("nextBtn");
+    const configScreenContainer = document.getElementById('config-screen-container');
+    const team1NameInput = document.getElementById('team1Name');
+    const team2NameInput = document.getElementById('team2Name');
+    const btnTeam1Btn = document.getElementById('btnTeam1');
+    const btnTeam2Btn = document.getElementById('btnTeam2');
+    const moveTimeButtons = document.getElementById('moveTimeButtons');
+    const timeButtons = document.getElementById('timeButtons');
+    const nextBtnBtn = document.getElementById('nextBtnBtn');
+    const configFullscreenBtn = document.getElementById('configFullscreenBtn');
 
-    // Elementy ekranu gry
-    const gameContainer = document.getElementById("game-container");
-    const fullGrid = document.getElementById("full-grid");
-    const startBtn = document.getElementById("startBtn");
-    const score1 = document.getElementById("score1");
-    const score2 = document.getElementById("score2");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const moveTimeDisplay = document.getElementById("moveTimeDisplay");
-    const gameTimeDisplay = document.getElementById("gameTimeDisplay");
-    const currentTeamDisplay = document.getElementById("current-team");
-    const team1Label = document.getElementById("team1-label");
-    const team2Label = document.getElementById("team2-label");
-    const team1NameSpan = document.getElementById("team1-name");
-    const team2NameSpan = document.getElementById("team2-name");
-    const returnBtn = document.getElementById("returnBtn");
+    const gameScreenContainer = document.getElementById('game-screen');
+    const gameGrid = document.getElementById('game-grid');
+    const startGameBtn = document.getElementById('btnStart');
+    const score1Display = document.getElementById('score1');
+    const score2Display = document.getElementById('score2');
+    const gameFullscreenBtn = document.getElementById('btn-gameFullscreen');
+    const moveTimeDisplay = document.getElementById('move-time-display');
+    const gameTimeDisplay = document.getElementById('game-time-display');
+    const currentTeamDisplay = document.getElementById('current-team-name');
+    const team1ScoreDisplay = document.getElementById('team1-score-display');
+    const team2ScoreDisplay = document.getElementById('team2-score-display');
+    const team1NameDisplay = document.getElementById('team1-name-display');
+    const team2NameDisplay = document.getElementById('team2-name-display');
+    const backBtn = document.getElementById('btn-back');
 
-    // Zmienne konfiguracyjne
-    let team1Name = "Drużyna 1";
-    let team2Name = "Drużyna 2";
+    let team1Name = '';
+    let team2Name = '';
     let startingTeam = null;
-    let moveTime = null;
-    let gameTime = null;
+    let moveTimeLimit = null;
+    let gameTimeLimit = null;
 
-    // Zmienne gry
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = true;
-    let matchedPairs = 0;
-    let moveTimer;
-    let gameTimer;
-    let moveSeconds = 0;
-    let gameSeconds = 0;
-    let started = false;
-    let points1 = 0;
-    let points2 = 0;
+    let firstCardSelected = null;
+    let secondCardSelected = null;
+    let boardLocked = true;
+    let matchedPairsCount = 0;
+    let moveTimerInterval;
+    let gameTimerInterval;
+    let moveSecondsCount = 0;
+    let gameSecondsCount = 0;
+    let gameStarted = false;
+    let points1Count = 0;
+    let points2Count = 0;
     let currentTeam = null;
-    let cards = [];
+    let cardsArray = [];
 
-    // Funkcje konfiguracyjne
-    const updateButtonLabels = () => {
-      btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1");
-      btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2");
-    };
+    function updateButtonLabels() {
+      btnTeam1.textContent = team1NameInput.value.trim() || 'Team 1';
+      btnTeam2.textContent = team2NameInput.value.trim() || 'Team 2';
+    }
 
-    const activateSingleButton = (group, value, setCallback) => {
-      [...group.querySelectorAll("button")].forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.time == value);
+    function activateSingleButton(buttonGroup, value, setCallback) {
+      Array.from(buttonGroup.children).forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.time === value);
       });
       setCallback(value);
-    };
+    }
 
-    team1Input.addEventListener("input", updateButtonLabels);
-    team2Input.addEventListener("input", updateButtonLabels);
+    team1NameInput.addEventListener('input', updateButtonLabels);
+    team2NameInput.addEventListener('input', updateButtonLabels);
 
-    btnTeam1.addEventListener("click", () => {
-      startingTeam = 1;
-      btnTeam1.classList.add("active");
-      btnTeam2.classList.remove("active");
+    btnTeam1.addEventListener('click', () => {
+      startingTeam = true;
+      btnTeam1.classList.add('active');
+      btnTeam2.classList.remove('active');
     });
 
-    btnTeam2.addEventListener("click", () => {
-      startingTeam = 2;
-      btnTeam2.classList.add("active");
-      btnTeam1.classList.remove("active");
+    btnTeam2.addEventListener('click', () => {
+      startingTeam = false;
+      btnTeam2.classList.add('active');
+      btnTeam1.classList.remove('active');
     });
 
-    moveTimeGroup.addEventListener("click", e => {
-      if (e.target.tagName === "BUTTON") {
-        activateSingleButton(moveTimeGroup, e.target.dataset.time, val => moveTime = parseInt(val));
+    moveTimeButtons.addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        activateSingleButton(moveTimeButtons, e.target.dataset.time, val => moveTime = parseInt(val));
       }
     });
 
-    gameTimeGroup.addEventListener("click", e => {
-      if (e.target.tagName === "BUTTON") {
-        activateSingleButton(gameTimeGroup, e.target.dataset.time, val => gameTime = parseInt(val));
+    timeButtons.addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        activateSingleButton(timeButtons, e.target.dataset.time, val => gameTime = parseInt(val));
       }
     });
 
-    // Funkcje gry
-    const formatTime = (seconds) => {
+    function formatTime(seconds) {
       if (isNaN(seconds) || seconds < 0) {
-        console.error("Invalid seconds value in formatTime:", seconds);
-        return "00:00";
+        console.error('Invalid time value:', seconds);
+        return '00:00';
       }
-      const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
-      const secs = (seconds % 60).toString().padStart(2, "0");
-      return `${mins}:${secs}`;
-    };
+      const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+      return `${minutes}:${secs}`;
+    }
 
-    const updateTeamHighlight = () => {
-      team1Label.classList.remove("active");
-      team2Label.classList.remove("active");
-      if (currentTeam === 1) {
-        team1Label.classList.add("active");
-      } else if (currentTeam === 2) {
-        team2Label.classList.add("active");
+    function updateTeamHighlight() {
+      team1ScoreDisplay.classList.remove('active');
+      team2ScoreDisplay.classList.remove('active');
+      if (currentTeam === true) {
+        team1ScoreDisplay.classList.add('active');
+      } else if (currentTeam === false) {
+        team2ScoreDisplay.classList.add('active');
       }
-    };
+    }
 
-    const updateCurrentTeamDisplay = () => {
-      if (!currentTeam) {
-        currentTeamDisplay.textContent = "";
-        return;
-      }
-      const teamName = currentTeam === 1 ? team1Name : team2Name;
-      const points = currentTeam === 1 ? points1 : points2;
-      currentTeamDisplay.textContent = `${teamName}: ${points}`;
-    };
-
-    const createBoard = (colorCovers = false) => {
+    function createBoard(colorCovers = false) {
       try {
-        fullGrid.innerHTML = "";
-        cards = [];
+        gameGrid.innerHTML = '';
+        cardsArray = [];
 
-        const totalPairs = 21;
-        const all = [];
+        const totalPairs = 25;
+        const cards = [];
         for (let i = 1; i <= totalPairs; i++) {
-          all.push(i, i);
+          cards.push(i, i);
         }
-        const shuffled = all.sort(() => 0.5 - Math.random());
 
-        const letters = ["", "A", "B", "C", "D", "E", "F", "G"];
-        const rows = ["", "1", "2", "3", "4", "5", "6"];
+        const shuffledCards = cards.sort(() => Math.random() - 0.5);
 
-        for (let i = 0; i < 7; i++) {
-          for (let j = 0; j < 8; j++) {
-            const cell = document.createElement("div");
+        const columnLabels = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const rowLabels = ['', '1', '2', '3', '4', '5', '6', '7'];
 
-            if (i === 0 && j > 0) {
-              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-              cell.textContent = letters[j];
-            } else if (j === 0 && i > 0) {
-              cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-              cell.textContent = rows[i];
-            } else if (i > 0 && j > 0) {
-              if (!shuffled.length) {
-                console.error("Not enough values in shuffled array");
+        for (let row = 0; row < 8; row++) {
+          for (let col = 0; col < 9; col++) {
+            const cell = document.createElement('div");
+            cell.className = 'grid-cell';
+
+            if (row === 0 && col > 0) {
+              cell.classList.add('label-cell', 'hide-label');
+              cell.textContent = columnLabels[col];
+            } else if (col === 0 && row > 0) {
+              cell.classList.add('label-cell', 'hide-label');
+              cell.textContent = rowLabels[row];
+            } else if (row > 0 && col > 0) {
+              if (!shuffledCards.length) {
+                console.error('Not enough shuffled cards');
                 return;
               }
-              const value = shuffled.pop();
-              const card = document.createElement("div");
-              card.classList.add("card");
+              const cardValue = shuffledCards.pop();
+              const card = document.createElement('div");
+              card.className = 'card';
 
-              const frontImg = document.createElement("img");
-              frontImg.src = `memory/${value}.png`;
-              frontImg.classList.add("front");
+              const frontImage = document.createElement('img');
+              frontImage.src = `img/card-${cardValue}.png`;
+              frontImage.className = 'front';
 
-              const backImg = document.createElement("img");
-              backImg.src = "memory/0.png";
-              backImg.classList.add("cover");
-              if (colorCovers) backImg.classList.add("kolorowa");
+              const backImage = document.createElement('img');
+              backImage.src = 'img/card-back.png';
+              backImage.className = 'cover';
+              if (colorCovers) backImage.classList.add('kolorowa');
 
-              card.appendChild(frontImg);
-              card.appendChild(backImg);
-              card.addEventListener("click", () => handleCardClick(card, value));
+              card.appendChild(frontImage);
+              card.appendChild(backImage);
+              card.addEventListener('click', () => handleCardClick(card, cardValue));
               cell.appendChild(card);
-              cards.push(card);
+              cardsArray.push(card);
             }
 
-            fullGrid.appendChild(cell);
+            gameGrid.appendChild(cell);
           }
         }
       } catch (error) {
-        console.error("Error in createBoard:", error);
+        console.error('Error creating board:', error);
       }
-    };
+    }
 
-    const handleCardClick = (card, value) => {
-      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+    function handleCardClick(card, value) {
+      if (boardLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
-      card.classList.add("flipped");
+      card.classList.add('flipped');
 
-      if (!firstCard) {
-        firstCard = { card, value };
-        if (moveTime > 0) {
-          moveSeconds = moveTime;
-          moveTimeDisplay.textContent = formatTime(moveSeconds);
+      if (!firstCardSelected) {
+        firstCardSelected = { card, value };
+        if (moveTimeLimit > 0) {
+          moveSecondsCount = moveTimeLimit;
+          moveTimeDisplay.textContent = formatTime(moveSecondsCount);
           startMoveTimer();
         }
       } else {
-        secondCard = { card, value };
-        lockBoard = true;
+        secondCardSelected = { card, value };
+        boardLocked = true;
 
-        if (firstCard.value === secondCard.value) {
-          firstCard.card.classList.add("matched");
-          secondCard.card.classList.add("matched");
+        if (firstCardSelected.value === secondCardSelected.value) {
+          firstCardSelected.card.classList.add('matched');
+          secondCardSelected.card.classList.add('matched');
 
-          matchedPairs++;
-          if (currentTeam === 1) {
-            points1++;
-            score1.textContent = points1;
+          matchedPairsCount++;
+          if (currentTeam === true) {
+            points1Count++;
+            score1Display.textContent = points1Count;
           } else {
-            points2++;
-            score2.textContent = points2;
+            points2Count++;
+            score2Display.textContent = points2Count;
           }
           updateCurrentTeamDisplay();
 
-          clearInterval(moveTimer);
-          if (moveTime > 0) {
-            moveSeconds = moveTime;
-            moveTimeDisplay.textContent = formatTime(moveSeconds);
+          clearInterval(moveTimerInterval);
+          if (moveTimeLimit > 0) {
+            moveSecondsCount = moveTimeLimit;
+            moveTimeDisplay.textContent = formatTime(moveSecondsCount);
             startMoveTimer();
           } else {
-            moveTimeDisplay.textContent = "Bez czasu";
+            moveTimeDisplay.textContent = 'Unlimited';
           }
           resetTurn();
         } else {
-          clearInterval(moveTimer);
+          clearInterval(moveTimerInterval);
           setTimeout(() => {
-            firstCard.card.classList.remove("flipped");
-            secondCard.card.classList.remove("flipped");
+            firstCardSelected.card.classList.remove('flipped');
+            secondCardSelected.card.classList.remove('flipped');
             resetTurn();
-            currentTeam = currentTeam === 1 ? 2 : 1;
+            currentTeam = !currentTeam;
             updateTeamHighlight();
             updateCurrentTeamDisplay();
-            if (moveTime > 0) {
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
+            if (moveTimeLimit > 0) {
+              moveSecondsCount = moveTimeLimit;
+              moveTimeDisplay.textContent = formatTime(moveSecondsCount);
               startMoveTimer();
             } else {
-              moveTimeDisplay.textContent = "Bez czasu";
+              moveTimeDisplay.textContent = 'Unlimited';
             }
           }, 1000);
         }
       }
-    };
+    }
 
-    const resetTurn = () => {
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
-    };
+    function resetTurn() {
+      firstCardSelected = null;
+      secondCardSelected = null;
+      boardLocked = false;
+    }
 
-    const startMoveTimer = () => {
-      clearInterval(moveTimer);
-      if (moveTime > 0) {
-        moveTimer = setInterval(() => {
-          moveSeconds--;
-          moveTimeDisplay.textContent = formatTime(moveSeconds);
-          if (moveSeconds <= 0) {
-            clearInterval(moveTimer);
-            if (firstCard && !secondCard) {
-              firstCard.card.classList.remove("flipped");
+    function startMoveTimer() {
+      clearInterval(moveTimerInterval);
+      if (moveTimeLimit > 0) {
+        moveTimerInterval = setInterval(() => {
+          moveSecondsCount--;
+          moveTimeDisplay.textContent = formatTime(moveSecondsCount);
+          if (moveSecondsCount <= 0) {
+            clearInterval(moveTimerInterval);
+            if (firstCardSelected && !secondCardSelected) {
+              firstCardSelected.card.classList.remove('flipped');
               resetTurn();
-              currentTeam = currentTeam === 1 ? 2 : 1;
+              currentTeam = !currentTeam;
               updateTeamHighlight();
               updateCurrentTeamDisplay();
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
+              moveSecondsCount = moveTimeLimit;
+              moveTimeDisplay.textContent = formatTime(moveSecondsCount);
               startMoveTimer();
-            } else if (!firstCard && !secondCard) {
-              currentTeam = currentTeam === 1 ? 2 : 1;
+            } else if (!firstCardSelected && !secondCardSelected) {
+              currentTeam = !currentTeam;
               updateTeamHighlight();
               updateCurrentTeamDisplay();
-              moveSeconds = moveTime;
-              moveTimeDisplay.textContent = formatTime(moveSeconds);
+              moveSecondsCount = moveTimeLimit;
+              moveTimeDisplay.textContent = formatTime(moveSecondsCount);
               startMoveTimer();
             }
           }
         }, 1000);
       }
-    };
+    }
 
-    const startGameTimer = () => {
-      clearInterval(gameTimer);
-      if (gameTime > 0) {
-        gameTimer = setInterval(() => {
-          gameSeconds--;
-          gameTimeDisplay.textContent = formatTime(gameSeconds);
-          if (gameSeconds <= 0) {
-            clearInterval(gameTimer);
-            lockBoard = true;
-            alert("Czas rozgrywki się skończył!");
+    function startGameTimer() {
+      clearInterval(gameTimerInterval);
+      if (gameTimeLimit > 0) {
+        gameTimerInterval = setInterval(() => {
+          gameSecondsCount--;
+          gameTimeDisplay.textContent = formatTime(gameSecondsCount);
+          if (gameSecondsCount <= 0) {
+            clearInterval(gameTimerInterval);
+            boardLocked = true;
+            alert('Game time is up!');
           }
         }, 1000);
       }
-    };
+    }
 
-    const restartAndStart = () => {
-      clearInterval(moveTimer);
-      clearInterval(gameTimer);
-      moveSeconds = moveTime;
-      gameSeconds = gameTime * 60;
-      moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveSeconds);
-      gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameSeconds);
-      matchedPairs = 0;
-      firstCard = null;
-      secondCard = null;
-      lockBoard = true;
-      points1 = 0;
-      points2 = 0;
-      currentTeam = startingTeam || 1;
-      score1.textContent = 0;
-      score2.textContent = 0;
+    function restartAndStart() {
+      clearInterval(moveTimerInterval);
+      clearInterval(gameTimerInterval);
+      moveSecondsCount = moveTimeLimit;
+      gameSecondsCount = gameTimeLimit * 60;
+      moveTimeDisplay.textContent = moveTimeLimit === 0 ? 'Unlimited' : formatTime(moveSecondsCount);
+      gameTimeDisplay.textContent = gameTimeLimit === 0 ? 'Unlimited' : formatTime(gameSecondsCount);
+      matchedPairsCount = 0;
+      firstCardSelected = null;
+      secondCardSelected = null;
+      boardLocked = true;
+      points1Count = 0;
+      points2Count = 0;
+      currentTeam = startingTeam === null ? true : startingTeam;
+      score1Display.textContent = 0;
+      score2Display.textContent = 0;
       updateTeamHighlight();
       updateCurrentTeamDisplay();
 
-      const labelCells = document.querySelectorAll(".label-cell");
-      labelCells.forEach(el => el.classList.add("ukryj-oznakowanie"));
+      const labelCells = document.querySelectorAll('.label-cell');
+      labelCells.forEach(el => el.classList.add('hide-label'));
 
-      const cards = document.querySelectorAll(".card");
+      const cards = document.querySelectorAll('.card');
       if (cards.length === 0) {
-        console.warn("No cards found for animation");
+        console.warn('No cards found for animation');
         createBoard(true);
-        lockBoard = false;
-        if (started) {
+        boardLocked = false;
+        if (gameStarted) {
           startMoveTimer();
           startGameTimer();
         }
         return;
       }
 
-      const gridRect = fullGrid.getBoundingClientRect();
+      const gridRect = gameGrid.getBoundingClientRect();
       const centerX = gridRect.left + gridRect.width / 2;
       const centerY = gridRect.top + gridRect.height / 2;
 
@@ -759,20 +813,20 @@
         const rect = card.getBoundingClientRect();
         const offsetX = centerX - (rect.left + rect.width / 2);
         const offsetY = centerY - (rect.top + rect.height / 2);
-        card.style.transition = "transform 0.5s ease-in-out";
+        card.style.transition = 'transform 0.5s ease-in-out';
         card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       });
 
       setTimeout(() => {
         createBoard(true);
-        lockBoard = false;
-        if (started) {
+        boardLocked = false;
+        if (gameStarted) {
           startMoveTimer();
           startGameTimer();
         }
 
-        const newCards = Array.from(document.querySelectorAll(".card"));
-        const newGridRect = fullGrid.getBoundingClientRect();
+        const newCards = Array.from(document.querySelectorAll('.card'));
+        const newGridRect = gameGrid.getBoundingClientRect();
         const centerX = newGridRect.left + newGridRect.width / 2;
         const centerY = newGridRect.top + newGridRect.height / 2;
 
@@ -780,111 +834,106 @@
           const rect = card.getBoundingClientRect();
           const offsetX = centerX - (rect.left + rect.width / 2);
           const offsetY = centerY - (rect.top + rect.height / 2);
-          card.style.transition = "none";
+          card.style.transition = 'none';
           card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
         });
 
         setTimeout(() => {
           newCards.forEach(card => {
-            card.style.transition = "transform 0.6s ease-in-out";
-            card.style.transform = "translate(0, 0)";
+            card.style.transition = 'transform 0.6s ease-in-out';
+            card.style.transform = 'translate(0, 0)';
           });
 
           setTimeout(() => {
             newCards.forEach(card => {
-              card.style.transition = "";
-              card.style.transform = "";
+              card.style.transition = '';
+              card.style.transform = '';
             });
 
-            const labelCells = document.querySelectorAll(".label-cell");
+            const labelCells = document.querySelectorAll('.label-cell');
             requestAnimationFrame(() => {
-              labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+              labelCells.forEach(el => el.classList.remove('hide-label'));
             });
           }, 600);
         }, 30);
       }, 600);
-    };
+    }
 
-    // Przełączanie ekranów
-    const showConfigScreen = () => {
-      configScreen.style.display = "block";
-      gameContainer.style.display = "none";
-      // Resetowanie wartości konfiguracyjnych
-      team1Input.value = "";
-      team2Input.value = "";
-      btnTeam1.classList.remove("active");
-      btnTeam2.classList.remove("active");
-      moveTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
-      gameTimeGroup.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+    function showConfigScreen() {
+      configScreenContainer.style.display = 'block';
+      gameScreenContainer.style.display = 'none';
+      team1NameInput.value = '';
+      team2NameInput.value = '';
+      btnTeam1.classList.remove('active');
+      btnTeam2.classList.remove('active');
+      moveTimeButtons.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      timeButtons.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
       startingTeam = null;
-      moveTime = null;
-      gameTime = null;
+      moveTimeLimit = null;
+      gameTimeLimit = null;
       updateButtonLabels();
-    };
+    }
 
-    const showGameScreen = () => {
-      configScreen.style.display = "none";
-      gameContainer.style.display = "flex";
+    function showGameScreen() {
+      configScreenContainer.style.display = 'none';
+      gameScreenContainer.style.display = 'flex';
 
-      // Inicjalizacja wartości gry
-      team1Name = team1Input.value.trim() || "Drużyna 1";
-      team2Name = team2Input.value.trim() || "Drużyna 2";
-      moveTime = moveTime || 0;
-      gameTime = gameTime || 0;
+      team1Name = team1NameInput.value.trim() || 'Team 1';
+      team2Name = team2NameInput.value.trim() || 'Team 2';
+      moveTimeLimit = moveTimeLimit || 0;
+      gameTimeLimit = gameTimeLimit || 0;
 
-      // Walidacja
-      if (isNaN(moveTime) || moveTime < 0) {
-        console.error("Invalid moveTime value:", moveTime);
-        moveTime = 0;
+      if (isNaN(moveTimeLimit) || moveTimeLimit < 0) {
+        console.error('Invalid move time:', moveTimeLimit);
+        moveTimeLimit = 0;
       }
-      if (isNaN(gameTime) || gameTime < 0) {
-        console.error("Invalid gameTime value:", gameTime);
-        gameTime = 0;
+      if (isNaN(gameTimeLimit) || gameTimeLimit < 0) {
+        console.error('Invalid game time:', gameTimeLimit);
+        gameTimeLimit = 0;
       }
 
-      team1NameSpan.textContent = team1Name;
-      team2NameSpan.textContent = team2Name;
-      moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveTime);
-      gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameTime * 60);
-      moveSeconds = moveTime;
-      gameSeconds = gameTime * 60;
-      currentTeam = null; // Brak aktywnej drużyny przed kliknięciem "Start"
+      team1NameDisplay.textContent = team1Name;
+      team2NameDisplay.textContent = team2Name;
+      moveTimeDisplay.textContent = moveTimeLimit === 0 ? 'Unlimited' : formatTime(moveTimeLimit);
+      gameTimeDisplay.textContent = gameTimeLimit === 0 ? 'Unlimited' : formatTime(gameTimeLimit * 60);
+      moveSecondsCount = moveTimeLimit;
+      gameSecondsCount = gameTimeLimit * 60;
+      currentTeam = null;
 
       createBoard(false);
       updateTeamHighlight();
       updateCurrentTeamDisplay();
-      const labelCells = document.querySelectorAll(".label-cell");
+      const labelCells = document.querySelectorAll('.label-cell');
       requestAnimationFrame(() => {
-        labelCells.forEach(el => el.classList.remove("ukryj-oznakowanie"));
+        labelCells.forEach(el => el.classList.remove('hide-label'));
       });
-    };
+    }
 
-    // Obsługa przycisków
-    nextBtn.addEventListener("click", () => {
+    nextBtnBtn.addEventListener('click', () => {
       showGameScreen();
     });
 
-    startBtn.addEventListener("click", () => {
-      if (!started) {
-        currentTeam = startingTeam || 1;
-        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
-        lockBoard = false;
-        if (moveTime > 0) {
-          moveSeconds = moveTime;
-          moveTimeDisplay.textContent = formatTime(moveSeconds);
+    startGameBtn.addEventListener('click', () => {
+      if (!gameStarted) {
+        currentTeam = startingTeam === null ? true : startingTeam;
+        document.querySelectorAll('.cover').forEach(cover => cover.classList.add('kolorowa'));
+        boardLocked = false;
+        if (moveTimeLimit > 0) {
+          moveSecondsCount = moveTimeLimit;
+          moveTimeDisplay.textContent = formatTime(moveSecondsCount);
           startMoveTimer();
         } else {
-          moveTimeDisplay.textContent = "Bez czasu";
+          moveTimeDisplay.textContent = 'Unlimited';
         }
-        if (gameTime > 0) {
-          gameSeconds = gameTime * 60;
-          gameTimeDisplay.textContent = formatTime(gameSeconds);
+        if (gameTimeLimit > 0) {
+          gameSecondsCount = gameTimeLimit * 60;
+          gameTimeDisplay.textContent = formatTime(gameSecondsCount);
           startGameTimer();
         } else {
-          gameTimeDisplay.textContent = "Bez czasu";
+          gameTimeDisplay.textContent = 'Unlimited';
         }
-        startBtn.textContent = "Restart";
-        started = true;
+        startGameBtn.textContent = 'Restart';
+        gameStarted = true;
         updateTeamHighlight();
         updateCurrentTeamDisplay();
       } else {
@@ -892,36 +941,40 @@
       }
     });
 
-    fullscreenBtn.addEventListener("click", () => {
+    function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
       } else {
         document.exitFullscreen();
       }
-    });
+    }
 
-    document.addEventListener("fullscreenchange", () => {
+    configFullscreenBtn.addEventListener('click', toggleFullscreen);
+    gameFullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement) {
-        fullscreenBtn.textContent = "Podstawowy ekran";
-        document.body.classList.add("fullscreen-active");
+        configFullscreenBtn.textContent = 'Exit Fullscreen';
+        gameFullscreenBtn.textContent = 'Exit Fullscreen';
+        document.body.classList.add('fullscreen-active');
       } else {
-        fullscreenBtn.textContent = "Pełny ekran";
-        document.body.classList.remove("fullscreen-active");
+        configFullscreenBtn.textContent = 'Fullscreen';
+        gameFullscreenBtn.textContent = 'Fullscreen';
+        document.body.classList.remove('fullscreen-active');
       }
     });
 
-    returnBtn.addEventListener("click", () => {
-      clearInterval(moveTimer);
-      clearInterval(gameTimer);
-      started = false;
-      startBtn.textContent = "Start";
+    backBtn.addEventListener('click', () => {
+      clearInterval(moveTimerInterval);
+      clearInterval(gameTimerInterval);
+      gameStarted = false;
+      startGameBtn.textContent = 'Start';
       showConfigScreen();
     });
 
-    // Inicjalizacja
     updateButtonLabels();
-    configScreen.style.display = "block";
-    gameContainer.style.display = "none";
+    configScreenContainer.style.display = 'block';
+    gameScreenContainer.style.display = 'none';
   </script>
 </body>
 </html>
