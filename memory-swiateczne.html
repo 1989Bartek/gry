@@ -493,6 +493,7 @@
         gap: 20px;
         width: 100%;
         max-width: 340px;
+        margin-top: -10px;
       }
 
       .team-name {
@@ -504,10 +505,8 @@
       }
 
       .time-label {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        flex-direction: column;
+        gap: 4px;
         align-items: center;
         width: 100%;
         max-width: 340px;
@@ -1085,6 +1084,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
       team2Input.value = "";
@@ -1115,6 +1115,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "flex";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const showCongratulationsScreen = () => {
@@ -1122,14 +1123,13 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "flex";
       gameContainer.style.display = "none";
-
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
       const winnerPoints = winnerTeam === 1 ? points1 : points2;
       const displayName = winnerName.trim() === "" || winnerName === "Drużyna 1" || winnerName === "Drużyna 2" ? `Drużyna ${winnerTeam}` : winnerName;
       winnerText.textContent = `Wygrała ${displayName}`;
       scoreText.textContent = `Ilość zdobytych punktów: ${winnerPoints}`;
-
       confetti({
         particleCount: 100,
         spread: 70,
@@ -1147,13 +1147,12 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "flex";
-
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       // Inicjalizacja wartości gry
       team1Name = team1Input.value.trim() || "Drużyna 1";
       team2Name = noTeamsMode ? "" : (team2Input.value.trim() || "Drużyna 2");
       moveTime = noTeamsMode ? 0 : (moveTime || 0);
       gameTime = gameTime || 0;
-
       // Walidacja
       if (isNaN(moveTime) || moveTime < 0) {
         console.error("Invalid moveTime value:", moveTime);
@@ -1163,7 +1162,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
         console.error("Invalid gameTime value:", gameTime);
         gameTime = 0;
       }
-
       team1NameSpan.textContent = team1Name;
       team2NameSpan.textContent = team2Name;
       team2Label.style.display = noTeamsMode ? "none" : "flex";
@@ -1173,7 +1171,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
       currentTeam = noTeamsMode ? 1 : null;
-
       createBoard(false);
       updateTeamHighlight();
       updateCurrentTeamDisplay();
