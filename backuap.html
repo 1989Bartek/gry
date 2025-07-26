@@ -398,79 +398,215 @@
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      #game-title {
+        font-size: 40px;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+      }
+
       .config-container {
         flex-direction: column;
         align-items: center;
         transform: scale(1);
         width: 100%;
-        max-width: 340px;
+        max-width: 100%;
+        gap: 20px;
       }
 
       .left-block, .right-block {
         width: 100%;
-        max-width: 340px;
+        max-width: 100%;
         align-items: center;
       }
 
       .team-input {
         width: 100%;
-        max-width: 340px;
+        max-width: 90%;
+      }
+
+      .team-input label {
+        font-size: 18px;
+      }
+
+      .team-input input {
+        font-size: 14px;
+        padding: 6px;
       }
 
       .button-group {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
         width: 100%;
-        max-width: 340px;
+        max-width: 90%;
         justify-items: center;
       }
 
       .button-group button {
         width: 100%;
-        max-width: 140px;
+        max-width: 45vw;
+        height: 40px;
+        font-size: 14px;
       }
 
       #noTeamsBtn {
-        width: 292px;
-        max-width: 292px;
+        width: 100%;
+        max-width: 90%;
+        height: 40px;
+        font-size: 14px;
       }
 
       .section-title {
         width: 100%;
-        max-width: 340px;
+        max-width: 90%;
+        font-size: 18px;
+        margin: 20px 0 8px;
       }
 
       #config-buttons {
         width: 100%;
-        max-width: 340px;
-        justify-content: center;
+        max-width: 90%;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      #config-buttons button {
+        width: 100%;
+        max-width: 90%;
+        height: 48px;
+        font-size: 16px;
       }
 
       #nextBtn-container {
         width: 100%;
-        max-width: 340px;
+        max-width: 90%;
+      }
+
+      #nextBtn {
+        width: 100%;
+        max-width: 90%;
+        height: 48px;
+        font-size: 16px;
       }
 
       #instructions-screen, #congratulations-screen {
         width: 100%;
-        max-width: 800px;
+        max-width: 100%;
+        padding: 0 10px;
+      }
+
+      #instructions-text, #winner-text, #score-text {
+        font-size: 15px;
+        margin-bottom: 15px;
+        padding: 0 5px;
       }
 
       #congrats-title {
         font-size: 48px;
         -webkit-text-stroke: 1.5px white;
         text-stroke: 1.5px white;
+        margin-bottom: 15px;
+      }
+
+      #instructionsReturnBtn, #congratsReturnBtn {
+        width: 100%;
+        max-width: 90%;
+        height: 48px;
+        font-size: 16px;
+      }
+
+      #game-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      #full-grid {
+        gap: 0.3vw;
+      }
+
+      .card {
+        width: clamp(40px, 11vw, 50px);
+      }
+
+      .grid-cell {
+        font-size: clamp(12px, 1.6vw, 16px);
+      }
+
+      .scoreboard {
+        width: 100%;
+        max-width: 90%;
+        font-size: 24px;
+        align-items: center;
+      }
+
+      .team-name {
+        width: 100%;
+        max-width: 90%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 24px;
+        padding: 0 6px;
+      }
+
+      .time-label {
+        font-size: 14px;
+        width: 100%;
+        max-width: 90%;
+        align-items: center;
+      }
+
+      .time-display {
+        width: 100%;
+        max-width: 50%;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        padding: 0 6px;
+      }
+
+      #buttons {
+        width: 100%;
+        max-width: 90%;
+      }
+
+      #buttons button {
+        width: 100%;
+        max-width: 90%;
+        height: 48px;
+        font-size: 16px;
+        padding: 10px;
+        margin-bottom: 8px;
+      }
+
+      #buttons img {
+        width: 120px;
       }
 
       #logo {
-        width: 150px;
-        max-width: 340px;
+        width: 120px;
       }
 
       #website-link {
         width: 100%;
-        max-width: 340px;
+        max-width: 90%;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        width: clamp(30px, 10vw, 45px);
+      }
+
+      .grid-cell {
+        font-size: clamp(10px, 1.4vw, 14px);
       }
     }
   </style>
@@ -526,7 +662,7 @@
       <button id="nextBtn">Dalej</button>
     </div>
 
-    <img id="logo" src="memory/logo.png" alt="Logo" />
+    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -545,7 +681,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
 Życzymy dobrej zabawy!
     </div>
     <button id="instructionsReturnBtn">Powrót</button>
-    <img id="logo" src="memory/logo.png" alt="Logo" />
+    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -554,7 +690,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     <div id="winner-text"></div>
     <div id="score-text"></div>
     <button id="congratsReturnBtn">Powrót</button>
-    <img id="logo" src="memory/logo.png" alt="Logo" />
+    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -580,7 +716,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
         <button id="returnBtn">Powrót</button>
-        <img src="memory/logo.png" alt="Logo" />
+        <img src="memory-swiateczne/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
     </div>
@@ -783,11 +919,11 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
               card.classList.add("card");
 
               const frontImg = document.createElement("img");
-              frontImg.src = `memory/${value}.png`;
+              frontImg.src = `memory-swiateczne/${value}.png`;
               frontImg.classList.add("front");
 
               const backImg = document.createElement("img");
-              backImg.src = "memory/0.png";
+              backImg.src = "memory-swiateczne/0.png";
               backImg.classList.add("cover");
               if (colorCovers) backImg.classList.add("kolorowa");
 
@@ -1203,4 +1339,3 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
   </script>
 </body>
 </html>
-
