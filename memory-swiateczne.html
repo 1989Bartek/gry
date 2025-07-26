@@ -520,6 +520,22 @@
       #fullscreenBtn {
         display: none;
       }
+
+      #full-grid {
+        width: 100%;
+        max-width: 340px;
+        gap: 2px;
+      }
+
+      .card {
+        width: calc((100% - 14px) / 8);
+        min-width: 30px;
+        max-width: 48px;
+      }
+
+      .grid-cell {
+        font-size: clamp(10px, 3vw, 12px);
+      }
     }
   </style>
 </head>
@@ -867,7 +883,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
           startMoveTimer();
         }
       } else {
-        secondCard = { card, value };
+        secondCard = { card, valores };
         lockBoard = true;
 
         if (firstCard.value === secondCard.value) {
