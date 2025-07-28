@@ -200,6 +200,7 @@
       align-items: flex-start;
       gap: 40px;
       flex-wrap: wrap;
+      flex-direction: row;
     }
 
     .scoreboard {
@@ -455,12 +456,6 @@
         max-width: 340px;
       }
 
-      #config-buttons {
-        width: 100%;
-        max-width: 340px;
-        justify-content: center;
-      }
-
       #nextBtn-container {
         width: 100%;
         max-width: 340px;
@@ -525,6 +520,11 @@
         display: none;
       }
 
+      #game-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
       #full-grid {
         transform: scale(0.85);
         transform-origin: top center;
@@ -545,6 +545,10 @@
       body {
         max-width: 1000px;
         margin: 0 auto;
+      }
+
+      #game-container {
+        flex-direction: row;
       }
     }
   </style>
