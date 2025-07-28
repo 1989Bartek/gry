@@ -842,9 +842,10 @@
           secondCard.card.classList.add("matched");
 
           matchedPairs++;
-          points1++;
-          score1.textContent = points1;
-          if (!noTeamsMode && currentTeam === 2) {
+          if (noTeamsMode || currentTeam === 1) {
+            points1++;
+            score1.textContent = points1;
+          } else if (currentTeam === 2) {
             points2++;
             score2.textContent = points2;
           }
