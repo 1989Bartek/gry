@@ -22,8 +22,6 @@
       flex-direction: column;
       align-items: center;
       transition: padding-top 0.3s ease;
-      position: relative;
-      pointer-events: auto;
     }
 
     body.fullscreen-active {
@@ -38,7 +36,6 @@
       font-weight: bold;
       letter-spacing: 4px;
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-      z-index: 10;
     }
 
     .config-container {
@@ -49,10 +46,9 @@
       gap: 40px;
       margin-bottom: 20px;
       font-size: 0.9rem;
+      transform: scale(0.94);
       margin-left: auto;
       margin-right: auto;
-      z-index: 10;
-      pointer-events: auto;
     }
 
     .left-block, .right-block {
@@ -80,8 +76,6 @@
       border-radius: 8px;
       border: none;
       outline: none;
-      z-index: 10;
-      pointer-events: auto;
     }
 
     .section-title {
@@ -90,7 +84,6 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      z-index: 10;
     }
 
     .button-group {
@@ -100,8 +93,6 @@
       gap: 12px;
       margin-left: auto;
       margin-right: auto;
-      z-index: 50;
-      pointer-events: auto;
     }
 
     .button-group button {
@@ -120,8 +111,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      pointer-events: auto;
-      z-index: 50;
     }
 
     .button-group button.active {
@@ -141,8 +130,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       text-transform: none;
       margin-top: 12px;
-      pointer-events: auto;
-      z-index: 50;
     }
 
     #noTeamsBtn.active {
@@ -161,22 +148,20 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       text-transform: capitalize;
-      pointer-events: auto;
-      z-index: 50;
     }
 
     #nextBtn {
       background-color: #2e7d32;
     }
 
-    #title-buttons {
+    #config-buttons {
       display: flex;
       gap: 20px;
+      margin-top: 30px;
       margin-bottom: 30px;
+      margin-left: auto;
+      margin-right: auto;
       justify-content: center;
-      z-index: 50;
-      position: relative;
-      pointer-events: auto;
     }
 
     #nextBtn-container {
@@ -184,26 +169,14 @@
       justify-content: center;
       margin-top: 20px;
       margin-bottom: 20px;
-      z-index: 50;
-      position: relative;
-      pointer-events: auto;
-    }
-
-    #config-screen {
-      width: 100%;
-      z-index: 10;
-      position: relative;
-      pointer-events: auto;
     }
 
     #instructions-screen, #congratulations-screen {
       display: none;
       flex-direction: column;
       align-items: center;
-      width: 100%;
-      z-index: 10;
-      position: relative;
-      pointer-events: auto;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     #instructions-text, #winner-text, #score-text {
@@ -212,7 +185,6 @@
       text-align: justify;
       margin-bottom: 20px;
       white-space: pre-wrap;
-      z-index: 10;
     }
 
     #congrats-title {
@@ -223,19 +195,14 @@
       color: #104f9c;
       -webkit-text-stroke: 2px white;
       text-stroke: 2px white;
-      z-index: 10;
     }
 
     #game-container {
       display: none;
-      flex-direction: row;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-start;
-      gap: 26px;
-      width: 100%;
-      position: relative;
-      z-index: 10;
-      pointer-events: auto;
+      gap: 40px;
+      flex-wrap: wrap;
     }
 
     .scoreboard {
@@ -247,7 +214,6 @@
       margin-top: 0;
       margin-bottom: 10px;
       width: 240px;
-      z-index: 15;
     }
 
     .scoreboard div {
@@ -258,10 +224,7 @@
       display: grid;
       grid-template-columns: repeat(8, auto);
       grid-template-rows: repeat(7, auto);
-      gap: 5px;
-      min-width: 0;
-      flex-shrink: 1;
-      z-index: 5;
+      gap: 0.5vw;
     }
 
     .grid-cell {
@@ -273,7 +236,6 @@
       color: white;
       opacity: 1;
       transition: opacity 0.4s ease;
-      z-index: 5;
     }
 
     .grid-cell.ukryj-oznakowanie {
@@ -281,14 +243,12 @@
     }
 
     .card {
-      width: 100px;
+      width: clamp(60px, 10vw, 100px);
       aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
       border-radius: 12px;
       overflow: hidden;
-      pointer-events: auto;
-      z-index: 50;
     }
 
     .card .front {
@@ -298,7 +258,6 @@
       border-radius: 12px;
       visibility: hidden;
       transition: filter 1s ease;
-      z-index: 5;
     }
 
     .card .cover {
@@ -310,7 +269,7 @@
       object-fit: cover;
       border-radius: 12px;
       transition: filter 0.3s ease;
-      z-index: 6;
+      z-index: 2;
       visibility: visible;
       filter: grayscale(100%) brightness(80%);
     }
@@ -336,9 +295,6 @@
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
-      z-index: 50;
-      position: relative;
-      pointer-events: auto;
     }
 
     #buttons button {
@@ -353,8 +309,6 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-bottom: 10px;
-      pointer-events: auto;
-      z-index: 50;
     }
 
     #startBtn {
@@ -366,7 +320,6 @@
       height: auto;
       display: block;
       margin-top: 10px;
-      z-index: 15;
     }
 
     #logo {
@@ -375,7 +328,6 @@
       margin-left: auto;
       margin-right: auto;
       display: block;
-      z-index: 10;
     }
 
     #website-link {
@@ -385,7 +337,6 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      z-index: 10;
     }
 
     .team-name {
@@ -403,7 +354,6 @@
       margin-bottom: 10px;
       display: flex;
       align-items: center;
-      z-index: 15;
     }
 
     .team-name.active {
@@ -420,7 +370,6 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      z-index: 15;
     }
 
     .time-display {
@@ -442,39 +391,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 15;
-    }
-
-    .time-container {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      z-index: 15;
     }
 
     .current-team-display {
       display: none;
-      z-index: 15;
-    }
-
-    #right-container {
-      flex-shrink: 1;
-      min-width: 0;
-      max-width: 260px;
-      z-index: 15;
-      position: relative;
-      pointer-events: auto;
     }
 
     @media (max-width: 768px) {
-      #game-title {
-        font-size: 48px;
-      }
-
       .config-container {
         flex-direction: column;
         align-items: center;
+        transform: scale(1);
         width: 100%;
         max-width: 340px;
       }
@@ -509,22 +436,15 @@
         max-width: 292px;
       }
 
-      #instructionsBtn, #nextBtn {
-        width: 292px;
-        max-width: 292px;
-      }
-
-      #configFullscreenBtn {
-        display: none;
-      }
-
-      #title-buttons {
-        justify-content: center;
-      }
-
       .section-title {
         width: 100%;
         max-width: 340px;
+      }
+
+      #config-buttons {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
       }
 
       #nextBtn-container {
@@ -532,13 +452,9 @@
         max-width: 340px;
       }
 
-      #config-screen {
-        max-width: 340px;
-      }
-
       #instructions-screen, #congratulations-screen {
         width: 100%;
-        max-width: 340px;
+        max-width: 800px;
       }
 
       #congrats-title {
@@ -556,125 +472,11 @@
         width: 100%;
         max-width: 340px;
       }
-
-      .scoreboard {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        width: 100%;
-        max-width: 340px;
-        margin-top: -10px;
-      }
-
-      .team-name {
-        width: 120px;
-        max-width: 120px;
-        font-size: 20px;
-        height: 32px;
-        line-height: 32px;
-      }
-
-      .time-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        width: 100%;
-        max-width: 340px;
-      }
-
-      .time-label {
-        flex-direction: column;
-        align-items: center;
-        width: auto;
-      }
-
-      .time-display {
-        width: 120px;
-        max-width: 120px;
-        height: 32px;
-        line-height: 32px;
-        font-size: 14px;
-      }
-
-      #fullscreenBtn {
-        display: none;
-      }
-
-      #game-container {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 340px;
-        flex-wrap: wrap;
-      }
-
-      #full-grid {
-        width: 100%;
-        max-width: 340px;
-      }
-
-      .card {
-        width: clamp(48px, 8.5vw, 85px);
-      }
-
-      .grid-cell {
-        font-size: clamp(10px, 1.35vw, 15px);
-      }
-
-      #right-container {
-        width: 100%;
-        max-width: 340px;
-      }
-    }
-
-    @media (min-width: 769px) {
-      body {
-        max-width: 1160px;
-        margin: 0 auto;
-      }
-
-      #game-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        max-width: 1160px;
-        flex-wrap: nowrap;
-        gap: 26px;
-      }
-
-      #config-screen {
-        max-width: 1160px;
-      }
-
-      #instructions-screen, #congratulations-screen {
-        max-width: 1160px;
-      }
-
-      #full-grid {
-        max-width: 860px;
-        min-width: 0;
-        flex-shrink: 1;
-        padding-top: 20px;
-        padding-bottom: 170px;
-      }
-
-      #right-container {
-        max-width: 260px;
-        flex-shrink: 1;
-        min-width: 0;
-      }
     }
   </style>
 </head>
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
-  <div id="title-buttons">
-    <button id="instructionsBtn">Instrukcja</button>
-    <button id="configFullscreenBtn">Pełny ekran</button>
-  </div>
 
   <div id="config-screen">
     <div class="config-container">
@@ -715,11 +517,16 @@
       <button data-time="0">Bez czasu</button>
     </div>
 
+    <div id="config-buttons">
+      <button id="configFullscreenBtn">Pełny ekran</button>
+      <button id="instructionsBtn">Instrukcja</button>
+    </div>
+
     <div id="nextBtn-container">
       <button id="nextBtn">Dalej</button>
     </div>
 
-    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
+    <img id="logo" src="memory/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -733,12 +540,12 @@ Przed rozpoczęciem gry należy w odpowiednich polach wpisać nazwy obu drużyn 
 
 Po przekroczeniu czasu na całą rozgrywkę, wygrywa drużyna, która zdobyła więcej punktów (nawet jeśli wszystkie kafelki nie zostały odkryte). W przypadku przekroczenia czasu przeznaczonego na ruch drużyny, kolejka automatycznie przechodzi na drużynę przeciwną.
 
-Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim przypadku można grać indywidualnie lub współpracując z całą grupą, starając się wspólnie odkryć wszystkie pary, zarówno w wersji z określonym czasem jak i bez. To doskonały bonus na integrację i wspólne ćwiczenie pamięci.
+Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim przypadku można grać indywidualnie lub współpracując z całą grupą, starając się wspólnie odkryć wszystkie pary, zarówno w wersji z określonym czasem jak i bez. To doskonały sposób na integrację i wspólne ćwiczenie pamięci.
 
 Życzymy dobrej zabawy!
     </div>
     <button id="instructionsReturnBtn">Powrót</button>
-    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
+    <img id="logo" src="memory/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -747,27 +554,25 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     <div id="winner-text"></div>
     <div id="score-text"></div>
     <button id="congratsReturnBtn">Powrót</button>
-    <img id="logo" src="memory-swiateczne/logo.png" alt="Logo" />
+    <img id="logo" src="memory/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
   <div id="game-container">
     <div id="full-grid"></div>
 
-    <div id="right-container" style="display: flex; flex-direction: column; align-items: center;">
+    <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
-        <div id="team2-label" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
+        <div id="team1-label" class="team-name"><span id="team1-name"></span>:  <span id="score1">0</span></div>
+        <div id="team2-label" class="team-name"><span id="team2-name"></span>:  <span id="score2">0</span></div>
         <div id="current-team" class="current-team-display"></div>
-        <div class="time-container">
-          <div class="time-label" id="moveTimeLabel">
-            Czas na ruch:
-            <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
-          </div>
-          <div class="time-label" id="gameTimeLabel">
-            Czas na rozgrywkę:
-            <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
-          </div>
+        <div class="time-label" id="moveTimeLabel">
+          Czas na ruch:
+          <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
+        </div>
+        <div class="time-label" id="gameTimeLabel">
+          Czas na rozgrywkę:
+          <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
         </div>
       </div>
 
@@ -775,20 +580,13 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
         <button id="returnBtn">Powrót</button>
-        <img src="memory-swiateczne/logo.png" alt="Logo" />
+        <img src="memory/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
     </div>
   </div>
 
   <script>
-    console.log("Script started loading");
-
-    // Fallback dla canvas-confetti
-    window.confetti = window.confetti || function(options) {
-      console.warn("canvas-confetti not loaded, using fallback", options);
-    };
-
     // Elementy ekranu konfiguracyjnego
     const configScreen = document.getElementById("config-screen");
     const team1Input = document.getElementById("team1");
@@ -830,28 +628,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     const team2NameSpan = document.getElementById("team2-name");
     const returnBtn = document.getElementById("returnBtn");
 
-    // Debugowanie: Sprawdzanie elementów
-    console.log("configScreen:", configScreen);
-    console.log("team1Input:", team1Input);
-    console.log("team2Input:", team2Input);
-    console.log("btnTeam1:", btnTeam1);
-    console.log("btnTeam2:", btnTeam2);
-    console.log("noTeamsBtn:", noTeamsBtn);
-    console.log("moveTimeGroup:", moveTimeGroup);
-    console.log("gameTimeGroup:", gameTimeGroup);
-    console.log("nextBtn:", nextBtn);
-    console.log("configFullscreenBtn:", configFullscreenBtn);
-    console.log("instructionsBtn:", instructionsBtn);
-    console.log("instructionsScreen:", instructionsScreen);
-    console.log("instructionsReturnBtn:", instructionsReturnBtn);
-    console.log("congratulationsScreen:", congratulationsScreen);
-    console.log("congratsReturnBtn:", congratsReturnBtn);
-    console.log("gameContainer:", gameContainer);
-    console.log("fullGrid:", fullGrid);
-    console.log("startBtn:", startBtn);
-    console.log("fullscreenBtn:", fullscreenBtn);
-    console.log("returnBtn:", returnBtn);
-
     // Zmienne konfiguracyjne
     let team1Name = "Drużyna 1";
     let team2Name = "Drużyna 2";
@@ -877,35 +653,21 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
 
     // Funkcje konfiguracyjne
     const updateButtonLabels = () => {
-      console.log("updateButtonLabels called");
       btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1");
       btnTeam2.textContent = (team2Input.value.trim() || "Drużyna 2");
     };
 
     const activateSingleButton = (group, value, setCallback) => {
-      console.log("activateSingleButton called with value:", value);
       [...group.querySelectorAll("button")].forEach(btn => {
         btn.classList.toggle("active", btn.dataset.time == value);
       });
       setCallback(value);
     };
 
-    // Przypisanie zdarzeń z dodatkowym debugowaniem
-    if (!team1Input) console.error("team1Input not found");
-    else team1Input.addEventListener("input", () => {
-      console.log("team1Input input event triggered");
-      updateButtonLabels();
-    });
+    team1Input.addEventListener("input", updateButtonLabels);
+    team2Input.addEventListener("input", updateButtonLabels);
 
-    if (!team2Input) console.error("team2Input not found");
-    else team2Input.addEventListener("input", () => {
-      console.log("team2Input input event triggered");
-      updateButtonLabels();
-    });
-
-    if (!btnTeam1) console.error("btnTeam1 not found");
-    else btnTeam1.addEventListener("click", () => {
-      console.log("btnTeam1 click event triggered");
+    btnTeam1.addEventListener("click", () => {
       if (!noTeamsMode) {
         startingTeam = 1;
         btnTeam1.classList.add("active");
@@ -913,9 +675,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       }
     });
 
-    if (!btnTeam2) console.error("btnTeam2 not found");
-    else btnTeam2.addEventListener("click", () => {
-      console.log("btnTeam2 click event triggered");
+    btnTeam2.addEventListener("click", () => {
       if (!noTeamsMode) {
         startingTeam = 2;
         btnTeam2.classList.add("active");
@@ -923,9 +683,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       }
     });
 
-    if (!noTeamsBtn) console.error("noTeamsBtn not found");
-    else noTeamsBtn.addEventListener("click", () => {
-      console.log("noTeamsBtn click event triggered");
+    noTeamsBtn.addEventListener("click", () => {
       noTeamsMode = !noTeamsMode;
       noTeamsBtn.classList.toggle("active", noTeamsMode);
       team2Input.disabled = noTeamsMode;
@@ -947,101 +705,17 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       }
     });
 
-    if (!moveTimeGroup) console.error("moveTimeGroup not found");
-    else moveTimeGroup.addEventListener("click", e => {
+    moveTimeGroup.addEventListener("click", e => {
       if (e.target.tagName === "BUTTON" && !noTeamsMode) {
-        console.log(`moveTimeGroup button click event triggered: ${e.target.dataset.time}`);
         activateSingleButton(moveTimeGroup, e.target.dataset.time, val => moveTime = parseInt(val));
       }
     });
 
-    if (!gameTimeGroup) console.error("gameTimeGroup not found");
-    else gameTimeGroup.addEventListener("click", e => {
+    gameTimeGroup.addEventListener("click", e => {
       if (e.target.tagName === "BUTTON") {
-        console.log(`gameTimeGroup button click event triggered: ${e.target.dataset.time}`);
         activateSingleButton(gameTimeGroup, e.target.dataset.time, val => gameTime = parseInt(val));
       }
     });
-
-    if (!nextBtn) console.error("nextBtn not found");
-    else nextBtn.addEventListener("click", () => {
-      console.log("nextBtn click event triggered");
-      showGameScreen();
-    });
-
-    if (!instructionsBtn) console.error("instructionsBtn not found");
-    else instructionsBtn.addEventListener("click", () => {
-      console.log("instructionsBtn click event triggered");
-      showInstructionsScreen();
-    });
-
-    if (!instructionsReturnBtn) console.error("instructionsReturnBtn not found");
-    else instructionsReturnBtn.addEventListener("click", () => {
-      console.log("instructionsReturnBtn click event triggered");
-      showConfigScreen();
-    });
-
-    if (!congratsReturnBtn) console.error("congratsReturnBtn not found");
-    else congratsReturnBtn.addEventListener("click", () => {
-      console.log("congratsReturnBtn click event triggered");
-      showGameScreen();
-    });
-
-    if (!startBtn) console.error("startBtn not found");
-    else startBtn.addEventListener("click", () => {
-      console.log("startBtn click event triggered");
-      if (!started) {
-        currentTeam = noTeamsMode ? 1 : (startingTeam || 1);
-        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
-        lockBoard = false;
-        if (!noTeamsMode && moveTime > 0) {
-          moveSeconds = moveTime;
-          moveTimeDisplay.textContent = formatTime(moveSeconds);
-          startMoveTimer();
-        } else {
-          moveTimeDisplay.textContent = "Bez czasu";
-        }
-        if (gameTime > 0) {
-          gameSeconds = gameTime * 60;
-          gameTimeDisplay.textContent = formatTime(gameSeconds);
-          startGameTimer();
-        } else {
-          gameTimeDisplay.textContent = "Bez czasu";
-        }
-        startBtn.textContent = "Restart";
-        started = true;
-        updateTeamHighlight();
-        updateCurrentTeamDisplay();
-      } else {
-        restartAndStart();
-      }
-    });
-
-    if (!fullscreenBtn) console.error("fullscreenBtn not found");
-    else fullscreenBtn.addEventListener("click", () => {
-      console.log("fullscreenBtn click event triggered");
-      toggleFullscreen();
-    });
-
-    if (!configFullscreenBtn) console.error("configFullscreenBtn not found");
-    else configFullscreenBtn.addEventListener("click", () => {
-      console.log("configFullscreenBtn click event triggered");
-      toggleFullscreen();
-    });
-
-    if (!returnBtn) console.error("returnBtn not found");
-    else returnBtn.addEventListener("click", () => {
-      console.log("returnBtn click event triggered");
-      clearInterval(moveTimer);
-      moveTimer = null;
-      clearInterval(gameTimer);
-      started = false;
-      startBtn.textContent = "Start";
-      document.querySelectorAll(".cover").forEach(cover => cover.classList.remove("kolorowa"));
-      showConfigScreen();
-    });
-
-    console.log("All event listeners assigned successfully");
 
     // Funkcje gry
     const formatTime = (seconds) => {
@@ -1055,7 +729,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const updateTeamHighlight = () => {
-      console.log("updateTeamHighlight called");
       team1Label.classList.remove("active");
       team2Label.classList.remove("active");
       if (!noTeamsMode && currentTeam === 1) {
@@ -1066,7 +739,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const updateCurrentTeamDisplay = () => {
-      console.log("updateCurrentTeamDisplay called");
       if (!currentTeam || noTeamsMode) {
         currentTeamDisplay.textContent = "";
         return;
@@ -1077,7 +749,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const createBoard = (colorCovers = false) => {
-      console.log("createBoard called with colorCovers:", colorCovers);
       try {
         fullGrid.innerHTML = "";
         cards = [];
@@ -1112,20 +783,17 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
               card.classList.add("card");
 
               const frontImg = document.createElement("img");
-              frontImg.src = `memory-swiateczne/${value}.png`;
+              frontImg.src = `memory/${value}.png`;
               frontImg.classList.add("front");
 
               const backImg = document.createElement("img");
-              backImg.src = "memory-swiateczne/0.png";
+              backImg.src = "memory/0.png";
               backImg.classList.add("cover");
               if (colorCovers) backImg.classList.add("kolorowa");
 
               card.appendChild(frontImg);
               card.appendChild(backImg);
-              card.addEventListener("click", () => {
-                console.log(`Card click event triggered: ${value}`);
-                handleCardClick(card, value);
-              });
+              card.addEventListener("click", () => handleCardClick(card, value));
               cell.appendChild(card);
               cards.push(card);
             }
@@ -1133,18 +801,13 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
             fullGrid.appendChild(cell);
           }
         }
-        console.log("Board created with", cards.length, "cards");
       } catch (error) {
         console.error("Error in createBoard:", error);
       }
     };
 
     const handleCardClick = (card, value) => {
-      console.log("handleCardClick called with value:", value);
-      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched") || !started) {
-        console.log("Card click ignored: lockBoard =", lockBoard, ", flipped =", card.classList.contains("flipped"), ", matched =", card.classList.contains("matched"), ", started =", started);
-        return;
-      }
+      if (lockBoard || card.classList.contains("flipped") || card.classList.contains("matched") || !started) return;
 
       card.classList.add("flipped");
 
@@ -1216,14 +879,12 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const resetTurn = () => {
-      console.log("resetTurn called");
       firstCard = null;
       secondCard = null;
       lockBoard = false;
     };
 
     const startMoveTimer = () => {
-      console.log("startMoveTimer called");
       if (!noTeamsMode && moveTime > 0) {
         moveTimer = setInterval(() => {
           moveSeconds--;
@@ -1247,7 +908,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const startGameTimer = () => {
-      console.log("startGameTimer called");
       clearInterval(gameTimer);
       if (gameTime > 0) {
         gameTimer = setInterval(() => {
@@ -1264,7 +924,6 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const restartAndStart = () => {
-      console.log("restartAndStart called");
       clearInterval(moveTimer);
       moveTimer = null;
       clearInterval(gameTimer);
@@ -1355,13 +1014,10 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
 
     // Przełączanie ekranów
     const showConfigScreen = () => {
-      console.log("showConfigScreen called");
       configScreen.style.display = "block";
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
-      document.getElementById("title-buttons").style.display = "flex";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
       team2Input.value = "";
@@ -1388,58 +1044,49 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     };
 
     const showInstructionsScreen = () => {
-      console.log("showInstructionsScreen called");
       configScreen.style.display = "none";
       instructionsScreen.style.display = "flex";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
-      document.getElementById("title-buttons").style.display = "none";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const showCongratulationsScreen = () => {
-      console.log("showCongratulationsScreen called");
       configScreen.style.display = "none";
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "flex";
       gameContainer.style.display = "none";
-      document.getElementById("title-buttons").style.display = "none";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
       const winnerPoints = winnerTeam === 1 ? points1 : points2;
       const displayName = winnerName.trim() === "" || winnerName === "Drużyna 1" || winnerName === "Drużyna 2" ? `Drużyna ${winnerTeam}` : winnerName;
       winnerText.textContent = `Wygrała ${displayName}`;
       scoreText.textContent = `Ilość zdobytych punktów: ${winnerPoints}`;
-      try {
-        confetti({
-          particleCount: 100;
-          spread: 70;
-          origin: { x: 0, y: 0.6 }
-        });
-        confetti({
-          particleCount: 100;
-          spread: 70;
-          origin: { x: 1, y: 0.6 }
-        });
-      } catch (error) {
-        console.warn("Error in confetti:", error);
-      }
+
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 0, y: 0.6 }
+      });
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 1, y: 0.6 }
+      });
     };
 
     const showGameScreen = () => {
-      console.log("showGameScreen called");
       configScreen.style.display = "none";
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "flex";
-      document.getElementById("title-buttons").style.display = "none";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       // Inicjalizacja wartości gry
       team1Name = team1Input.value.trim() || "Drużyna 1";
       team2Name = noTeamsMode ? "" : (team2Input.value.trim() || "Drużyna 2");
       moveTime = noTeamsMode ? 0 : (moveTime || 0);
       gameTime = gameTime || 0;
+
       // Walidacja
       if (isNaN(moveTime) || moveTime < 0) {
         console.error("Invalid moveTime value:", moveTime);
@@ -1449,6 +1096,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
         console.error("Invalid gameTime value:", gameTime);
         gameTime = 0;
       }
+
       team1NameSpan.textContent = team1Name;
       team2NameSpan.textContent = team2Name;
       team2Label.style.display = noTeamsMode ? "none" : "flex";
@@ -1458,6 +1106,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       moveSeconds = moveTime;
       gameSeconds = gameTime * 60;
       currentTeam = noTeamsMode ? 1 : null;
+
       createBoard(false);
       updateTeamHighlight();
       updateCurrentTeamDisplay();
@@ -1467,21 +1116,63 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       });
     };
 
-    const toggleFullscreen = () => {
-      console.log("toggleFullscreen called");
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.error("Error entering fullscreen:", err);
-        });
+    // Obsługa przycisków
+    nextBtn.addEventListener("click", () => {
+      showGameScreen();
+    });
+
+    instructionsBtn.addEventListener("click", () => {
+      showInstructionsScreen();
+    });
+
+    instructionsReturnBtn.addEventListener("click", () => {
+      showConfigScreen();
+    });
+
+    congratsReturnBtn.addEventListener("click", () => {
+      showGameScreen();
+    });
+
+    startBtn.addEventListener("click", () => {
+      if (!started) {
+        currentTeam = noTeamsMode ? 1 : (startingTeam || 1);
+        document.querySelectorAll(".cover").forEach(cover => cover.classList.add("kolorowa"));
+        lockBoard = false;
+        if (!noTeamsMode && moveTime > 0) {
+          moveSeconds = moveTime;
+          moveTimeDisplay.textContent = formatTime(moveSeconds);
+          startMoveTimer();
+        } else {
+          moveTimeDisplay.textContent = "Bez czasu";
+        }
+        if (gameTime > 0) {
+          gameSeconds = gameTime * 60;
+          gameTimeDisplay.textContent = formatTime(gameSeconds);
+          startGameTimer();
+        } else {
+          gameTimeDisplay.textContent = "Bez czasu";
+        }
+        startBtn.textContent = "Restart";
+        started = true;
+        updateTeamHighlight();
+        updateCurrentTeamDisplay();
       } else {
-        document.exitFullscreen().catch(err => {
-          console.error("Error exiting fullscreen:", err);
-        });
+        restartAndStart();
+      }
+    });
+
+    const toggleFullscreen = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
       }
     };
 
+    configFullscreenBtn.addEventListener("click", toggleFullscreen);
+    fullscreenBtn.addEventListener("click", toggleFullscreen);
+
     document.addEventListener("fullscreenchange", () => {
-      console.log("fullscreenchange event triggered");
       if (document.fullscreenElement) {
         fullscreenBtn.textContent = "Podstawowy ekran";
         configFullscreenBtn.textContent = "Podstawowy ekran";
@@ -1493,20 +1184,22 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       }
     });
 
-    // Inicjalizacja
-    console.log("Initializing application");
-    try {
-      updateButtonLabels();
-      configScreen.style.display = "block";
-      instructionsScreen.style.display = "none";
-      congratulationsScreen.style.display = "none";
-      gameContainer.style.display = "none";
-      console.log("Initialization completed");
-    } catch (error) {
-      console.error("Error during initialization:", error);
-    }
+    returnBtn.addEventListener("click", () => {
+      clearInterval(moveTimer);
+      moveTimer = null;
+      clearInterval(gameTimer);
+      started = false;
+      startBtn.textContent = "Start";
+      document.querySelectorAll(".cover").forEach(cover => cover.classList.remove("kolorowa"));
+      showConfigScreen();
+    });
 
-    console.log("Script loaded successfully");
+    // Inicjalizacja
+    updateButtonLabels();
+    configScreen.style.display = "block";
+    instructionsScreen.style.display = "none";
+    congratulationsScreen.style.display = "none";
+    gameContainer.style.display = "none";
   </script>
 </body>
 </html>
