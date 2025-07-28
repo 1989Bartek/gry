@@ -38,13 +38,6 @@
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    #config-buttons-top {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-      justify-content: center;
-    }
-
     .config-container {
       display: flex;
       flex-wrap: wrap;
@@ -161,6 +154,13 @@
       background-color: #2e7d32;
     }
 
+    #title-buttons {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      justify-content: center;
+    }
+
     #nextBtn-container {
       display: flex;
       justify-content: center;
@@ -172,7 +172,7 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
@@ -200,8 +200,6 @@
       align-items: flex-start;
       gap: 40px;
       flex-wrap: wrap;
-      max-width: 900px;
-      margin: 0 auto;
     }
 
     .scoreboard {
@@ -401,10 +399,6 @@
         font-size: 48px;
       }
 
-      #config-buttons-top {
-        display: none;
-      }
-
       .config-container {
         flex-direction: column;
         align-items: center;
@@ -452,9 +446,19 @@
         display: none;
       }
 
+      #title-buttons {
+        justify-content: center;
+      }
+
       .section-title {
         width: 100%;
         max-width: 340px;
+      }
+
+      #config-buttons {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
       }
 
       #nextBtn-container {
@@ -538,8 +542,8 @@
     }
 
     @media (min-width: 769px) {
-      #config-screen {
-        max-width: 900px;
+      body {
+        max-width: 1000px;
         margin: 0 auto;
       }
     }
@@ -547,7 +551,7 @@
 </head>
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
-  <div id="config-buttons-top">
+  <div id="title-buttons">
     <button id="instructionsBtn">Instrukcja</button>
     <button id="configFullscreenBtn">Pełny ekran</button>
   </div>
@@ -1087,7 +1091,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
-      document.getElementById("config-buttons-top").style.display = "flex";
+      document.getElementById("title-buttons").style.display = "flex";
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
@@ -1119,7 +1123,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "flex";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
-      document.getElementById("config-buttons-top").style.display = "none";
+      document.getElementById("title-buttons").style.display = "none";
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -1128,7 +1132,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "flex";
       gameContainer.style.display = "none";
-      document.getElementById("config-buttons-top").style.display = "none";
+      document.getElementById("title-buttons").style.display = "none";
       window.scrollTo({ top: 0, behavior: 'smooth' });
       const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
@@ -1153,7 +1157,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "flex";
-      document.getElementById("config-buttons-top").style.display = "none";
+      document.getElementById("title-buttons").style.display = "none";
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // Inicjalizacja wartości gry
       team1Name = team1Input.value.trim() || "Drużyna 1";
