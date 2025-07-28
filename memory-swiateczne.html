@@ -49,6 +49,7 @@
       transform: scale(0.94);
       margin-left: auto;
       margin-right: auto;
+      max-width: 900px; /* Dopasowanie szerokości do widoku instrukcji na komputerach */
     }
 
     .left-block, .right-block {
@@ -157,7 +158,6 @@
     #config-buttons {
       display: flex;
       gap: 20px;
-      margin-top: 30px;
       margin-bottom: 30px;
       margin-left: auto;
       margin-right: auto;
@@ -175,7 +175,7 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      max-width: 800px;
+      max-width: 900px; /* Zwiększenie szerokości widoku instrukcji */
       margin: 0 auto;
     }
 
@@ -203,6 +203,7 @@
       align-items: flex-start;
       gap: 40px;
       flex-wrap: wrap;
+      max-width: 900px; /* Dopasowanie szerokości do widoku instrukcji na komputerach */
     }
 
     .scoreboard {
@@ -407,7 +408,7 @@
         align-items: center;
         transform: scale(1);
         width: 100%;
-        max-width: 340px;
+        max-width: 340px; /* Bez zmian w widoku mobilnym */
       }
 
       .left-block, .right-block {
@@ -467,7 +468,7 @@
 
       #instructions-screen, #congratulations-screen {
         width: 100%;
-        max-width: 800px;
+        max-width: 800px; /* Zwiększenie szerokości widoku instrukcji */
       }
 
       #congrats-title {
@@ -543,6 +544,10 @@
 </head>
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
+  <div id="config-buttons">
+    <button id="configFullscreenBtn">Pełny ekran</button>
+    <button id="instructionsBtn">Instrukcja</button>
+  </div>
 
   <div id="config-screen">
     <div class="config-container">
@@ -581,11 +586,6 @@
       <button data-time="25">25 min.</button>
       <button data-time="35">35 min.</button>
       <button data-time="0">Bez czasu</button>
-    </div>
-
-    <div id="config-buttons">
-      <button id="configFullscreenBtn">Pełny ekran</button>
-      <button id="instructionsBtn">Instrukcja</button>
     </div>
 
     <div id="nextBtn-container">
@@ -838,7 +838,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
               cell.textContent = letters[j];
             } else if (j === 0 && i > 0) {
               cell.classList.add("grid-cell", "label-cell", "ukryj-oznakowanie");
-              cell.textContent = rows[i];
+              cell.textContent = i;
             } else if (i > 0 && j > 0) {
               if (!shuffled.length) {
                 console.error("Not enough values in shuffled array");
@@ -853,9 +853,9 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
               frontImg.classList.add("front");
 
               const backImg = document.createElement("img");
-              backImg.src = "memory-swiateczne/0.png";
+              backImg.src = "memory-swiateczne/blank.png";
               backImg.classList.add("cover");
-              if (colorCovers) backImg.classList.add("kolorowa");
+              if (colorCovers) backImg.classList.add("active-board");
 
               card.appendChild(frontImg);
               card.appendChild(backImg);
@@ -997,7 +997,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       gameSeconds = gameTime * 60;
       moveTimeDisplay.textContent = moveTime === 0 ? "Bez czasu" : formatTime(moveSeconds);
       gameTimeDisplay.textContent = gameTime === 0 ? "Bez czasu" : formatTime(gameSeconds);
-      matchedPairs = 0;
+      matchedPairs = [];
       firstCard = null;
       secondCard = null;
       lockBoard = true;
