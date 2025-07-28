@@ -157,7 +157,7 @@
     #config-buttons {
       display: flex;
       gap: 20px;
-      margin-top: 30px;
+      margin-top: 10px;
       margin-bottom: 30px;
       margin-left: auto;
       margin-right: auto;
@@ -472,11 +472,19 @@
         width: 100%;
         max-width: 340px;
       }
+
+      #configFullscreenBtn {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   <h1 id="game-title">Świąteczne Memory</h1>
+  <div id="config-buttons">
+    <button id="instructionsBtn">Instrukcja</button>
+    <button id="configFullscreenBtn">Pełny ekran</button>
+  </div>
 
   <div id="config-screen">
     <div class="config-container">
@@ -515,11 +523,6 @@
       <button data-time="25">25 min.</button>
       <button data-time="35">35 min.</button>
       <button data-time="0">Bez czasu</button>
-    </div>
-
-    <div id="config-buttons">
-      <button id="configFullscreenBtn">Pełny ekran</button>
-      <button id="instructionsBtn">Instrukcja</button>
     </div>
 
     <div id="nextBtn-container">
@@ -1018,6 +1021,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
+      document.getElementById("config-buttons").style.display = "flex";
       // Resetowanie wartości konfiguracyjnych
       team1Input.value = "";
       team2Input.value = "";
@@ -1048,6 +1052,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "flex";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "none";
+      document.getElementById("config-buttons").style.display = "none";
     };
 
     const showCongratulationsScreen = () => {
@@ -1055,6 +1060,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "flex";
       gameContainer.style.display = "none";
+      document.getElementById("config-buttons").style.display = "none";
 
       const winnerTeam = noTeamsMode ? 1 : (points1 >= points2 ? 1 : 2);
       const winnerName = winnerTeam === 1 ? team1Name : team2Name;
@@ -1080,6 +1086,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
       instructionsScreen.style.display = "none";
       congratulationsScreen.style.display = "none";
       gameContainer.style.display = "flex";
+      document.getElementById("config-buttons").style.display = "none";
 
       // Inicjalizacja wartości gry
       team1Name = team1Input.value.trim() || "Drużyna 1";
@@ -1200,6 +1207,7 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
     instructionsScreen.style.display = "none";
     congratulationsScreen.style.display = "none";
     gameContainer.style.display = "none";
+    document.getElementById("config-buttons").style.display = "flex";
   </script>
 </body>
 </html>
