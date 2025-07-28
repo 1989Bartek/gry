@@ -215,8 +215,7 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 40px;
-      flex-wrap: wrap;
+      gap: 20px;
       width: 100%;
       max-width: 1000px;
       position: relative;
@@ -561,11 +560,17 @@
         align-items: center;
         width: 100%;
         max-width: 340px;
+        flex-wrap: wrap;
       }
 
       #full-grid {
         transform: scale(0.85);
         transform-origin: top center;
+        width: 100%;
+        max-width: 340px;
+      }
+
+      #right-container {
         width: 100%;
         max-width: 340px;
       }
@@ -591,14 +596,17 @@
         align-items: flex-start;
         width: 100%;
         max-width: 1000px;
+        flex-wrap: nowrap;
       }
 
       #full-grid {
         margin-right: auto;
+        max-width: 720px;
       }
 
       #right-container {
         margin-left: auto;
+        max-width: 260px;
       }
     }
   </style>
