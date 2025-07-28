@@ -182,12 +182,15 @@
       z-index: 10;
     }
 
+    #config-screen {
+      width: 100%;
+    }
+
     #instructions-screen, #congratulations-screen {
       display: none;
       flex-direction: column;
       align-items: center;
-      max-width: 1000px;
-      margin: 0 auto;
+      width: 100%;
       z-index: 10;
     }
 
@@ -218,7 +221,6 @@
       align-items: flex-start;
       gap: 26px;
       width: 100%;
-      max-width: 1000px;
       position: relative;
       z-index: 5;
     }
@@ -266,7 +268,7 @@
     }
 
     .card {
-      width: 80px;
+      width: 90px;
       aspect-ratio: 1 / 1;
       position: relative;
       cursor: pointer;
@@ -428,6 +430,14 @@
       z-index: 15;
     }
 
+    .time-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      z-index: 15;
+    }
+
     .current-team-display {
       display: none;
       z-index: 15;
@@ -506,9 +516,13 @@
         max-width: 340px;
       }
 
+      #config-screen {
+        max-width: 340px;
+      }
+
       #instructions-screen, #congratulations-screen {
         width: 100%;
-        max-width: 800px;
+        max-width: 340px;
       }
 
       #congrats-title {
@@ -528,8 +542,7 @@
       }
 
       .scoreboard {
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
         justify-content: center;
         gap: 20px;
         width: 100%;
@@ -545,17 +558,24 @@
         line-height: 40px;
       }
 
-      .time-label {
-        flex-direction: column;
-        gap: 4px;
-        align-items: center;
+      .time-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
         width: 100%;
         max-width: 340px;
       }
 
+      .time-label {
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+      }
+
       .time-display {
-        width: 140px;
-        max-width: 140px;
+        width: 120px;
+        max-width: 120px;
         height: 32px;
         line-height: 32px;
         font-size: 14px;
@@ -580,11 +600,6 @@
         max-width: 340px;
       }
 
-      #right-container {
-        width: 100%;
-        max-width: 340px;
-      }
-
       .card {
         width: clamp(48px, 8.5vw, 85px);
       }
@@ -592,11 +607,16 @@
       .grid-cell {
         font-size: clamp(10px, 1.35vw, 15px);
       }
+
+      #right-container {
+        width: 100%;
+        max-width: 340px;
+      }
     }
 
     @media (min-width: 769px) {
       body {
-        max-width: 1000px;
+        max-width: 1080px;
         margin: 0 auto;
       }
 
@@ -605,15 +625,25 @@
         justify-content: space-between;
         align-items: flex-start;
         width: 100%;
-        max-width: 1000px;
+        max-width: 1080px;
         flex-wrap: nowrap;
         gap: 26px;
       }
 
+      #config-screen {
+        max-width: 1080px;
+      }
+
+      #instructions-screen, #congratulations-screen {
+        max-width: 1080px;
+      }
+
       #full-grid {
-        max-width: 700px;
+        max-width: 780px;
         min-width: 0;
         flex-shrink: 1;
+        padding-top: 10px;
+        padding-bottom: 150px;
       }
 
       #right-container {
@@ -711,16 +741,18 @@ Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim 
 
     <div id="right-container" style="display: flex; flex-direction: column; align-items: center;">
       <div class="scoreboard">
-        <div id="team1-label" class="team-name"><span id="team1-name"></span>:  <span id="score1">0</span></div>
-        <div id="team2-label" class="team-name"><span id="team2-name"></span>:  <span id="score2">0</span></div>
+        <div id="team1-label" class="team-name"><span id="team1-name"></span>: <span id="score1">0</span></div>
+        <div id="team2-label" class="team-name"><span id="team2-name"></span>: <span id="score2">0</span></div>
         <div id="current-team" class="current-team-display"></div>
-        <div class="time-label" id="moveTimeLabel">
-          Czas na ruch:
-          <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
-        </div>
-        <div class="time-label" id="gameTimeLabel">
-          Czas na rozgrywkę:
-          <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
+        <div class="time-container">
+          <div class="time-label" id="moveTimeLabel">
+            Czas na ruch:
+            <span id="moveTimeDisplay" class="time-display">Bez czasu</span>
+          </div>
+          <div class="time-label" id="gameTimeLabel">
+            Czas na rozgrywkę:
+            <span id="gameTimeDisplay" class="time-display">Bez czasu</span>
+          </div>
         </div>
       </div>
 
