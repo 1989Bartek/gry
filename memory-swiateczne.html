@@ -194,6 +194,10 @@
       box-sizing: border-box;
     }
 
+    #congratulations-screen #winner-text, #congratulations-screen #score-text {
+      text-align: center;
+    }
+
     #congrats-title {
       font-size: 80px;
       font-weight: bold;
@@ -653,6 +657,15 @@
     let currentTeam = null;
     let cards = [];
 
+    // Funkcja resetująca punktację
+    const resetScores = () => {
+      points1 = 0;
+      points2 = 0;
+      score1.textContent = 0;
+      score2.textContent = 0;
+      updateCurrentTeamDisplay();
+    };
+
     // Funkcje konfiguracyjne
     const updateButtonLabels = () => {
       btnTeam1.textContent = (team1Input.value.trim() || "Drużyna 1");
@@ -937,11 +950,8 @@
       firstCard = null;
       secondCard = null;
       lockBoard = true;
-      points1 = 0;
-      points2 = 0;
+      resetScores();
       currentTeam = noTeamsMode ? 1 : (startingTeam || 1);
-      score1.textContent = 0;
-      score2.textContent = 0;
       updateTeamHighlight();
       updateCurrentTeamDisplay();
 
@@ -1043,6 +1053,7 @@
       moveTime = null;
       gameTime = null;
       noTeamsMode = false;
+      resetScores();
       updateButtonLabels();
     };
 
@@ -1078,6 +1089,8 @@
         spread: 70,
         origin: { x: 1, y: 0.6 }
       });
+
+      resetScores();
     };
 
     const showGameScreen = () => {
@@ -1201,6 +1214,7 @@
     });
 
     // Inicjalizacja
+    resetScores();
     updateButtonLabels();
     configScreen.style.display = "block";
     instructionsScreen.style.display = "none";
