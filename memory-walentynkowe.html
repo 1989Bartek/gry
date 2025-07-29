@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>Halloweenowe Memory</title>
+  <title>Walentynkowe Memory</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -14,7 +14,7 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: radial-gradient(ellipse at center, #ff6200 0%, #b34700 100%);
+      background: radial-gradient(ellipse at center, #ffb6c1 0%, #ff8c9d 100%);
       color: #ffffff;
       padding: 20px;
       min-height: 100vh;
@@ -103,7 +103,7 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #000000;
+      background-color: #c71585;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -126,7 +126,7 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #000000;
+      background-color: #c71585;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -146,7 +146,7 @@
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #000000;
+      background-color: #c71585;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -284,7 +284,6 @@
       object-fit: cover;
       border-radius: 12px;
       transition: filter 0.3s ease;
-:"
       z-index: 2;
       visibility: visible;
       filter: grayscale(100%) brightness(80%);
@@ -319,7 +318,7 @@
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      background-color: #000000;
+      background-color: #c71585;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -374,7 +373,7 @@
     }
 
     .team-name.active {
-      background-color: #000000;
+      background-color: #c71585;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
@@ -397,7 +396,7 @@
       font-size: 15px;
       font-weight: bold;
       text-align: center;
-      background-color: #000000;
+      background-color: #c71585;
       color: white;
       border: 4px solid white;
       border-radius: 12px;
@@ -648,7 +647,7 @@
   </style>
 </head>
 <body>
-  <h1 id="game-title">Halloweenowe Memory</h1>
+  <h1 id="game-title">Walentynkowe Memory</h1>
   <div id="config-buttons">
     <button id="instructionsBtn">Instrukcja</button>
     <button id="configFullscreenBtn">Pełny ekran</button>
@@ -697,7 +696,7 @@
       <button id="nextBtn">Dalej</button>
     </div>
 
-    <img id="logo" src="memory-halloweenowe/logo.png" alt="Logo" />
+    <img id="logo" src="memory-walentynkowe/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -708,7 +707,7 @@
 </br>Istnieje również wariant gry bez rywalizacji i podziału na drużyny. W takim przypadku można grać indywidualnie lub współpracując z całą grupą, starając się wspólnie odkryć wszystkie pary, zarówno w wersji z określonym czasem jak i bez. 
 </div>
     <button id="instructionsReturnBtn">Powrót</button>
-    <img id="logo" src="memory-halloweenowe/logo.png" alt="Logo" />
+    <img id="logo" src="memory-walentynkowe/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -717,7 +716,7 @@
     <div id="winner-text"></div>
     <div id="score-text"></div>
     <button id="congratsReturnBtn">Powrót</button>
-    <img id="logo" src="memory-halloweenowe/logo.png" alt="Logo" />
+    <img id="logo" src="memory-walentynkowe/logo.png" alt="Logo" />
     <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
   </div>
 
@@ -743,7 +742,7 @@
         <button id="startBtn">Start</button>
         <button id="fullscreenBtn">Pełny ekran</button>
         <button id="returnBtn">Powrót</button>
-        <img src="memory-halloweenowe/logo.png" alt="Logo" />
+        <img src="memory-walentynkowe/logo.png" alt="Logo" />
         <div id="website-link">WWW.MUZYKAMIKROFONACKJA.PL</div>
       </div>
     </div>
@@ -955,11 +954,11 @@
               card.classList.add("card");
 
               const frontImg = document.createElement("img");
-              frontImg.src = `memory-halloweenowe/${value}.png`;
+              frontImg.src = `memory-walentynkowe/${value}.png`;
               frontImg.classList.add("front");
 
               const backImg = document.createElement("img");
-              backImg.src = "memory-halloweenowe/0.png";
+              backImg.src = "memory-walentynkowe/0.png";
               backImg.classList.add("cover");
               if (colorCovers) backImg.classList.add("kolorowa");
 
