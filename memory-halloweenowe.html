@@ -284,6 +284,7 @@
       object-fit: cover;
       border-radius: 12px;
       transition: filter 0.3s ease;
+:"
       z-index: 2;
       visibility: visible;
       filter: grayscale(100%) brightness(80%);
@@ -544,16 +545,26 @@
         width: 100%;
         max-width: 100%;
         align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
       .team-name {
         font-size: clamp(24px, 6vw, 28px);
-        width: 100%;
-        max-width: 100%;
+        width: auto;
+        max-width: clamp(200px, 80vw, 280px);
         height: 40px;
         line-height: 40px;
         padding: 0 6px;
         margin-bottom: 8px;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .team-name.active {
+        width: auto;
+        max-width: clamp(200px, 80vw, 280px);
       }
 
       .time-label {
@@ -581,13 +592,6 @@
       .scoreboard .time-label:nth-child(4), .scoreboard .time-label:nth-child(5) {
         display: inline-flex;
         margin: 0 10px;
-      }
-
-      .scoreboard {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
       }
 
       #full-grid {
